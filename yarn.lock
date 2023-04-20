@@ -30,10 +30,39 @@
   resolved "https://registry.yarnpkg.com/@ethersproject/logger/-/logger-5.7.0.tgz#6ce9ae168e74fecf287be17062b590852c311892"
   integrity sha512-0odtFdXu/XHtjQXJYA3u9G0G8btm0ND5Cu8M7i5vhEcE8/HmF4Lbdqanwyv4uQTr2tx6b7fQRmgLrsnpQlmnig==
 
+"@jbx-protocol/juice-721-delegate@jbx-protocol/juice-721-delegate#version/3.2":
+  version "5.0.3"
+  resolved "https://codeload.github.com/jbx-protocol/juice-721-delegate/tar.gz/7aaeea7464b9a7138d7b3cb473b04fab1ab14e0c"
+  dependencies:
+    "@jbx-protocol/juice-contracts-v3" "^2.0.4"
+    "@jbx-protocol/juice-delegates-registry" "^1.0.0"
+    "@openzeppelin/contracts" "^4.6.0"
+    "@paulrberg/contracts" "^3.7.0"
+    prb-math "^2.4.3"
+
 "@jbx-protocol/juice-contracts-v3@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-2.0.3.tgz#0b0acd14a6ad51da4e425b8d55bad8db5c7dbbc1"
   integrity sha512-lYXRYlhUzsR9xLrzXTq95Ps3rE6xNDrgKhZ+yiitdPRRkAPPA887BtSt72BamsKUiHl3xAoKGYIvv+3b/h9/UA==
+
+"@jbx-protocol/juice-contracts-v3@^2.0.4":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-2.0.5.tgz#b75e5547d3ffe660a3fb9124e5e747fc52b5d642"
+  integrity sha512-pQSJbzz96nzHc2HDlN0Xx6uJufnRPAiUsilSwGRLjX38KZaeOtC7LU+YY0G5OHpH8tQPyAC/G/m5EwjpObIh3A==
+
+"@jbx-protocol/juice-delegates-registry@^1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-delegates-registry/-/juice-delegates-registry-1.0.1.tgz#88badca1dd2e271605e62e4d300bb3e616604622"
+  integrity sha512-kAN/xv8VBK/GkdkKKjOGV6nzOS0RI9/eyPWsR9UExZIcFr8fBoO7fLlTIWA/YSvQNdrMYd8urUJJpGPiXkRlLw==
+  dependencies:
+    "@jbx-protocol/juice-contracts-v3" "^2.0.3"
+    "@openzeppelin/contracts" "^4.8.0"
+    "@paulrberg/contracts" "^3.7.0"
+
+"@openzeppelin/contracts@^4.6.0", "@openzeppelin/contracts@^4.8.0":
+  version "4.8.3"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.3.tgz#cbef3146bfc570849405f59cba18235da95a252a"
+  integrity sha512-bQHV8R9Me8IaJoJ2vPG4rXcL7seB7YVuskr4f+f5RyOStSZetwzkWtoqDMl5erkBJy0lDRUnIR2WIkPiC0GJlg==
 
 "@openzeppelin/contracts@^4.8.1":
   version "4.8.1"
@@ -105,7 +134,7 @@ mathjs@^10.1.1:
     tiny-emitter "^2.1.0"
     typed-function "^2.1.0"
 
-prb-math@^2.4.1:
+prb-math@^2.4.1, prb-math@^2.4.3:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/prb-math/-/prb-math-2.4.3.tgz#a0121111aeae49fe5686db4aef422b785101bf7b"
   integrity sha512-t5jncEscKmWg7COkMkmbXXxSeDI6Xl21rxx5e+oxUCqskNvsu6Q9RqdVfGY6y+sMwyMQE8DJ/OOyQ9ExH1yfbw==
