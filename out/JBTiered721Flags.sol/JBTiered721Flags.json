@@ -1,0 +1,159 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721Flags.sol",
+    "id": 27229,
+    "exportedSymbols": {
+      "JBTiered721Flags": [
+        27228
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:745:22",
+    "nodes": [
+      {
+        "id": 27219,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:22",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 27228,
+        "nodeType": "StructDefinition",
+        "src": "625:151:22",
+        "nodes": [],
+        "canonicalName": "JBTiered721Flags",
+        "members": [
+          {
+            "constant": false,
+            "id": 27221,
+            "mutability": "mutable",
+            "name": "lockReservedTokenChanges",
+            "nameLocation": "658:24:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 27228,
+            "src": "653:29:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 27220,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "653:4:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 27223,
+            "mutability": "mutable",
+            "name": "lockVotingUnitChanges",
+            "nameLocation": "691:21:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 27228,
+            "src": "686:26:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 27222,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "686:4:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 27225,
+            "mutability": "mutable",
+            "name": "lockManualMintingChanges",
+            "nameLocation": "721:24:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 27228,
+            "src": "716:29:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 27224,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "716:4:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 27227,
+            "mutability": "mutable",
+            "name": "preventOverspending",
+            "nameLocation": "754:19:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 27228,
+            "src": "749:24:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 27226,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "749:4:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "name": "JBTiered721Flags",
+        "nameLocation": "632:16:22",
+        "scope": 27229,
+        "visibility": "public"
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 22
+}

@@ -1,0 +1,115 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721MintForTiersData.sol",
+    "id": 27237,
+    "exportedSymbols": {
+      "JBTiered721MintForTiersData": [
+        27236
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:221:23",
+    "nodes": [
+      {
+        "id": 27230,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:23",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 27236,
+        "nodeType": "StructDefinition",
+        "src": "171:81:23",
+        "nodes": [],
+        "canonicalName": "JBTiered721MintForTiersData",
+        "members": [
+          {
+            "constant": false,
+            "id": 27233,
+            "mutability": "mutable",
+            "name": "tierIds",
+            "nameLocation": "219:7:23",
+            "nodeType": "VariableDeclaration",
+            "scope": 27236,
+            "src": "210:16:23",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+              "typeString": "uint16[]"
+            },
+            "typeName": {
+              "baseType": {
+                "id": 27231,
+                "name": "uint16",
+                "nodeType": "ElementaryTypeName",
+                "src": "210:6:23",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint16",
+                  "typeString": "uint16"
+                }
+              },
+              "id": 27232,
+              "nodeType": "ArrayTypeName",
+              "src": "210:8:23",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_uint16_$dyn_storage_ptr",
+                "typeString": "uint16[]"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 27235,
+            "mutability": "mutable",
+            "name": "beneficiary",
+            "nameLocation": "238:11:23",
+            "nodeType": "VariableDeclaration",
+            "scope": 27236,
+            "src": "230:19:23",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 27234,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "230:7:23",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "name": "JBTiered721MintForTiersData",
+        "nameLocation": "178:27:23",
+        "scope": 27237,
+        "visibility": "public"
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 23
+}

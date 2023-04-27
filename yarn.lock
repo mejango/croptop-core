@@ -50,6 +50,11 @@
   resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-2.0.5.tgz#b75e5547d3ffe660a3fb9124e5e747fc52b5d642"
   integrity sha512-pQSJbzz96nzHc2HDlN0Xx6uJufnRPAiUsilSwGRLjX38KZaeOtC7LU+YY0G5OHpH8tQPyAC/G/m5EwjpObIh3A==
 
+"@jbx-protocol/juice-contracts-v3@^3.1.1":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-3.1.2.tgz#9d7ee2aa394f9334f4c704a8cf78acdaf57fad0b"
+  integrity sha512-s9lDzTKfDk5MDWhIq8piguoD5AT2FPP4KC2HdGYe2IGq/sQCONTg4sBRHJ9NyB8XLruFuhWsWSqzy26ntZseSg==
+
 "@jbx-protocol/juice-delegates-registry@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-delegates-registry/-/juice-delegates-registry-1.0.1.tgz#88badca1dd2e271605e62e4d300bb3e616604622"

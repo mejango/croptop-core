@@ -1,0 +1,140 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBRedemptionDelegateAllocation.sol",
+    "id": 29804,
+    "exportedSymbols": {
+      "IERC165": [
+        30113
+      ],
+      "IJBRedemptionDelegate": [
+        28990
+      ],
+      "JBDidRedeemData": [
+        29654
+      ],
+      "JBRedemptionDelegateAllocation": [
+        29803
+      ],
+      "JBTokenAmount": [
+        29850
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:297:64",
+    "nodes": [
+      {
+        "id": 29796,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:64",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 29797,
+        "nodeType": "ImportDirective",
+        "src": "57:49:64",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBRedemptionDelegate.sol",
+        "file": "../interfaces/IJBRedemptionDelegate.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 29804,
+        "sourceUnit": 28991,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 29803,
+        "nodeType": "StructDefinition",
+        "src": "235:93:64",
+        "nodes": [],
+        "canonicalName": "JBRedemptionDelegateAllocation",
+        "members": [
+          {
+            "constant": false,
+            "id": 29800,
+            "mutability": "mutable",
+            "name": "delegate",
+            "nameLocation": "299:8:64",
+            "nodeType": "VariableDeclaration",
+            "scope": 29803,
+            "src": "277:30:64",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IJBRedemptionDelegate_$28990",
+              "typeString": "contract IJBRedemptionDelegate"
+            },
+            "typeName": {
+              "id": 29799,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 29798,
+                "name": "IJBRedemptionDelegate",
+                "nameLocations": [
+                  "277:21:64"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 28990,
+                "src": "277:21:64"
+              },
+              "referencedDeclaration": 28990,
+              "src": "277:21:64",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IJBRedemptionDelegate_$28990",
+                "typeString": "contract IJBRedemptionDelegate"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 29802,
+            "mutability": "mutable",
+            "name": "amount",
+            "nameLocation": "319:6:64",
+            "nodeType": "VariableDeclaration",
+            "scope": 29803,
+            "src": "311:14:64",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 29801,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "311:7:64",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "name": "JBRedemptionDelegateAllocation",
+        "nameLocation": "242:30:64",
+        "scope": 29804,
+        "visibility": "public"
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 64
+}

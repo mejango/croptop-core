@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@jbx-protocol/juice-721-delegate": "jbx-protocol/juice-721-delegate#version/3.2",
-    "@jbx-protocol/juice-contracts-v3": "^2.0.3",
+    "@jbx-protocol/juice-contracts-v3": "^3.1.1",
     "@openzeppelin/contracts": "^4.8.1",
     "@paulrberg/contracts": "^3.7.0"
   },
