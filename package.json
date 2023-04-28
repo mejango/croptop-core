@@ -12,7 +12,7 @@
     "coverage": "forge coverage --match-path ./src/*.sol --report lcov --report summary",
     "doc": "forge doc",
     "deploy:mainnet": "source .env && forge script DeployMainnet --broadcast --network mainnet --rpc-url $RPC_MAINNET --verify --ledger --sender $SENDER_MAINNET",
-    "deploy:goerli": "source .env && forge script DeployGoerli --broadcast --network mainnet --rpc-url $RPC_GOERLI --verify --ledger --sender $SENDER_GOERLI",
+    "deploy-goerli": "source .env && forge script DeployGoerli --rpc-url $GOERLI_RPC_PROVIDER_URL --broadcast --mnemonic-paths mnemonic.txt --verify --etherscan-api-key $ETHERSCAN_API_KEY --sender $SENDER_ADDRESS --optimize --optimizer-runs 200 -vvv",
     "tree": "forge tree",
     "lint": "forge fmt"
   }
