@@ -6,11 +6,27 @@ import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.s
 import "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol";
 import "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delegate.sol";
 
+/** 
+  @notice
+  Criteria for allowed posts.
+
+  @member category A category that should allow posts.
+  @member price The minimum price that a post to the specified category should cost.
+*/
 struct AllowedPost {
     uint256 category;
-    uint256 price;
+    uint256 minimumPrice;
 }
 
+/** 
+  @notice
+  A post to be published.
+
+  @member encodedIPFSUri The encoded IPFS URI of the post that is being published.
+  @member quantity The quantity of NFTs that should be made available, including the 1 that will be minted alongside this transaction.
+  @member price The price being paid for buying the post that is being published.
+  @member category The category that the post should be published in.
+*/
 struct Post {
     bytes32 encodedIPFSUri;
     uint40 quantity;
@@ -18,6 +34,10 @@ struct Post {
     uint16 category;
 }
 
+/** 
+  @notice
+  A contract that facilitates the distribution of NFT posts to a Juicebox project.
+*/
 contract Croptop is Ownable {
     error INCOMPATIBLE_DATA_SOURCE();
     error INSUFFICIENT_AMOUNT();
@@ -25,12 +45,50 @@ contract Croptop is Ownable {
     error UNAUTHORIZED();
     error UNAUTHORIZED_CATEGORY();
 
+    /** 
+      @notice
+      The divisor that describes the fee that should be taken. 
+
+      @dev
+      This is equal to 100 divided by the fee percent.  
+    */
     uint256 public feeDivisor = 20;
+
+    /** 
+      @notice
+      The controller that directs the projects being posted to. 
+    */
     IJBController3_1 public controller;
+
+    /** 
+      @notice
+      A flag indicating if a category allows posts for each project. 
+
+      _projectId The ID of the project.
+      _category The category.
+    */
     mapping(uint256 => mapping(uint256 => bool)) public allowedCategoryFor;
+
+    /** 
+      @notice
+      The minimum accepted price for each post on each category.
+
+      _projectId The ID of the project.
+      _category The category.
+    */
     mapping(uint256 => mapping(uint256 => uint256)) public minPostPriceFor;
+
+    /** 
+      @notice
+      The ID of the project to which fees will be routed. 
+    */
     uint256 public feeProjectId;
 
+    /** 
+      @param _controller The controller that directs the projects being posted to. 
+      @param _feeProjectId The ID of the project to which fees will be routed. 
+      @param _owner The owner of this contract, who can set the fee.
+    */
     constructor(
         IJBController3_1 _controller,
         uint256 _feeProjectId,
@@ -223,7 +281,7 @@ contract Croptop is Ownable {
 
             // Set the minimum price for posts to the specific category.
             minPostPriceFor[_projectId][_allowedPost.category] = _allowedPost
-                .price;
+                .minimumPrice;
 
             unchecked {
                 ++_i;
