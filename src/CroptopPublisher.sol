@@ -38,7 +38,7 @@ struct Post {
   @notice
   A contract that facilitates the distribution of NFT posts to a Juicebox project.
 */
-contract Croptop is Ownable {
+contract CroptopPublisher is Ownable {
     error INCOMPATIBLE_DATA_SOURCE();
     error INSUFFICIENT_AMOUNT();
     error INVALID_FEE_PERCENT();
