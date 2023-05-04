@@ -30,9 +30,10 @@
   resolved "https://registry.yarnpkg.com/@ethersproject/logger/-/logger-5.7.0.tgz#6ce9ae168e74fecf287be17062b590852c311892"
   integrity sha512-0odtFdXu/XHtjQXJYA3u9G0G8btm0ND5Cu8M7i5vhEcE8/HmF4Lbdqanwyv4uQTr2tx6b7fQRmgLrsnpQlmnig==
 
-"@jbx-protocol/juice-721-delegate@jbx-protocol/juice-721-delegate#version/3.2":
+"@jbx-protocol/juice-721-delegate@^5.0.3":
   version "5.0.3"
-  resolved "https://codeload.github.com/jbx-protocol/juice-721-delegate/tar.gz/7aaeea7464b9a7138d7b3cb473b04fab1ab14e0c"
+  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-721-delegate/-/juice-721-delegate-5.0.3.tgz#237d7093924ea6656d3603ed735a0aa22dfcf9b3"
+  integrity sha512-Fz5iUPya+W42u4a+VgxcMWVHVdCwMYngTQ0ijujJK/zeRv7Eg92FyDVYvLrHGVG8Z99Im6xYgqiBWvJoDHBL0g==
   dependencies:
     "@jbx-protocol/juice-contracts-v3" "^2.0.4"
     "@jbx-protocol/juice-delegates-registry" "^1.0.0"

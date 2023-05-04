@@ -11,11 +11,13 @@ import "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delega
   Criteria for allowed posts.
 
   @member category A category that should allow posts.
-  @member price The minimum price that a post to the specified category should cost.
+  @member minimumPrice The minimum price that a post to the specified category should cost.
+  @member minimumQuantity The minimum quantity of NFTs that can be made available when minting.
 */
 struct AllowedPost {
     uint256 category;
     uint256 minimumPrice;
+    uint256 minimumQuantity;
 }
 
 /** 
@@ -41,6 +43,7 @@ struct Post {
 contract CroptopPublisher is Ownable {
     error INCOMPATIBLE_DATA_SOURCE();
     error INSUFFICIENT_AMOUNT();
+    error INSUFFICIENT_QUANTITY();
     error INVALID_FEE_PERCENT();
     error UNAUTHORIZED();
     error UNAUTHORIZED_CATEGORY();
@@ -77,6 +80,25 @@ contract CroptopPublisher is Ownable {
       _category The category.
     */
     mapping(uint256 => mapping(uint256 => uint256)) public minPostPriceFor;
+
+    /** 
+      @notice
+      The minimum quantity of NFTs for each post on each category.
+
+      _projectId The ID of the project.
+      _category The category.
+    */
+    mapping(uint256 => mapping(uint256 => uint256)) public minPostQuantityFor;
+
+    /** 
+      @notice
+      The ID of the tier that an IPFS metadata has been saved to.
+
+      _projectId The ID of the project.
+      _encodedIPFSUri The IPFS URI.
+    */
+    mapping(uint256 => mapping(bytes32 => uint256))
+        public tierIdForEncodedIPFSUriOf;
 
     /** 
       @notice
@@ -148,42 +170,68 @@ contract CroptopPublisher is Ownable {
         // Keep a reference to the total price being paid.
         uint256 _totalPrice;
 
+        // Keep a reference to the total number of tiers being added.
+        uint256 _numberOfTiersBeingAdded;
+
         // For each post, create tiers after validating to make sure they fulfill the allowance specified by the project's owner.
         for (uint256 _i; _i < _numberOfPosts; ) {
             // Get the current post being iterated on.
             _post = _posts[_i];
 
-            // Make sure the category being posted to allows publishing.
-            if (!allowedCategoryFor[_projectId][_post.category])
-                revert UNAUTHORIZED_CATEGORY();
+            // Check if there's an ID of a tier already minted for this encodedIPFSUri.
+            uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][
+                _post.encodedIPFSUri
+            ];
 
-            // Make sure the price being paid for the post is at least the allowed minimum price.
-            if (_post.price < minPostPriceFor[_projectId][_post.category])
-                revert INSUFFICIENT_AMOUNT();
+            if (_tierId != 0) {
+                _tierIdsToMint[_i] = _tierId;
+            } else {
+                // Make sure the category being posted to allows publishing.
+                if (!allowedCategoryFor[_projectId][_post.category])
+                    revert UNAUTHORIZED_CATEGORY();
+
+                // Make sure the price being paid for the post is at least the allowed minimum price.
+                if (_post.price < minPostPriceFor[_projectId][_post.category])
+                    revert INSUFFICIENT_AMOUNT();
+
+                // Make sure the quantity being made available for the post is at least the allowed minimum quantity.
+                if (
+                    _post.quantity <
+                    minPostQuantityFor[_projectId][_post.category]
+                ) revert INSUFFICIENT_QUANTITY();
+
+                // Set the tier.
+                _tierDataToAdd[_numberOfTiersBeingAdded++] = JB721TierParams({
+                    contributionFloor: uint80(_post.price),
+                    lockedUntil: 0,
+                    initialQuantity: _post.quantity,
+                    votingUnits: 0,
+                    reservedRate: 0,
+                    reservedTokenBeneficiary: address(0),
+                    royaltyRate: 0,
+                    royaltyBeneficiary: address(0),
+                    encodedIPFSUri: _post.encodedIPFSUri,
+                    category: uint8(_post.category),
+                    allowManualMint: false,
+                    shouldUseReservedTokenBeneficiaryAsDefault: false,
+                    shouldUseRoyaltyBeneficiaryAsDefault: false,
+                    transfersPausable: false
+                });
+
+                // Get a reference to the new tier ID.
+                uint256 _newTierId = _startingTierId + _numberOfTiersBeingAdded;
+
+                // Set the ID of the tier to mint.
+                _tierIdsToMint[_i] = _newTierId;
+
+                // Save the encodedIPFSUri as minted.
+                tierIdForEncodedIPFSUriOf[_projectId][
+                    _post.encodedIPFSUri
+                ] = _newTierId;
+            }
 
             // Increment the total price.
             _totalPrice += _post.price;
-
-            // Set the tier.
-            _tierDataToAdd[_i] = JB721TierParams({
-                price: _post.price,
-                initialQuantity: _post.quantity,
-                votingUnits: 0,
-                reservedRate: 0,
-                reservedTokenBeneficiary: address(0),
-                royaltyRate: 0,
-                royaltyBeneficiary: address(0),
-                encodedIPFSUri: _post.encodedIPFSUri,
-                category: _post.category,
-                allowManualMint: false,
-                shouldUseReservedTokenBeneficiaryAsDefault: false,
-                shouldUseRoyaltyBeneficiaryAsDefault: false,
-                transfersPausable: false,
-                useVotingUnits: false
-            });
-
-            // Set the ID of the tier to mint.
-            _tierIdsToMint[_i] = _startingTierId + _i;
 
             unchecked {
                 ++_i;
@@ -194,11 +242,20 @@ contract CroptopPublisher is Ownable {
         if (_totalPrice + (_totalPrice / feeDivisor) < msg.value)
             revert INSUFFICIENT_AMOUNT();
 
-        // Add the new tiers.
-        IJBTiered721Delegate(metadata.dataSource).adjustTiers(
-            _tierDataToAdd,
-            new uint256[](0)
-        );
+        // Add the new tiers if needed.
+        if (_numberOfTiersBeingAdded != 0) {
+            // Resize the array if there are
+            if (_numberOfTiersBeingAdded != _numberOfPosts)
+                assembly ("memory-safe") {
+                    mstore(_tierIdsToMint, _numberOfTiersBeingAdded)
+                }
+
+            // Add the new tiers.
+            IJBTiered721Delegate(metadata.dataSource).adjustTiers(
+                _tierDataToAdd,
+                new uint256[](0)
+            );
+        }
 
         // Scoped section to prevent stack too deep.
         {
@@ -212,7 +269,7 @@ contract CroptopPublisher is Ownable {
                 bytes32(feeProjectId), // Referral project ID.
                 bytes32(0),
                 type(IJB721Delegate).interfaceId,
-                false, // Don't allow overspending.
+                true, // Allow overspending.
                 _tierIdsToMint
             );
 
@@ -276,12 +333,16 @@ contract CroptopPublisher is Ownable {
             // Set the post criteria being iterated on.
             _allowedPost = _allowedPosts[_i];
 
-            // Allow posting to the specified category.
-            allowedCategoryFor[_projectId][_allowedPost.category] = true;
+            // Invert allowance posting to the specified category.
+            allowedCategoryFor[_projectId][
+                _allowedPost.category
+            ] = !allowedCategoryFor[_projectId][_allowedPost.category];
 
             // Set the minimum price for posts to the specific category.
-            minPostPriceFor[_projectId][_allowedPost.category] = _allowedPost
-                .minimumPrice;
+            minPostQuantityFor[_projectId][_allowedPost.category] = _allowedPost
+                .minimumQuantity;
+
+            // Set the minimum quantity that can be minted for the specific category.
 
             unchecked {
                 ++_i;
