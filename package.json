@@ -13,8 +13,8 @@
     "size": "forge build --sizes",
     "coverage": "forge coverage --match-path ./src/*.sol --report lcov --report summary",
     "doc": "forge doc",
-    "deploy:mainnet": "source .env && forge script DeployMainnet --broadcast --network mainnet --rpc-url $RPC_MAINNET --verify --ledger --sender $SENDER_MAINNET",
-    "deploy:goerli": "source .env && forge script DeployGoerli --broadcast --network goerli --rpc-url $RPC_GOERLI --verify --ledger --sender $SENDER_GOERLI",
+    "deploy:mainnet": "source .env && forge script DeployMainnet --broadcast --chain-id 1 --rpc-url $RPC_MAINNET --verify --ledger --sender $SENDER_MAINNET",
+    "deploy:goerli": "source .env && forge script DeployGoerli --broadcast --chain-id 5 --rpc-url $RPC_GOERLI --verify --ledger --sender $SENDER_GOERLI",
     "tree": "forge tree",
     "lint": "forge fmt"
   }
