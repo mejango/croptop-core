@@ -10,29 +10,29 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBRedemptionDelegateAllocation.sol",
-    "id": 29804,
+    "id": 29708,
     "exportedSymbols": {
       "IERC165": [
-        30113
+        29882
       ],
       "IJBRedemptionDelegate": [
-        28990
+        28894
       ],
       "JBDidRedeemData": [
-        29654
+        29558
       ],
       "JBRedemptionDelegateAllocation": [
-        29803
+        29707
       ],
       "JBTokenAmount": [
-        29850
+        29754
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:297:64",
     "nodes": [
       {
-        "id": 29796,
+        "id": 29700,
         "nodeType": "PragmaDirective",
         "src": "32:23:64",
         "nodes": [],
@@ -44,20 +44,20 @@
         ]
       },
       {
-        "id": 29797,
+        "id": 29701,
         "nodeType": "ImportDirective",
         "src": "57:49:64",
         "nodes": [],
         "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBRedemptionDelegate.sol",
         "file": "../interfaces/IJBRedemptionDelegate.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 29804,
-        "sourceUnit": 28991,
+        "scope": 29708,
+        "sourceUnit": 28895,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 29803,
+        "id": 29707,
         "nodeType": "StructDefinition",
         "src": "235:93:64",
         "nodes": [],
@@ -65,36 +65,36 @@
         "members": [
           {
             "constant": false,
-            "id": 29800,
+            "id": 29704,
             "mutability": "mutable",
             "name": "delegate",
             "nameLocation": "299:8:64",
             "nodeType": "VariableDeclaration",
-            "scope": 29803,
+            "scope": 29707,
             "src": "277:30:64",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IJBRedemptionDelegate_$28990",
+              "typeIdentifier": "t_contract$_IJBRedemptionDelegate_$28894",
               "typeString": "contract IJBRedemptionDelegate"
             },
             "typeName": {
-              "id": 29799,
+              "id": 29703,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 29798,
+                "id": 29702,
                 "name": "IJBRedemptionDelegate",
                 "nameLocations": [
                   "277:21:64"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 28990,
+                "referencedDeclaration": 28894,
                 "src": "277:21:64"
               },
-              "referencedDeclaration": 28990,
+              "referencedDeclaration": 28894,
               "src": "277:21:64",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IJBRedemptionDelegate_$28990",
+                "typeIdentifier": "t_contract$_IJBRedemptionDelegate_$28894",
                 "typeString": "contract IJBRedemptionDelegate"
               }
             },
@@ -102,12 +102,12 @@
           },
           {
             "constant": false,
-            "id": 29802,
+            "id": 29706,
             "mutability": "mutable",
             "name": "amount",
             "nameLocation": "319:6:64",
             "nodeType": "VariableDeclaration",
-            "scope": 29803,
+            "scope": 29707,
             "src": "311:14:64",
             "stateVariable": false,
             "storageLocation": "default",
@@ -116,7 +116,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29801,
+              "id": 29705,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "311:7:64",
@@ -130,7 +130,7 @@
         ],
         "name": "JBRedemptionDelegateAllocation",
         "nameLocation": "242:30:64",
-        "scope": 29804,
+        "scope": 29708,
         "visibility": "public"
       }
     ],

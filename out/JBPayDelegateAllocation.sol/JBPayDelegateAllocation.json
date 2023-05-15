@@ -10,29 +10,29 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBPayDelegateAllocation.sol",
-    "id": 29788,
+    "id": 29692,
     "exportedSymbols": {
       "IERC165": [
-        30113
+        29882
       ],
       "IJBPayDelegate": [
-        28419
+        28323
       ],
       "JBDidPayData": [
-        29630
+        29534
       ],
       "JBPayDelegateAllocation": [
-        29787
+        29691
       ],
       "JBTokenAmount": [
-        29850
+        29754
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:276:62",
     "nodes": [
       {
-        "id": 29780,
+        "id": 29684,
         "nodeType": "PragmaDirective",
         "src": "32:23:62",
         "nodes": [],
@@ -44,20 +44,20 @@
         ]
       },
       {
-        "id": 29781,
+        "id": 29685,
         "nodeType": "ImportDirective",
         "src": "57:42:62",
         "nodes": [],
         "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPayDelegate.sol",
         "file": "../interfaces/IJBPayDelegate.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 29788,
-        "sourceUnit": 28420,
+        "scope": 29692,
+        "sourceUnit": 28324,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 29787,
+        "id": 29691,
         "nodeType": "StructDefinition",
         "src": "228:79:62",
         "nodes": [],
@@ -65,36 +65,36 @@
         "members": [
           {
             "constant": false,
-            "id": 29784,
+            "id": 29688,
             "mutability": "mutable",
             "name": "delegate",
             "nameLocation": "278:8:62",
             "nodeType": "VariableDeclaration",
-            "scope": 29787,
+            "scope": 29691,
             "src": "263:23:62",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IJBPayDelegate_$28419",
+              "typeIdentifier": "t_contract$_IJBPayDelegate_$28323",
               "typeString": "contract IJBPayDelegate"
             },
             "typeName": {
-              "id": 29783,
+              "id": 29687,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 29782,
+                "id": 29686,
                 "name": "IJBPayDelegate",
                 "nameLocations": [
                   "263:14:62"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 28419,
+                "referencedDeclaration": 28323,
                 "src": "263:14:62"
               },
-              "referencedDeclaration": 28419,
+              "referencedDeclaration": 28323,
               "src": "263:14:62",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IJBPayDelegate_$28419",
+                "typeIdentifier": "t_contract$_IJBPayDelegate_$28323",
                 "typeString": "contract IJBPayDelegate"
               }
             },
@@ -102,12 +102,12 @@
           },
           {
             "constant": false,
-            "id": 29786,
+            "id": 29690,
             "mutability": "mutable",
             "name": "amount",
             "nameLocation": "298:6:62",
             "nodeType": "VariableDeclaration",
-            "scope": 29787,
+            "scope": 29691,
             "src": "290:14:62",
             "stateVariable": false,
             "storageLocation": "default",
@@ -116,7 +116,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29785,
+              "id": 29689,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "290:7:62",
@@ -130,7 +130,7 @@
         ],
         "name": "JBPayDelegateAllocation",
         "nameLocation": "235:23:62",
-        "scope": 29788,
+        "scope": 29692,
         "visibility": "public"
       }
     ],

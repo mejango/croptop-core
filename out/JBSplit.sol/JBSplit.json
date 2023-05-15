@@ -10,26 +10,26 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBSplit.sol",
-    "id": 29823,
+    "id": 29727,
     "exportedSymbols": {
       "IERC165": [
-        30113
+        29882
       ],
       "IJBSplitAllocator": [
-        29256
+        29160
       ],
       "JBSplit": [
-        29822
+        29726
       ],
       "JBSplitAllocationData": [
-        29839
+        29743
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:1945:65",
     "nodes": [
       {
-        "id": 29805,
+        "id": 29709,
         "nodeType": "PragmaDirective",
         "src": "32:23:65",
         "nodes": [],
@@ -41,20 +41,20 @@
         ]
       },
       {
-        "id": 29806,
+        "id": 29710,
         "nodeType": "ImportDirective",
         "src": "57:47:65",
         "nodes": [],
         "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBSplitAllocator.sol",
         "file": "./../interfaces/IJBSplitAllocator.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 29823,
-        "sourceUnit": 29257,
+        "scope": 29727,
+        "sourceUnit": 29161,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 29822,
+        "id": 29726,
         "nodeType": "StructDefinition",
         "src": "1784:192:65",
         "nodes": [],
@@ -62,12 +62,12 @@
         "members": [
           {
             "constant": false,
-            "id": 29808,
+            "id": 29712,
             "mutability": "mutable",
             "name": "preferClaimed",
             "nameLocation": "1808:13:65",
             "nodeType": "VariableDeclaration",
-            "scope": 29822,
+            "scope": 29726,
             "src": "1803:18:65",
             "stateVariable": false,
             "storageLocation": "default",
@@ -76,7 +76,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 29807,
+              "id": 29711,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "1803:4:65",
@@ -89,12 +89,12 @@
           },
           {
             "constant": false,
-            "id": 29810,
+            "id": 29714,
             "mutability": "mutable",
             "name": "preferAddToBalance",
             "nameLocation": "1830:18:65",
             "nodeType": "VariableDeclaration",
-            "scope": 29822,
+            "scope": 29726,
             "src": "1825:23:65",
             "stateVariable": false,
             "storageLocation": "default",
@@ -103,7 +103,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 29809,
+              "id": 29713,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "1825:4:65",
@@ -116,12 +116,12 @@
           },
           {
             "constant": false,
-            "id": 29812,
+            "id": 29716,
             "mutability": "mutable",
             "name": "percent",
             "nameLocation": "1860:7:65",
             "nodeType": "VariableDeclaration",
-            "scope": 29822,
+            "scope": 29726,
             "src": "1852:15:65",
             "stateVariable": false,
             "storageLocation": "default",
@@ -130,7 +130,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29811,
+              "id": 29715,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "1852:7:65",
@@ -143,12 +143,12 @@
           },
           {
             "constant": false,
-            "id": 29814,
+            "id": 29718,
             "mutability": "mutable",
             "name": "projectId",
             "nameLocation": "1879:9:65",
             "nodeType": "VariableDeclaration",
-            "scope": 29822,
+            "scope": 29726,
             "src": "1871:17:65",
             "stateVariable": false,
             "storageLocation": "default",
@@ -157,7 +157,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29813,
+              "id": 29717,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "1871:7:65",
@@ -170,12 +170,12 @@
           },
           {
             "constant": false,
-            "id": 29816,
+            "id": 29720,
             "mutability": "mutable",
             "name": "beneficiary",
             "nameLocation": "1908:11:65",
             "nodeType": "VariableDeclaration",
-            "scope": 29822,
+            "scope": 29726,
             "src": "1892:27:65",
             "stateVariable": false,
             "storageLocation": "default",
@@ -184,7 +184,7 @@
               "typeString": "address payable"
             },
             "typeName": {
-              "id": 29815,
+              "id": 29719,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1892:15:65",
@@ -198,12 +198,12 @@
           },
           {
             "constant": false,
-            "id": 29818,
+            "id": 29722,
             "mutability": "mutable",
             "name": "lockedUntil",
             "nameLocation": "1931:11:65",
             "nodeType": "VariableDeclaration",
-            "scope": 29822,
+            "scope": 29726,
             "src": "1923:19:65",
             "stateVariable": false,
             "storageLocation": "default",
@@ -212,7 +212,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29817,
+              "id": 29721,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "1923:7:65",
@@ -225,36 +225,36 @@
           },
           {
             "constant": false,
-            "id": 29821,
+            "id": 29725,
             "mutability": "mutable",
             "name": "allocator",
             "nameLocation": "1964:9:65",
             "nodeType": "VariableDeclaration",
-            "scope": 29822,
+            "scope": 29726,
             "src": "1946:27:65",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IJBSplitAllocator_$29256",
+              "typeIdentifier": "t_contract$_IJBSplitAllocator_$29160",
               "typeString": "contract IJBSplitAllocator"
             },
             "typeName": {
-              "id": 29820,
+              "id": 29724,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 29819,
+                "id": 29723,
                 "name": "IJBSplitAllocator",
                 "nameLocations": [
                   "1946:17:65"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 29256,
+                "referencedDeclaration": 29160,
                 "src": "1946:17:65"
               },
-              "referencedDeclaration": 29256,
+              "referencedDeclaration": 29160,
               "src": "1946:17:65",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IJBSplitAllocator_$29256",
+                "typeIdentifier": "t_contract$_IJBSplitAllocator_$29160",
                 "typeString": "contract IJBSplitAllocator"
               }
             },
@@ -263,7 +263,7 @@
         ],
         "name": "JBSplit",
         "nameLocation": "1791:7:65",
-        "scope": 29823,
+        "scope": 29727,
         "visibility": "public"
       }
     ],

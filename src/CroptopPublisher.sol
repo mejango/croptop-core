@@ -32,7 +32,7 @@ struct AllowedPost {
  */
 struct Post {
     bytes32 encodedIPFSUri;
-    uint40 quantity;
+    uint32 quantity;
     uint88 price;
     uint16 category;
 }
@@ -99,10 +99,9 @@ contract CroptopPublisher {
      * The ID of the tier that an IPFS metadata has been saved to.
      *
      * _projectId The ID of the project.
-     * _nft The NFT contract on which the tier resides.
      * _encodedIPFSUri The IPFS URI.
      */
-    mapping(uint256 => mapping(address => mapping(bytes32 => uint256))) public tierIdForEncodedIPFSUriOf;
+    mapping(uint256 => mapping(bytes32 => uint256)) public tierIdForEncodedIPFSUriOf;
 
     /**
      * @notice
@@ -138,11 +137,11 @@ contract CroptopPublisher {
         // Get the tier for each provided encoded IPFS URI.
         for (uint256 _i; _i < _numberOfEncodedIPFSUris;) {
             // Check if there's a tier ID stored for the encoded IPFS URI.
-            uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_nft][_encodedIPFSUris[_i]];
+            uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_encodedIPFSUris[_i]];
 
             // If there's a tier ID stored, resolve it.
             if (_tierId != 0) {
-                tiers[_i] = IJBTiered721Delegate(_nft).store().tier(_nft, _tierId);
+                tiers[_i] = IJBTiered721Delegate(_nft).store().tierOf(_nft, _tierId, false);
             }
 
             unchecked {
@@ -169,9 +168,10 @@ contract CroptopPublisher {
      *
      * @param _projectId The ID of the project to which the NFT should be added.
      * @param _posts An array of posts that should be published as NFTs to the specified project.
-     * @param _beneficiary The beneficiary of the NFT mints and of the fee project's token.
+     * @param _nftBeneficiary The beneficiary of the NFT mints.
+     * @param _feeBeneficiary The beneficiary of the fee project's token.
      */
-    function collect(uint256 _projectId, Post[] memory _posts, address _beneficiary) external payable {
+    function collect(uint256 _projectId, Post[] memory _posts, address _nftBeneficiary, address _feeBeneficiary) external payable {
         // Get the projects current data source from its current funding cyce's metadata.
         (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
 
@@ -214,7 +214,7 @@ contract CroptopPublisher {
                 // Scoped section to prevent stack too deep.
                 {
                     // Check if there's an ID of a tier already minted for this encodedIPFSUri.
-                    uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_metadata.dataSource][_post.encodedIPFSUri];
+                    uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri];
 
                     if (_tierId != 0) _tierIdsToMint[_i] = _tierId;
                 }
@@ -238,20 +238,17 @@ contract CroptopPublisher {
 
                     // Set the tier.
                     _tierDataToAdd[_numberOfTiersBeingAdded] = JB721TierParams({
-                        contributionFloor: uint80(_post.price),
-                        lockedUntil: 0,
+                        price: uint80(_post.price),
                         initialQuantity: _post.quantity,
                         votingUnits: 0,
                         reservedRate: 0,
                         reservedTokenBeneficiary: address(0),
-                        royaltyRate: 0,
-                        royaltyBeneficiary: address(0),
                         encodedIPFSUri: _post.encodedIPFSUri,
                         category: uint8(_post.category),
                         allowManualMint: false,
                         shouldUseReservedTokenBeneficiaryAsDefault: false,
-                        shouldUseRoyaltyBeneficiaryAsDefault: false,
-                        transfersPausable: false
+                        transfersPausable: false,
+                        useVotingUnits: true
                     });
 
                     // Get a reference to the new tier ID.
@@ -264,7 +261,7 @@ contract CroptopPublisher {
                     _tierIdsToMint[_i] = _newTierId;
 
                     // Save the encodedIPFSUri as minted.
-                    tierIdForEncodedIPFSUriOf[_projectId][_metadata.dataSource][_post.encodedIPFSUri] = _newTierId;
+                    tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri] = _newTierId;
                 }
 
                 // Increment the total price.
@@ -310,7 +307,7 @@ contract CroptopPublisher {
 
             // Make the payment.
             _projectTerminal.pay{value: _totalPrice}(
-                _projectId, _totalPrice, JBTokens.ETH, _beneficiary, 0, false, "Minted from Croptop", _mintMetadata
+                _projectId, _totalPrice, JBTokens.ETH, _nftBeneficiary, 0, false, "Minted from Croptop", _mintMetadata
             );
         }
 
@@ -322,7 +319,7 @@ contract CroptopPublisher {
 
         // Make the fee payment.
         _feeTerminal.pay{value: address(this).balance}(
-            feeProjectId, address(this).balance, JBTokens.ETH, _beneficiary, 0, false, "", _feeMetadata
+            feeProjectId, address(this).balance, JBTokens.ETH, _feeBeneficiary, 0, false, "", _feeMetadata
         );
     }
 

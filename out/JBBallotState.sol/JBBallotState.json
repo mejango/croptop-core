@@ -10,17 +10,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/enums/JBBallotState.sol",
-    "id": 27250,
+    "id": 27154,
     "exportedSymbols": {
       "JBBallotState": [
-        27249
+        27153
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:79:25",
     "nodes": [
       {
-        "id": 27245,
+        "id": 27149,
         "nodeType": "PragmaDirective",
         "src": "32:23:25",
         "nodes": [],
@@ -32,28 +32,28 @@
         ]
       },
       {
-        "id": 27249,
+        "id": 27153,
         "nodeType": "EnumDefinition",
         "src": "57:53:25",
         "nodes": [],
         "canonicalName": "JBBallotState",
         "members": [
           {
-            "id": 27246,
+            "id": 27150,
             "name": "Active",
             "nameLocation": "80:6:25",
             "nodeType": "EnumValue",
             "src": "80:6:25"
           },
           {
-            "id": 27247,
+            "id": 27151,
             "name": "Approved",
             "nameLocation": "90:8:25",
             "nodeType": "EnumValue",
             "src": "90:8:25"
           },
           {
-            "id": 27248,
+            "id": 27152,
             "name": "Failed",
             "nameLocation": "102:6:25",
             "nodeType": "EnumValue",

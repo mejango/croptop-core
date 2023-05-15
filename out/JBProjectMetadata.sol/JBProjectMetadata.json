@@ -10,17 +10,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBProjectMetadata.sol",
-    "id": 29795,
+    "id": 29699,
     "exportedSymbols": {
       "JBProjectMetadata": [
-        29794
+        29698
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:201:63",
     "nodes": [
       {
-        "id": 29789,
+        "id": 29693,
         "nodeType": "PragmaDirective",
         "src": "32:23:63",
         "nodes": [],
@@ -32,7 +32,7 @@
         ]
       },
       {
-        "id": 29794,
+        "id": 29698,
         "nodeType": "StructDefinition",
         "src": "168:64:63",
         "nodes": [],
@@ -40,12 +40,12 @@
         "members": [
           {
             "constant": false,
-            "id": 29791,
+            "id": 29695,
             "mutability": "mutable",
             "name": "content",
             "nameLocation": "204:7:63",
             "nodeType": "VariableDeclaration",
-            "scope": 29794,
+            "scope": 29698,
             "src": "197:14:63",
             "stateVariable": false,
             "storageLocation": "default",
@@ -54,7 +54,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 29790,
+              "id": 29694,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "197:6:63",
@@ -67,12 +67,12 @@
           },
           {
             "constant": false,
-            "id": 29793,
+            "id": 29697,
             "mutability": "mutable",
             "name": "domain",
             "nameLocation": "223:6:63",
             "nodeType": "VariableDeclaration",
-            "scope": 29794,
+            "scope": 29698,
             "src": "215:14:63",
             "stateVariable": false,
             "storageLocation": "default",
@@ -81,7 +81,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29792,
+              "id": 29696,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "215:7:63",
@@ -95,7 +95,7 @@
         ],
         "name": "JBProjectMetadata",
         "nameLocation": "175:17:63",
-        "scope": 29795,
+        "scope": 29699,
         "visibility": "public"
       }
     ],

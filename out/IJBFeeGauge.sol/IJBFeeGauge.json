@@ -33,7 +33,7 @@
   "methodIdentifiers": {
     "currentDiscountFor(uint256)": "77695896"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_projectId\",\"type\":\"uint256\"}],\"name\":\"currentDiscountFor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFeeGauge.sol\":\"IJBFeeGauge\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":@paulrberg/=node_modules/@paulrberg/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":prb-math/=node_modules/prb-math/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFeeGauge.sol\":{\"keccak256\":\"0x8e19959617191320fe1210760860e668a57319258c0c74fcfabac829ae0222c0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3dd8a4e26f3abc19f1b0580b02d894bd91d31f8d72d8ee1be529ecd6dc638723\",\"dweb:/ipfs/QmUxSM2ePxorxRNFxpxqDnRmGtQrwVMiezQsbxLCCkLL5x\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_projectId\",\"type\":\"uint256\"}],\"name\":\"currentDiscountFor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFeeGauge.sol\":\"IJBFeeGauge\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"],\"viaIR\":true},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFeeGauge.sol\":{\"keccak256\":\"0x8e19959617191320fe1210760860e668a57319258c0c74fcfabac829ae0222c0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3dd8a4e26f3abc19f1b0580b02d894bd91d31f8d72d8ee1be529ecd6dc638723\",\"dweb:/ipfs/QmUxSM2ePxorxRNFxpxqDnRmGtQrwVMiezQsbxLCCkLL5x\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.17+commit.8df45f5f"
@@ -76,10 +76,8 @@
       "remappings": [
         ":@jbx-protocol/=node_modules/@jbx-protocol/",
         ":@openzeppelin/=node_modules/@openzeppelin/",
-        ":@paulrberg/=node_modules/@paulrberg/",
         ":ds-test/=lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/",
-        ":prb-math/=node_modules/prb-math/"
+        ":forge-std/=lib/forge-std/src/"
       ],
       "optimizer": {
         "enabled": true,
@@ -91,7 +89,8 @@
       "compilationTarget": {
         "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFeeGauge.sol": "IJBFeeGauge"
       },
-      "libraries": {}
+      "libraries": {},
+      "viaIR": true
     },
     "sources": {
       "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFeeGauge.sol": {
@@ -107,17 +106,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFeeGauge.sol",
-    "id": 28213,
+    "id": 28117,
     "exportedSymbols": {
       "IJBFeeGauge": [
-        28212
+        28116
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:134:31",
     "nodes": [
       {
-        "id": 28204,
+        "id": 28108,
         "nodeType": "PragmaDirective",
         "src": "32:23:31",
         "nodes": [],
@@ -129,12 +128,12 @@
         ]
       },
       {
-        "id": 28212,
+        "id": 28116,
         "nodeType": "ContractDefinition",
         "src": "57:108:31",
         "nodes": [
           {
-            "id": 28211,
+            "id": 28115,
             "nodeType": "FunctionDefinition",
             "src": "83:80:31",
             "nodes": [],
@@ -145,17 +144,17 @@
             "name": "currentDiscountFor",
             "nameLocation": "92:18:31",
             "parameters": {
-              "id": 28207,
+              "id": 28111,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28206,
+                  "id": 28110,
                   "mutability": "mutable",
                   "name": "_projectId",
                   "nameLocation": "119:10:31",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28211,
+                  "scope": 28115,
                   "src": "111:18:31",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -164,7 +163,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28205,
+                    "id": 28109,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "111:7:31",
@@ -179,17 +178,17 @@
               "src": "110:20:31"
             },
             "returnParameters": {
-              "id": 28210,
+              "id": 28114,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28209,
+                  "id": 28113,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28211,
+                  "scope": 28115,
                   "src": "154:7:31",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -198,7 +197,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28208,
+                    "id": 28112,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "154:7:31",
@@ -212,7 +211,7 @@
               ],
               "src": "153:9:31"
             },
-            "scope": 28212,
+            "scope": 28116,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -225,11 +224,11 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          28212
+          28116
         ],
         "name": "IJBFeeGauge",
         "nameLocation": "67:11:31",
-        "scope": 28213,
+        "scope": 28117,
         "usedErrors": []
       }
     ],
