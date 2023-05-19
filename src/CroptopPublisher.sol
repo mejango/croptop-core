@@ -49,6 +49,8 @@ contract CroptopPublisher {
     error UNAUTHORIZED();
     error UNAUTHORIZED_CATEGORY();
 
+    event Collected(uint256 projectId, Post[] posts, address nftBeneficiary, address feeBeneficiary, address caller);
+
     /**
      * @notice
      * The divisor that describes the fee that should be taken.
@@ -195,14 +197,14 @@ contract CroptopPublisher {
         // Keep a reference to the tier IDs of the posts that should be minted once published.
         uint256[] memory _tierIdsToMint = new uint256[](_numberOfPosts);
 
-        // Keep a reference to the post being iterated on.
-        Post memory _post;
-
         // Keep a reference to the total price being paid.
         uint256 _totalPrice;
 
         // Scoped section to prevent stack too deep.
         {
+            // Keep a reference to the post being iterated on.
+            Post memory _post;
+
             // Keep a reference to the total number of tiers being added.
             uint256 _numberOfTiersBeingAdded;
 
@@ -251,17 +253,14 @@ contract CroptopPublisher {
                         useVotingUnits: true
                     });
 
-                    // Get a reference to the new tier ID.
-                    uint256 _newTierId = _startingTierId + _numberOfTiersBeingAdded;
-
                     // Increment the number of tiers being added.
                     _numberOfTiersBeingAdded++;
 
                     // Set the ID of the tier to mint.
-                    _tierIdsToMint[_i] = _newTierId;
+                    _tierIdsToMint[_i] = _startingTierId + _numberOfTiersBeingAdded;
 
                     // Save the encodedIPFSUri as minted.
-                    tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri] = _newTierId;
+                    tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri] =  _tierIdsToMint[_i];
                 }
 
                 // Increment the total price.
@@ -321,6 +320,8 @@ contract CroptopPublisher {
         _feeTerminal.pay{value: address(this).balance}(
             feeProjectId, address(this).balance, JBTokens.ETH, _feeBeneficiary, 0, false, "", _feeMetadata
         );
+
+        emit Collected(_projectId, _posts, _nftBeneficiary, _feeBeneficiary, msg.sender);
     }
 
     /**
