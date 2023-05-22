@@ -200,10 +200,7 @@ contract CroptopPublisher {
             _setupPosts(_projectId, _metadata.dataSource, _posts);
 
         // Keep a reference to the fee that will be paid.
-        uint256 _fee;
-
-        // Determine the applicable fee.
-        _fee = _projectId == feeProjectId ? 0 : (_totalPrice / feeDivisor);
+        uint256 _fee = _projectId == feeProjectId ? 0 : (_totalPrice / feeDivisor);
 
         // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
         if (_totalPrice + _fee < msg.value) {
