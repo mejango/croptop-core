@@ -193,9 +193,7 @@ contract CroptopPublisher {
             revert INCOMPATIBLE_DATA_SOURCE();
         }
 
-        // Keep a reference to the tier data that will be created to represent the posts.
-        // Keep a reference to the tier IDs of the posts that should be minted once published.
-        // Keep a reference to the total price being paid.
+        // Setup the posts.
         (JB721TierParams[] memory _tierDataToAdd, uint256[] memory _tierIdsToMint, uint256 _totalPrice) =
             _setupPosts(_projectId, _metadata.dataSource, _posts);
 
