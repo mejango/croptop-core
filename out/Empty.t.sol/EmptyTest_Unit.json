@@ -968,13 +968,13 @@
   },
   "ast": {
     "absolutePath": "test/Empty.t.sol",
-    "id": 30645,
+    "id": 30718,
     "exportedSymbols": {
       "DSTest": [
         1786
       ],
       "EmptyTest_Unit": [
-        30644
+        30717
       ],
       "StdAssertions": [
         3129
@@ -1023,7 +1023,7 @@
     "src": "32:224:72",
     "nodes": [
       {
-        "id": 30640,
+        "id": 30713,
         "nodeType": "PragmaDirective",
         "src": "32:24:72",
         "nodes": [],
@@ -1035,20 +1035,20 @@
         ]
       },
       {
-        "id": 30641,
+        "id": 30714,
         "nodeType": "ImportDirective",
         "src": "58:28:72",
         "nodes": [],
         "absolutePath": "lib/forge-std/src/Test.sol",
         "file": "forge-std/Test.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 30645,
+        "scope": 30718,
         "sourceUnit": 8891,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 30644,
+        "id": 30717,
         "nodeType": "ContractDefinition",
         "src": "119:136:72",
         "nodes": [],
@@ -1056,7 +1056,7 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 30642,
+              "id": 30715,
               "name": "Test",
               "nameLocations": [
                 "146:4:72"
@@ -1065,7 +1065,7 @@
               "referencedDeclaration": 8890,
               "src": "146:4:72"
             },
-            "id": 30643,
+            "id": 30716,
             "nodeType": "InheritanceSpecifier",
             "src": "146:4:72"
           }
@@ -1075,7 +1075,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "linearizedBaseContracts": [
-          30644,
+          30717,
           8890,
           1846,
           1843,
@@ -1088,7 +1088,7 @@
         ],
         "name": "EmptyTest_Unit",
         "nameLocation": "128:14:72",
-        "scope": 30645,
+        "scope": 30718,
         "usedErrors": []
       }
     ],
