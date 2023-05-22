@@ -15,7 +15,7 @@ contract DeployMainnet is Script {
 contract DeployGoerli is Script {
     // V3_1 goerli controller.
     IJBController3_1 _controller = IJBController3_1(0x1d260DE91233e650F136Bf35f8A4ea1F2b68aDB6);
-    uint256 _feeProjectId = 669;
+    uint256 _feeProjectId = 748;
 
     function run() external {
         vm.startBroadcast();

@@ -111,6 +111,14 @@ contract CroptopPublisher {
         view
         returns (uint256 minimumPrice, uint256 minimumQuantity)
     {
+        if (_nft == address(0)) {
+            // Get the projects current data source from its current funding cyce's metadata.
+            (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+
+            // Set the NFT as the data source.
+            _nft = _metadata.dataSource;
+        }
+
         // Get a reference to the packed values.
         uint256 _packed = _packedAllowanceFor[_projectId][_nft][_category];
 
