@@ -76,6 +76,9 @@ contract CroptopPublisher {
     {
         uint256 _numberOfEncodedIPFSUris = _encodedIPFSUris.length;
 
+        // Initialize the tier array being returned.
+        tiers = new JB721Tier[](_numberOfEncodedIPFSUris);
+
         if (_nft == address(0)) {
             // Get the projects current data source from its current funding cyce's metadata.
             (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
