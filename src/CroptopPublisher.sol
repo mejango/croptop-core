@@ -328,11 +328,8 @@ contract CroptopPublisher {
                     useVotingUnits: true
                 });
 
-                // Increment the number of tiers being added.
-                _numberOfTiersBeingAdded++;
-
                 // Set the ID of the tier to mint.
-                tierIdsToMint[_i] = _startingTierId + _numberOfTiersBeingAdded;
+                tierIdsToMint[_i] = _startingTierId + _numberOfTiersBeingAdded++;
 
                 // Save the encodedIPFSUri as minted.
                 tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri] = tierIdsToMint[_i];
