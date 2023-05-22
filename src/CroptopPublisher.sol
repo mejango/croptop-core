@@ -213,29 +213,22 @@ contract CroptopPublisher {
         // Add the new tiers.
         IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
 
-            // Get a reference to the project's current ETH payment terminal.
-            IJBPaymentTerminal _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
+        // Get a reference to the project's current ETH payment terminal.
+        IJBPaymentTerminal _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
 
-            // Create the metadata for the payment to specify the tier IDs that should be minted.
-            bytes memory _mintMetadata = abi.encode(
-                bytes32(feeProjectId), // Referral project ID.
-                bytes32(0),
-                type(IJBTiered721Delegate).interfaceId,
-                true, // Allow overspending.
-                _tierIdsToMint
-            );
+        // Create the metadata for the payment to specify the tier IDs that should be minted.
+        bytes memory _mintMetadata = abi.encode(
+            bytes32(feeProjectId), // Referral project ID.
+            bytes32(0),
+            type(IJBTiered721Delegate).interfaceId,
+            true, // Allow overspending.
+            _tierIdsToMint
+        );
 
-            // Make the payment.
-            _projectTerminal.pay{value: msg.value - _fee}(
-                _projectId,
-                msg.value - _fee,
-                JBTokens.ETH,
-                _nftBeneficiary,
-                0,
-                false,
-                "Minted from Croptop",
-                _mintMetadata
-            );
+        // Make the payment.
+        _projectTerminal.pay{value: msg.value - _fee}(
+            _projectId, msg.value - _fee, JBTokens.ETH, _nftBeneficiary, 0, false, "Minted from Croptop", _mintMetadata
+        );
 
         // Pay a fee if there are funds left.
         if (address(this).balance != 0) {
@@ -305,117 +298,114 @@ contract CroptopPublisher {
         }
     }
 
-    /** 
-      @notice 
-      Setup the posts.
-
-      @param _projectId The ID of the project having posts set up.
-      @param _nft The NFT address on which the posts will apply.
-      @param _posts An array of posts that should be published as NFTs to the specified project.
-
-      @return tierDataToAdd The tier data that will be created to represent the posts.
-      @return tierIdsToMint The tier IDs of the posts that should be minted once published.
-      @return totalPrice The total price being paid.
-    */ 
+    /**
+     * @notice 
+     *   Setup the posts.
+     * 
+     *   @param _projectId The ID of the project having posts set up.
+     *   @param _nft The NFT address on which the posts will apply.
+     *   @param _posts An array of posts that should be published as NFTs to the specified project.
+     * 
+     *   @return tierDataToAdd The tier data that will be created to represent the posts.
+     *   @return tierIdsToMint The tier IDs of the posts that should be minted once published.
+     *   @return totalPrice The total price being paid.
+     */
     function _setupPosts(uint256 _projectId, address _nft, Post[] memory _posts)
         internal
         returns (JB721TierParams[] memory tierDataToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
     {
-        // Scoped section to prevent stack too deep.
-        {
-            // Keep a reference to the number of posts being published.
-            uint256 _numberOfMints = _posts.length;
+        // Keep a reference to the number of posts being published.
+        uint256 _numberOfMints = _posts.length;
 
-            // Set the max size of the tier data that will be added.
-            tierDataToAdd = new JB721TierParams[](
+        // Set the max size of the tier data that will be added.
+        tierDataToAdd = new JB721TierParams[](
                 _numberOfMints
             );
 
-            // Set the size of the tier IDs of the posts that should be minted once published.
-            tierIdsToMint = new uint256[](_numberOfMints);
+        // Set the size of the tier IDs of the posts that should be minted once published.
+        tierIdsToMint = new uint256[](_numberOfMints);
 
-            // The tier ID that will be created, and the first one that should be minted from, is one more than the current max.
-            uint256 _startingTierId = IJBTiered721Delegate(_nft).store().maxTierIdOf(_nft) + 1;
+        // The tier ID that will be created, and the first one that should be minted from, is one more than the current max.
+        uint256 _startingTierId = IJBTiered721Delegate(_nft).store().maxTierIdOf(_nft) + 1;
 
-            // Keep a reference to the post being iterated on.
-            Post memory _post;
+        // Keep a reference to the post being iterated on.
+        Post memory _post;
 
-            // Keep a reference to the total number of tiers being added.
-            uint256 _numberOfTiersBeingAdded;
+        // Keep a reference to the total number of tiers being added.
+        uint256 _numberOfTiersBeingAdded;
 
-            // For each post, create tiers after validating to make sure they fulfill the allowance specified by the project's owner.
-            for (uint256 _i; _i < _numberOfMints;) {
-                // Get the current post being iterated on.
-                _post = _posts[_i];
+        // For each post, create tiers after validating to make sure they fulfill the allowance specified by the project's owner.
+        for (uint256 _i; _i < _numberOfMints;) {
+            // Get the current post being iterated on.
+            _post = _posts[_i];
 
-                // Scoped section to prevent stack too deep.
-                {
-                    // Check if there's an ID of a tier already minted for this encodedIPFSUri.
-                    uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri];
+            // Scoped section to prevent stack too deep.
+            {
+                // Check if there's an ID of a tier already minted for this encodedIPFSUri.
+                uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri];
 
-                    if (_tierId != 0) tierIdsToMint[_i] = _tierId;
-                }
-
-                // If no tier already exists, post the tier.
-                if (tierIdsToMint[_i] == 0) {
-                    // Get references to the allowance.
-                    (uint256 _minimumPrice, uint256 _minimumQuantity) = allowanceFor(_projectId, _nft, _post.category);
-
-                    // Make sure the category being posted to allows publishing.
-                    if (_minimumQuantity == 0) {
-                        revert UNAUTHORIZED_CATEGORY();
-                    }
-
-                    // Make sure the price being paid for the post is at least the allowed minimum price.
-                    if (_post.price < _minimumPrice) {
-                        revert INSUFFICIENT_AMOUNT();
-                    }
-
-                    // Make sure the quantity being made available for the post is at least the allowed minimum quantity.
-                    if (_post.quantity < _minimumQuantity) {
-                        revert INSUFFICIENT_QUANTITY();
-                    }
-
-                    // Set the tier.
-                    tierDataToAdd[_numberOfTiersBeingAdded] = JB721TierParams({
-                        price: uint80(_post.price),
-                        initialQuantity: _post.quantity,
-                        votingUnits: 0,
-                        reservedRate: 0,
-                        reservedTokenBeneficiary: address(0),
-                        encodedIPFSUri: _post.encodedIPFSUri,
-                        category: uint8(_post.category),
-                        allowManualMint: false,
-                        shouldUseReservedTokenBeneficiaryAsDefault: false,
-                        transfersPausable: false,
-                        useVotingUnits: true
-                    });
-
-                    // Increment the number of tiers being added.
-                    _numberOfTiersBeingAdded++;
-
-                    // Set the ID of the tier to mint.
-                    tierIdsToMint[_i] = _startingTierId + _numberOfTiersBeingAdded;
-
-                    // Save the encodedIPFSUri as minted.
-                    tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri] = tierIdsToMint[_i];
-                }
-
-                // Increment the total price.
-                totalPrice += _post.price;
-
-                unchecked {
-                    ++_i;
-                }
+                if (_tierId != 0) tierIdsToMint[_i] = _tierId;
             }
 
-            // Add the new tiers if needed.
-            if (_numberOfTiersBeingAdded != 0) {
-                // Resize the array if there's a mismatch in length.
-                if (_numberOfTiersBeingAdded != tierDataToAdd.length) {
-                    assembly ("memory-safe") {
-                        mstore(tierDataToAdd, _numberOfTiersBeingAdded)
-                    }
+            // If no tier already exists, post the tier.
+            if (tierIdsToMint[_i] == 0) {
+                // Get references to the allowance.
+                (uint256 _minimumPrice, uint256 _minimumQuantity) = allowanceFor(_projectId, _nft, _post.category);
+
+                // Make sure the category being posted to allows publishing.
+                if (_minimumQuantity == 0) {
+                    revert UNAUTHORIZED_CATEGORY();
+                }
+
+                // Make sure the price being paid for the post is at least the allowed minimum price.
+                if (_post.price < _minimumPrice) {
+                    revert INSUFFICIENT_AMOUNT();
+                }
+
+                // Make sure the quantity being made available for the post is at least the allowed minimum quantity.
+                if (_post.quantity < _minimumQuantity) {
+                    revert INSUFFICIENT_QUANTITY();
+                }
+
+                // Set the tier.
+                tierDataToAdd[_numberOfTiersBeingAdded] = JB721TierParams({
+                    price: uint80(_post.price),
+                    initialQuantity: _post.quantity,
+                    votingUnits: 0,
+                    reservedRate: 0,
+                    reservedTokenBeneficiary: address(0),
+                    encodedIPFSUri: _post.encodedIPFSUri,
+                    category: uint8(_post.category),
+                    allowManualMint: false,
+                    shouldUseReservedTokenBeneficiaryAsDefault: false,
+                    transfersPausable: false,
+                    useVotingUnits: true
+                });
+
+                // Increment the number of tiers being added.
+                _numberOfTiersBeingAdded++;
+
+                // Set the ID of the tier to mint.
+                tierIdsToMint[_i] = _startingTierId + _numberOfTiersBeingAdded;
+
+                // Save the encodedIPFSUri as minted.
+                tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri] = tierIdsToMint[_i];
+            }
+
+            // Increment the total price.
+            totalPrice += _post.price;
+
+            unchecked {
+                ++_i;
+            }
+        }
+
+        // Add the new tiers if needed.
+        if (_numberOfTiersBeingAdded != 0) {
+            // Resize the array if there's a mismatch in length.
+            if (_numberOfTiersBeingAdded != tierDataToAdd.length) {
+                assembly ("memory-safe") {
+                    mstore(tierDataToAdd, _numberOfTiersBeingAdded)
                 }
             }
         }
