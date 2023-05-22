@@ -15,19 +15,19 @@
     }
   ],
   "bytecode": {
-    "object": "0x609f610038600b82828239805160001a607314602b57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea2646970667358221220dc2c7dbba12aa0f654a163d8dff2dedf85ce2b84fa3cbd4eda007f218f0b75d564736f6c63430008140033",
+    "object": "0x609f610038600b82828239805160001a607314602b57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea2646970667358221220cc1d4b8cd7f2de0a43290851ade306df6ec859aa0c343dfdf2d3608b481f7f0764736f6c63430008140033",
     "sourceMap": "57:230:52:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;57:230:52;;;;;;;;;;;;;;;;;",
     "linkReferences": {}
   },
   "deployedBytecode": {
-    "object": "0x730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea2646970667358221220dc2c7dbba12aa0f654a163d8dff2dedf85ce2b84fa3cbd4eda007f218f0b75d564736f6c63430008140033",
+    "object": "0x730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea2646970667358221220cc1d4b8cd7f2de0a43290851ade306df6ec859aa0c343dfdf2d3608b481f7f0764736f6c63430008140033",
     "sourceMap": "57:230:52:-:0;;;;;;;;;;;;;;;;;;;;;;;;203:81;;241:42;203:81;;;;;198:42:74;186:55;;;168:74;;156:2;141:18;203:81:52;;;;;;",
     "linkReferences": {}
   },
   "methodIdentifiers": {
     "ETH()": "8322fff2"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"ETH\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"ETH()\":{\"notice\":\" The ETH token address in Juicebox is represented by 0x000000000000000000000000000000000000EEEe.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":\"JBTokens\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":4294967295},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":{\"keccak256\":\"0xecf82992f7b827766aa55f16872517a646521eef414d8cc9786617ea377e5463\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4bb334faa6d2d071473bfcd7efeb5bfa068c340600c204651d59a94be4e4b147\",\"dweb:/ipfs/QmaKgSCvDNgQ6dh2gZfQ9VhkPuRCoACv8e7sd1K9VFikix\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"ETH\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"ETH()\":{\"notice\":\" The ETH token address in Juicebox is represented by 0x000000000000000000000000000000000000EEEe.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":\"JBTokens\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":5000000},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":{\"keccak256\":\"0xecf82992f7b827766aa55f16872517a646521eef414d8cc9786617ea377e5463\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4bb334faa6d2d071473bfcd7efeb5bfa068c340600c204651d59a94be4e4b147\",\"dweb:/ipfs/QmaKgSCvDNgQ6dh2gZfQ9VhkPuRCoACv8e7sd1K9VFikix\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.20+commit.a1b79de6"
@@ -73,7 +73,7 @@
       ],
       "optimizer": {
         "enabled": true,
-        "runs": 4294967295
+        "runs": 5000000
       },
       "metadata": {
         "bytecodeHash": "ipfs"
