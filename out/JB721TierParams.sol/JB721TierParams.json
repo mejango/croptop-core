@@ -10,17 +10,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol",
-    "id": 27122,
+    "id": 27125,
     "exportedSymbols": {
       "JB721TierParams": [
-        27121
+        27124
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:1417:21",
     "nodes": [
       {
-        "id": 27098,
+        "id": 27100,
         "nodeType": "PragmaDirective",
         "src": "32:23:21",
         "nodes": [],
@@ -32,20 +32,26 @@
         ]
       },
       {
-        "id": 27121,
+        "id": 27124,
         "nodeType": "StructDefinition",
         "src": "1129:319:21",
         "nodes": [],
         "canonicalName": "JB721TierParams",
+        "documentation": {
+          "id": 27101,
+          "nodeType": "StructuredDocumentation",
+          "src": "57:1071:21",
+          "text": "@member price The minimum contribution to qualify for this tier.\n@member initialQuantity The initial `remainingAllowance` value when the tier was set.\n@member votingUnits The amount of voting significance to give this tier compared to others.\n@member reservedRate The number of minted tokens needed in the tier to allow for minting another reserved token.\n@member reservedRateBeneficiary The beneificary of the reserved tokens for this tier.\n@member encodedIPFSUri The URI to use for each token within the tier.\n@member category A category to group NFT tiers by.\n@member allowManualMint A flag indicating if the contract's owner can mint from this tier on demand.\n@member shouldUseReservedRateBeneficiaryAsDefault A flag indicating if the `reservedTokenBeneficiary` should be stored as the default beneficiary for all tiers.\n@member transfersPausable A flag indicating if transfers from this tier can be pausable. \n@member useVotingUnits A flag indicating if the voting units override should be used over the price as the tier's voting units."
+        },
         "members": [
           {
             "constant": false,
-            "id": 27100,
+            "id": 27103,
             "mutability": "mutable",
             "name": "price",
             "nameLocation": "1164:5:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1156:13:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -54,7 +60,7 @@
               "typeString": "uint104"
             },
             "typeName": {
-              "id": 27099,
+              "id": 27102,
               "name": "uint104",
               "nodeType": "ElementaryTypeName",
               "src": "1156:7:21",
@@ -67,12 +73,12 @@
           },
           {
             "constant": false,
-            "id": 27102,
+            "id": 27105,
             "mutability": "mutable",
             "name": "initialQuantity",
             "nameLocation": "1180:15:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1173:22:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -81,7 +87,7 @@
               "typeString": "uint32"
             },
             "typeName": {
-              "id": 27101,
+              "id": 27104,
               "name": "uint32",
               "nodeType": "ElementaryTypeName",
               "src": "1173:6:21",
@@ -94,12 +100,12 @@
           },
           {
             "constant": false,
-            "id": 27104,
+            "id": 27107,
             "mutability": "mutable",
             "name": "votingUnits",
             "nameLocation": "1206:11:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1199:18:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -108,7 +114,7 @@
               "typeString": "uint32"
             },
             "typeName": {
-              "id": 27103,
+              "id": 27106,
               "name": "uint32",
               "nodeType": "ElementaryTypeName",
               "src": "1199:6:21",
@@ -121,12 +127,12 @@
           },
           {
             "constant": false,
-            "id": 27106,
+            "id": 27109,
             "mutability": "mutable",
             "name": "reservedRate",
             "nameLocation": "1228:12:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1221:19:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -135,7 +141,7 @@
               "typeString": "uint16"
             },
             "typeName": {
-              "id": 27105,
+              "id": 27108,
               "name": "uint16",
               "nodeType": "ElementaryTypeName",
               "src": "1221:6:21",
@@ -148,12 +154,12 @@
           },
           {
             "constant": false,
-            "id": 27108,
+            "id": 27111,
             "mutability": "mutable",
             "name": "reservedTokenBeneficiary",
             "nameLocation": "1252:24:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1244:32:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -162,7 +168,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 27107,
+              "id": 27110,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1244:7:21",
@@ -176,12 +182,12 @@
           },
           {
             "constant": false,
-            "id": 27110,
+            "id": 27113,
             "mutability": "mutable",
             "name": "encodedIPFSUri",
             "nameLocation": "1288:14:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1280:22:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -190,7 +196,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 27109,
+              "id": 27112,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "1280:7:21",
@@ -203,12 +209,12 @@
           },
           {
             "constant": false,
-            "id": 27112,
+            "id": 27115,
             "mutability": "mutable",
             "name": "category",
             "nameLocation": "1313:8:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1306:15:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -217,7 +223,7 @@
               "typeString": "uint24"
             },
             "typeName": {
-              "id": 27111,
+              "id": 27114,
               "name": "uint24",
               "nodeType": "ElementaryTypeName",
               "src": "1306:6:21",
@@ -230,12 +236,12 @@
           },
           {
             "constant": false,
-            "id": 27114,
+            "id": 27117,
             "mutability": "mutable",
             "name": "allowManualMint",
             "nameLocation": "1330:15:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1325:20:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -244,7 +250,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 27113,
+              "id": 27116,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "1325:4:21",
@@ -257,12 +263,12 @@
           },
           {
             "constant": false,
-            "id": 27116,
+            "id": 27119,
             "mutability": "mutable",
             "name": "shouldUseReservedTokenBeneficiaryAsDefault",
             "nameLocation": "1354:42:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1349:47:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -271,7 +277,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 27115,
+              "id": 27118,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "1349:4:21",
@@ -284,12 +290,12 @@
           },
           {
             "constant": false,
-            "id": 27118,
+            "id": 27121,
             "mutability": "mutable",
             "name": "transfersPausable",
             "nameLocation": "1405:17:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1400:22:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -298,7 +304,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 27117,
+              "id": 27120,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "1400:4:21",
@@ -311,12 +317,12 @@
           },
           {
             "constant": false,
-            "id": 27120,
+            "id": 27123,
             "mutability": "mutable",
             "name": "useVotingUnits",
             "nameLocation": "1431:14:21",
             "nodeType": "VariableDeclaration",
-            "scope": 27121,
+            "scope": 27124,
             "src": "1426:19:21",
             "stateVariable": false,
             "storageLocation": "default",
@@ -325,7 +331,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 27119,
+              "id": 27122,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "1426:4:21",
@@ -339,7 +345,7 @@
         ],
         "name": "JB721TierParams",
         "nameLocation": "1136:15:21",
-        "scope": 27122,
+        "scope": 27125,
         "visibility": "public"
       }
     ],

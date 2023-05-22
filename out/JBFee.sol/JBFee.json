@@ -10,17 +10,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBFee.sol",
-    "id": 29570,
+    "id": 29579,
     "exportedSymbols": {
       "JBFee": [
-        29569
+        29578
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:504:55",
     "nodes": [
       {
-        "id": 29560,
+        "id": 29568,
         "nodeType": "PragmaDirective",
         "src": "32:23:55",
         "nodes": [],
@@ -32,20 +32,26 @@
         ]
       },
       {
-        "id": 29569,
+        "id": 29578,
         "nodeType": "StructDefinition",
         "src": "442:93:55",
         "nodes": [],
         "canonicalName": "JBFee",
+        "documentation": {
+          "id": 29569,
+          "nodeType": "StructuredDocumentation",
+          "src": "57:384:55",
+          "text": "@member amount The total amount the fee was taken from, as a fixed point number with the same number of decimals as the terminal in which this struct was created.\n@member fee The percent of the fee, out of MAX_FEE.\n@member feeDiscount The discount of the fee.\n@member beneficiary The address that will receive the tokens that are minted as a result of the fee payment."
+        },
         "members": [
           {
             "constant": false,
-            "id": 29562,
+            "id": 29571,
             "mutability": "mutable",
             "name": "amount",
             "nameLocation": "467:6:55",
             "nodeType": "VariableDeclaration",
-            "scope": 29569,
+            "scope": 29578,
             "src": "459:14:55",
             "stateVariable": false,
             "storageLocation": "default",
@@ -54,7 +60,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29561,
+              "id": 29570,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "459:7:55",
@@ -67,12 +73,12 @@
           },
           {
             "constant": false,
-            "id": 29564,
+            "id": 29573,
             "mutability": "mutable",
             "name": "fee",
             "nameLocation": "484:3:55",
             "nodeType": "VariableDeclaration",
-            "scope": 29569,
+            "scope": 29578,
             "src": "477:10:55",
             "stateVariable": false,
             "storageLocation": "default",
@@ -81,7 +87,7 @@
               "typeString": "uint32"
             },
             "typeName": {
-              "id": 29563,
+              "id": 29572,
               "name": "uint32",
               "nodeType": "ElementaryTypeName",
               "src": "477:6:55",
@@ -94,12 +100,12 @@
           },
           {
             "constant": false,
-            "id": 29566,
+            "id": 29575,
             "mutability": "mutable",
             "name": "feeDiscount",
             "nameLocation": "498:11:55",
             "nodeType": "VariableDeclaration",
-            "scope": 29569,
+            "scope": 29578,
             "src": "491:18:55",
             "stateVariable": false,
             "storageLocation": "default",
@@ -108,7 +114,7 @@
               "typeString": "uint32"
             },
             "typeName": {
-              "id": 29565,
+              "id": 29574,
               "name": "uint32",
               "nodeType": "ElementaryTypeName",
               "src": "491:6:55",
@@ -121,12 +127,12 @@
           },
           {
             "constant": false,
-            "id": 29568,
+            "id": 29577,
             "mutability": "mutable",
             "name": "beneficiary",
             "nameLocation": "521:11:55",
             "nodeType": "VariableDeclaration",
-            "scope": 29569,
+            "scope": 29578,
             "src": "513:19:55",
             "stateVariable": false,
             "storageLocation": "default",
@@ -135,7 +141,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 29567,
+              "id": 29576,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "513:7:55",
@@ -150,7 +156,7 @@
         ],
         "name": "JBFee",
         "nameLocation": "449:5:55",
-        "scope": 29570,
+        "scope": 29579,
         "visibility": "public"
       }
     ],

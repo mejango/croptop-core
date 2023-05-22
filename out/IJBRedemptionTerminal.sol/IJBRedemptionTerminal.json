@@ -68,10 +68,10 @@
   "methodIdentifiers": {
     "redeemTokensOf(address,uint256,uint256,address,uint256,address,string,bytes)": "fe663f0f"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_holder\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_projectId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_tokenCount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_minReturnedTokens\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_beneficiary\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"_memo\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"_metadata\",\"type\":\"bytes\"}],\"name\":\"redeemTokensOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"reclaimAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBRedemptionTerminal.sol\":\"IJBRedemptionTerminal\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBRedemptionTerminal.sol\":{\"keccak256\":\"0xe26a6a03468401b802ae5328b39a266f53b9331a1c077fcbf7719d10ba74ff44\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dae771e2abe46134bb23e5eebc30ebebb09a0677a8827f89a51e84902176cfb8\",\"dweb:/ipfs/QmRqF3cdeB46PfYb6bGeFKQetjBJHaJHGV47kTbtMMsoEp\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_holder\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_projectId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_tokenCount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_minReturnedTokens\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_beneficiary\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"_memo\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"_metadata\",\"type\":\"bytes\"}],\"name\":\"redeemTokensOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"reclaimAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBRedemptionTerminal.sol\":\"IJBRedemptionTerminal\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBRedemptionTerminal.sol\":{\"keccak256\":\"0xe26a6a03468401b802ae5328b39a266f53b9331a1c077fcbf7719d10ba74ff44\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dae771e2abe46134bb23e5eebc30ebebb09a0677a8827f89a51e84902176cfb8\",\"dweb:/ipfs/QmRqF3cdeB46PfYb6bGeFKQetjBJHaJHGV47kTbtMMsoEp\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
-      "version": "0.8.17+commit.8df45f5f"
+      "version": "0.8.20+commit.a1b79de6"
     },
     "language": "Solidity",
     "output": {
@@ -175,17 +175,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBRedemptionTerminal.sol",
-    "id": 28919,
+    "id": 28925,
     "exportedSymbols": {
       "IJBRedemptionTerminal": [
-        28918
+        28924
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:346:44",
     "nodes": [
       {
-        "id": 28896,
+        "id": 28902,
         "nodeType": "PragmaDirective",
         "src": "32:23:44",
         "nodes": [],
@@ -197,12 +197,12 @@
         ]
       },
       {
-        "id": 28918,
+        "id": 28924,
         "nodeType": "ContractDefinition",
         "src": "57:320:44",
         "nodes": [
           {
-            "id": 28917,
+            "id": 28923,
             "nodeType": "FunctionDefinition",
             "src": "93:282:44",
             "nodes": [],
@@ -213,17 +213,17 @@
             "name": "redeemTokensOf",
             "nameLocation": "102:14:44",
             "parameters": {
-              "id": 28913,
+              "id": 28919,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28898,
+                  "id": 28904,
                   "mutability": "mutable",
                   "name": "_holder",
                   "nameLocation": "130:7:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "122:15:44",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -232,7 +232,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 28897,
+                    "id": 28903,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "122:7:44",
@@ -246,12 +246,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 28900,
+                  "id": 28906,
                   "mutability": "mutable",
                   "name": "_projectId",
                   "nameLocation": "151:10:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "143:18:44",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -260,7 +260,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28899,
+                    "id": 28905,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "143:7:44",
@@ -273,12 +273,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 28902,
+                  "id": 28908,
                   "mutability": "mutable",
                   "name": "_tokenCount",
                   "nameLocation": "175:11:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "167:19:44",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -287,7 +287,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28901,
+                    "id": 28907,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "167:7:44",
@@ -300,12 +300,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 28904,
+                  "id": 28910,
                   "mutability": "mutable",
                   "name": "_token",
                   "nameLocation": "200:6:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "192:14:44",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -314,7 +314,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 28903,
+                    "id": 28909,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "192:7:44",
@@ -328,12 +328,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 28906,
+                  "id": 28912,
                   "mutability": "mutable",
                   "name": "_minReturnedTokens",
                   "nameLocation": "220:18:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "212:26:44",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -342,7 +342,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28905,
+                    "id": 28911,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "212:7:44",
@@ -355,12 +355,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 28908,
+                  "id": 28914,
                   "mutability": "mutable",
                   "name": "_beneficiary",
                   "nameLocation": "260:12:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "244:28:44",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -369,7 +369,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 28907,
+                    "id": 28913,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "244:15:44",
@@ -383,12 +383,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 28910,
+                  "id": 28916,
                   "mutability": "mutable",
                   "name": "_memo",
                   "nameLocation": "294:5:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "278:21:44",
                   "stateVariable": false,
                   "storageLocation": "calldata",
@@ -397,7 +397,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 28909,
+                    "id": 28915,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "278:6:44",
@@ -410,12 +410,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 28912,
+                  "id": 28918,
                   "mutability": "mutable",
                   "name": "_metadata",
                   "nameLocation": "320:9:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "305:24:44",
                   "stateVariable": false,
                   "storageLocation": "calldata",
@@ -424,7 +424,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 28911,
+                    "id": 28917,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "305:5:44",
@@ -439,17 +439,17 @@
               "src": "116:217:44"
             },
             "returnParameters": {
-              "id": 28916,
+              "id": 28922,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28915,
+                  "id": 28921,
                   "mutability": "mutable",
                   "name": "reclaimAmount",
                   "nameLocation": "360:13:44",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28917,
+                  "scope": 28923,
                   "src": "352:21:44",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -458,7 +458,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28914,
+                    "id": 28920,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "352:7:44",
@@ -472,7 +472,7 @@
               ],
               "src": "351:23:44"
             },
-            "scope": 28918,
+            "scope": 28924,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -485,12 +485,13 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          28918
+          28924
         ],
         "name": "IJBRedemptionTerminal",
         "nameLocation": "67:21:44",
-        "scope": 28919,
-        "usedErrors": []
+        "scope": 28925,
+        "usedErrors": [],
+        "usedEvents": []
       }
     ],
     "license": "MIT"

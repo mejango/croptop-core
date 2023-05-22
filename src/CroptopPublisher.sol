@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.20;
 
 import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
 import "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol";
 import "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delegate.sol";
 
 /// @notice Criteria for allowed posts.
-/// @member nft The NFT to which this allowance applies.
-/// @member category A category that should allow posts.
-/// @member minimumPrice The minimum price that a post to the specified category should cost.
-/// @member minimumQuantity The minimum quantity of NFTs that can be made available when minting.
+/// @custom:member nft The NFT to which this allowance applies.
+/// @custom:member category A category that should allow posts.
+/// @custom:member minimumPrice The minimum price that a post to the specified category should cost.
+/// @custom:member minimumQuantity The minimum quantity of NFTs that can be made available when minting.
 struct AllowedPost {
     address nft;
     uint256 category;
@@ -18,10 +18,10 @@ struct AllowedPost {
 }
 
 /// @notice A post to be published.
-/// @member encodedIPFSUri The encoded IPFS URI of the post that is being published.
-/// @member quantity The quantity of NFTs that should be made available, including the 1 that will be minted alongside this transaction.
-/// @member price The price being paid for buying the post that is being published.
-/// @member category The category that the post should be published in.
+/// @custom:member encodedIPFSUri The encoded IPFS URI of the post that is being published.
+/// @custom:member quantity The quantity of NFTs that should be made available, including the 1 that will be minted alongside this transaction.
+/// @custom:member price The price being paid for buying the post that is being published.
+/// @custom:member category The category that the post should be published in.
 struct Post {
     bytes32 encodedIPFSUri;
     uint32 quantity;
@@ -29,8 +29,7 @@ struct Post {
     uint16 category;
 }
 
-/// @notice
-/// A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
+/// @notice A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
 contract CroptopPublisher {
     error INVALID_MINIMUM_QUANTITY();
     error INCOMPATIBLE_DATA_SOURCE();
@@ -45,10 +44,15 @@ contract CroptopPublisher {
     );
 
     /// @notice Packed values that determine the allowance of posts.
-    /// _projectId The ID of the project.
-    /// _nft The NFT contract for which this allowance applies.
-    /// _category The category for which the allowance applies
-    mapping(uint256 => mapping(address => mapping(uint256 => uint256))) internal _packedAllowanceFor;
+    /// @custom:param _projectId The ID of the project.
+    /// @custom:param _nft The NFT contract for which this allowance applies.
+    /// @custom:param _category The category for which the allowance applies
+    mapping(uint256 _projectId => mapping(address _nft => mapping(uint256 _category => uint256))) internal _packedAllowanceFor;
+
+    /// @notice The ID of the tier that an IPFS metadata has been saved to.
+    /// @custom:param _projectId The ID of the project.
+    /// @custom:param _encodedIPFSUri The IPFS URI.
+    mapping(uint256 _projectId => mapping(bytes32 _encodedIPFSUri => uint256)) public tierIdForEncodedIPFSUriOf;
 
     /// @notice The divisor that describes the fee that should be taken.
     /// @dev This is equal to 100 divided by the fee percent.
@@ -56,11 +60,6 @@ contract CroptopPublisher {
 
     /// @notice The controller that directs the projects being posted to.
     IJBController3_1 public controller;
-
-    /// @notice The ID of the tier that an IPFS metadata has been saved to.
-    /// _projectId The ID of the project.
-    /// _encodedIPFSUri The IPFS URI.
-    mapping(uint256 => mapping(bytes32 => uint256)) public tierIdForEncodedIPFSUriOf;
 
     /// @notice The ID of the project to which fees will be routed.
     uint256 public feeProjectId;
