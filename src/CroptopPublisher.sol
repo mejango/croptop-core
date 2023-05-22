@@ -5,15 +5,11 @@ import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.s
 import "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol";
 import "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delegate.sol";
 
-/**
- * @notice
- * Criteria for allowed posts.
- *
- * @member nft The NFT to which this allowance applies.
- * @member category A category that should allow posts.
- * @member minimumPrice The minimum price that a post to the specified category should cost.
- * @member minimumQuantity The minimum quantity of NFTs that can be made available when minting.
- */
+/// @notice Criteria for allowed posts.
+/// @member nft The NFT to which this allowance applies.
+/// @member category A category that should allow posts.
+/// @member minimumPrice The minimum price that a post to the specified category should cost.
+/// @member minimumQuantity The minimum quantity of NFTs that can be made available when minting.
 struct AllowedPost {
     address nft;
     uint256 category;
@@ -21,15 +17,11 @@ struct AllowedPost {
     uint256 minimumQuantity;
 }
 
-/**
- * @notice
- * A post to be published.
- *
- * @member encodedIPFSUri The encoded IPFS URI of the post that is being published.
- * @member quantity The quantity of NFTs that should be made available, including the 1 that will be minted alongside this transaction.
- * @member price The price being paid for buying the post that is being published.
- * @member category The category that the post should be published in.
- */
+/// @notice A post to be published.
+/// @member encodedIPFSUri The encoded IPFS URI of the post that is being published.
+/// @member quantity The quantity of NFTs that should be made available, including the 1 that will be minted alongside this transaction.
+/// @member price The price being paid for buying the post that is being published.
+/// @member category The category that the post should be published in.
 struct Post {
     bytes32 encodedIPFSUri;
     uint32 quantity;
@@ -37,10 +29,8 @@ struct Post {
     uint16 category;
 }
 
-/**
- * @notice
- * A contract that facilitates the distribution of NFT posts to a Juicebox project.
- */
+/// @notice
+/// A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
 contract CroptopPublisher {
     error INVALID_MINIMUM_QUANTITY();
     error INCOMPATIBLE_DATA_SOURCE();
@@ -54,56 +44,32 @@ contract CroptopPublisher {
         uint256 projectId, Post[] posts, address nftBeneficiary, address feeBeneficiary, uint256 fee, address caller
     );
 
-    /**
-     * @notice
-     * Packed values that determine the allowance of posts.
-     *
-     * _projectId The ID of the project.
-     * _nft The NFT contract for which this allowance applies.
-     * _category The category for which the allowance applies
-     */
+    /// @notice Packed values that determine the allowance of posts.
+    /// _projectId The ID of the project.
+    /// _nft The NFT contract for which this allowance applies.
+    /// _category The category for which the allowance applies
     mapping(uint256 => mapping(address => mapping(uint256 => uint256))) internal _packedAllowanceFor;
 
-    /**
-     * @notice
-     * The divisor that describes the fee that should be taken.
-     *
-     * @dev
-     * This is equal to 100 divided by the fee percent.
-     */
+    /// @notice The divisor that describes the fee that should be taken.
+    /// @dev This is equal to 100 divided by the fee percent.
     uint256 public feeDivisor = 20;
 
-    /**
-     * @notice
-     * The controller that directs the projects being posted to.
-     */
+    /// @notice The controller that directs the projects being posted to.
     IJBController3_1 public controller;
 
-    /**
-     * @notice
-     * The ID of the tier that an IPFS metadata has been saved to.
-     *
-     * _projectId The ID of the project.
-     * _encodedIPFSUri The IPFS URI.
-     */
+    /// @notice The ID of the tier that an IPFS metadata has been saved to.
+    /// _projectId The ID of the project.
+    /// _encodedIPFSUri The IPFS URI.
     mapping(uint256 => mapping(bytes32 => uint256)) public tierIdForEncodedIPFSUriOf;
 
-    /**
-     * @notice
-     * The ID of the project to which fees will be routed.
-     */
+    /// @notice The ID of the project to which fees will be routed.
     uint256 public feeProjectId;
 
-    /**
-     * @notice
-     * Get the tiers for the provided encoded IPFS URIs.
-     *
-     *  @param _projectId The ID of the project from which the tiers are being sought.
-     *  @param _nft The NFT from which to get tiers.
-     *  @param _encodedIPFSUris The URIs to get tiers of.
-     *
-     *  @return tiers The tiers that correspond to the provided encoded IPFS URIs. If there's no tier yet, an empty tier is returned.
-     */
+    /// @notice Get the tiers for the provided encoded IPFS URIs.
+    /// @param _projectId The ID of the project from which the tiers are being sought.
+    /// @param _nft The NFT from which to get tiers.
+    /// @param _encodedIPFSUris The URIs to get tiers of.
+    /// @return tiers The tiers that correspond to the provided encoded IPFS URIs. If there's no tier yet, an empty tier is returned.
     function tiersFor(uint256 _projectId, address _nft, bytes32[] memory _encodedIPFSUris)
         external
         view
@@ -135,17 +101,12 @@ contract CroptopPublisher {
         }
     }
 
-    /**
-     * @notice
-     * Post allowances for a particular category on a particular NFT.
-     *
-     * @param _projectId The ID of the project.
-     * @param _nft The NFT contract for which this allowance applies.
-     * @param _category The category for which this allowance applies.
-     *
-     * @return minimumPrice The minimum price that a poster must pay to record a new NFT.
-     * @return minimumQuantity The minimum quantity that a minter must set to record a new NFT.
-     */
+    /// @notice Post allowances for a particular category on a particular NFT.
+    /// @param _projectId The ID of the project.
+    /// @param _nft The NFT contract for which this allowance applies.
+    /// @param _category The category for which this allowance applies.
+    /// @return minimumPrice The minimum price that a poster must pay to record a new NFT.
+    /// @return minimumQuantity The minimum quantity that a minter must set to record a new NFT.
     function allowanceFor(uint256 _projectId, address _nft, uint256 _category)
         public
         view
@@ -160,27 +121,19 @@ contract CroptopPublisher {
         minimumQuantity = uint256(uint32(_packed >> 104));
     }
 
-    /**
-     * @param _controller The controller that directs the projects being posted to.
-     * @param _feeProjectId The ID of the project to which fees will be routed.
-     */
+    /// @param _controller The controller that directs the projects being posted to.
+    /// @param _feeProjectId The ID of the project to which fees will be routed.
     constructor(IJBController3_1 _controller, uint256 _feeProjectId) {
         controller = _controller;
         feeProjectId = _feeProjectId;
     }
 
-    /**
-     * @notice
-     * Publish an NFT to become mintable, and mint a first copy.
-     *
-     * @dev
-     * A fee is taken into the appropriate treasury.
-     *
-     * @param _projectId The ID of the project to which the NFT should be added.
-     * @param _posts An array of posts that should be published as NFTs to the specified project.
-     * @param _nftBeneficiary The beneficiary of the NFT mints.
-     * @param _feeBeneficiary The beneficiary of the fee project's token.
-     */
+    /// @notice Publish an NFT to become mintable, and mint a first copy.
+    /// @dev A fee is taken into the appropriate treasury.
+    /// @param _projectId The ID of the project to which the NFT should be added.
+    /// @param _posts An array of posts that should be published as NFTs to the specified project.
+    /// @param _nftBeneficiary The beneficiary of the NFT mints.
+    /// @param _feeBeneficiary The beneficiary of the fee project's token.
     function collect(uint256 _projectId, Post[] memory _posts, address _nftBeneficiary, address _feeBeneficiary)
         external
         payable
@@ -242,13 +195,9 @@ contract CroptopPublisher {
         emit Collected(_projectId, _posts, _nftBeneficiary, _feeBeneficiary, _fee, msg.sender);
     }
 
-    /**
-     * @notice
-     * Project owners can set the allowed criteria for publishing a new NFT to their project.
-     *
-     * @param _projectId The ID of the project having its publishing allowances set.
-     * @param _allowedPosts An array of criteria for allowed posts.
-     */
+    /// @notice Project owners can set the allowed criteria for publishing a new NFT to their project.
+    /// @param _projectId The ID of the project having its publishing allowances set.
+    /// @param _allowedPosts An array of criteria for allowed posts.
     function configure(uint256 _projectId, AllowedPost[] memory _allowedPosts) external {
         // Make sure the caller is the owner of the project.
         if (msg.sender != controller.projects().ownerOf(_projectId)) {
@@ -293,18 +242,13 @@ contract CroptopPublisher {
         }
     }
 
-    /**
-     * @notice 
-     *   Setup the posts.
-     * 
-     *   @param _projectId The ID of the project having posts set up.
-     *   @param _nft The NFT address on which the posts will apply.
-     *   @param _posts An array of posts that should be published as NFTs to the specified project.
-     * 
-     *   @return tierDataToAdd The tier data that will be created to represent the posts.
-     *   @return tierIdsToMint The tier IDs of the posts that should be minted once published.
-     *   @return totalPrice The total price being paid.
-     */
+    /// @notice Setup the posts.
+    /// @param _projectId The ID of the project having posts set up.
+    /// @param _nft The NFT address on which the posts will apply.
+    /// @param _posts An array of posts that should be published as NFTs to the specified project.
+    /// @return tierDataToAdd The tier data that will be created to represent the posts.
+    /// @return tierIdsToMint The tier IDs of the posts that should be minted once published.
+    /// @return totalPrice The total price being paid.
     function _setupPosts(uint256 _projectId, address _nft, Post[] memory _posts)
         internal
         returns (JB721TierParams[] memory tierDataToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
