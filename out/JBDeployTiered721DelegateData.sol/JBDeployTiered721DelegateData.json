@@ -1,0 +1,594 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JBDeployTiered721DelegateData.sol",
+    "id": 24229,
+    "exportedSymbols": {
+      "IERC165": [
+        26481
+      ],
+      "IERC721": [
+        26469
+      ],
+      "IJBDirectory": [
+        25332
+      ],
+      "IJBFundingCycleBallot": [
+        25418
+      ],
+      "IJBFundingCycleStore": [
+        25514
+      ],
+      "IJBPaymentTerminal": [
+        25672
+      ],
+      "IJBPriceFeed": [
+        25682
+      ],
+      "IJBPrices": [
+        25726
+      ],
+      "IJBProjects": [
+        25805
+      ],
+      "IJBTiered721DelegateStore": [
+        24034
+      ],
+      "IJBTokenUriResolver": [
+        26158
+      ],
+      "JB721GovernanceType": [
+        23379
+      ],
+      "JB721PricingParams": [
+        24133
+      ],
+      "JB721Tier": [
+        24161
+      ],
+      "JB721TierParams": [
+        24187
+      ],
+      "JBBallotState": [
+        24401
+      ],
+      "JBDeployTiered721DelegateData": [
+        24228
+      ],
+      "JBFundingCycle": [
+        26219
+      ],
+      "JBFundingCycleData": [
+        26233
+      ],
+      "JBProjectMetadata": [
+        26315
+      ],
+      "JBTiered721Flags": [
+        24370
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:1672:22",
+    "nodes": [
+      {
+        "id": 24189,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:22",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 24190,
+        "nodeType": "ImportDirective",
+        "src": "57:80:22",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBDirectory.sol",
+        "file": "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBDirectory.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24229,
+        "sourceUnit": 25333,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24191,
+        "nodeType": "ImportDirective",
+        "src": "138:88:22",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFundingCycleStore.sol",
+        "file": "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFundingCycleStore.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24229,
+        "sourceUnit": 25515,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24192,
+        "nodeType": "ImportDirective",
+        "src": "227:87:22",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBTokenUriResolver.sol",
+        "file": "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBTokenUriResolver.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24229,
+        "sourceUnit": 26159,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24193,
+        "nodeType": "ImportDirective",
+        "src": "315:44:22",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/enums/JB721GovernanceType.sol",
+        "file": "./../enums/JB721GovernanceType.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24229,
+        "sourceUnit": 23380,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24194,
+        "nodeType": "ImportDirective",
+        "src": "360:55:22",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateStore.sol",
+        "file": "./../interfaces/IJBTiered721DelegateStore.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24229,
+        "sourceUnit": 24035,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24195,
+        "nodeType": "ImportDirective",
+        "src": "416:34:22",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JB721PricingParams.sol",
+        "file": "./JB721PricingParams.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24229,
+        "sourceUnit": 24134,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24196,
+        "nodeType": "ImportDirective",
+        "src": "451:32:22",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721Flags.sol",
+        "file": "./JBTiered721Flags.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24229,
+        "sourceUnit": 24371,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24228,
+        "nodeType": "StructDefinition",
+        "src": "1327:376:22",
+        "nodes": [],
+        "canonicalName": "JBDeployTiered721DelegateData",
+        "documentation": {
+          "id": 24197,
+          "nodeType": "StructuredDocumentation",
+          "src": "485:841:22",
+          "text": "@member name The name of the token.\n@member symbol The symbol that the token should be represented by.\n@member fundingCycleStore A contract storing all funding cycle configurations.\n@member baseUri A URI to use as a base for full token URIs.\n@member tokenUriResolver A contract responsible for resolving the token URI for each token ID.\n@member contractUri A URI where contract metadata can be found. \n@member owner The address that should own this contract.\n@member pricing The tier pricing according to which token distribution will be made. \n@member reservedTokenBeneficiary The address receiving the reserved token\n@member store The store contract to use.\n@member flags A set of flags that help define how this contract works.\n@member governanceType The type of governance to allow the NFTs to be used for."
+        },
+        "members": [
+          {
+            "constant": false,
+            "id": 24199,
+            "mutability": "mutable",
+            "name": "name",
+            "nameLocation": "1375:4:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1368:11:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage_ptr",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 24198,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "1368:6:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24201,
+            "mutability": "mutable",
+            "name": "symbol",
+            "nameLocation": "1390:6:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1383:13:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage_ptr",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 24200,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "1383:6:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24204,
+            "mutability": "mutable",
+            "name": "fundingCycleStore",
+            "nameLocation": "1421:17:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1400:38:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IJBFundingCycleStore_$25514",
+              "typeString": "contract IJBFundingCycleStore"
+            },
+            "typeName": {
+              "id": 24203,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 24202,
+                "name": "IJBFundingCycleStore",
+                "nameLocations": [
+                  "1400:20:22"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 25514,
+                "src": "1400:20:22"
+              },
+              "referencedDeclaration": 25514,
+              "src": "1400:20:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IJBFundingCycleStore_$25514",
+                "typeString": "contract IJBFundingCycleStore"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24206,
+            "mutability": "mutable",
+            "name": "baseUri",
+            "nameLocation": "1449:7:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1442:14:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage_ptr",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 24205,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "1442:6:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24209,
+            "mutability": "mutable",
+            "name": "tokenUriResolver",
+            "nameLocation": "1480:16:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1460:36:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IJBTokenUriResolver_$26158",
+              "typeString": "contract IJBTokenUriResolver"
+            },
+            "typeName": {
+              "id": 24208,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 24207,
+                "name": "IJBTokenUriResolver",
+                "nameLocations": [
+                  "1460:19:22"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 26158,
+                "src": "1460:19:22"
+              },
+              "referencedDeclaration": 26158,
+              "src": "1460:19:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IJBTokenUriResolver_$26158",
+                "typeString": "contract IJBTokenUriResolver"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24211,
+            "mutability": "mutable",
+            "name": "contractUri",
+            "nameLocation": "1507:11:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1500:18:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage_ptr",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 24210,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "1500:6:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24213,
+            "mutability": "mutable",
+            "name": "owner",
+            "nameLocation": "1530:5:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1522:13:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 24212,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "1522:7:22",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24216,
+            "mutability": "mutable",
+            "name": "pricing",
+            "nameLocation": "1558:7:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1539:26:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_JB721PricingParams_$24133_storage_ptr",
+              "typeString": "struct JB721PricingParams"
+            },
+            "typeName": {
+              "id": 24215,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 24214,
+                "name": "JB721PricingParams",
+                "nameLocations": [
+                  "1539:18:22"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 24133,
+                "src": "1539:18:22"
+              },
+              "referencedDeclaration": 24133,
+              "src": "1539:18:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_JB721PricingParams_$24133_storage_ptr",
+                "typeString": "struct JB721PricingParams"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24218,
+            "mutability": "mutable",
+            "name": "reservedTokenBeneficiary",
+            "nameLocation": "1577:24:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1569:32:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 24217,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "1569:7:22",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24221,
+            "mutability": "mutable",
+            "name": "store",
+            "nameLocation": "1631:5:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1605:31:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IJBTiered721DelegateStore_$24034",
+              "typeString": "contract IJBTiered721DelegateStore"
+            },
+            "typeName": {
+              "id": 24220,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 24219,
+                "name": "IJBTiered721DelegateStore",
+                "nameLocations": [
+                  "1605:25:22"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 24034,
+                "src": "1605:25:22"
+              },
+              "referencedDeclaration": 24034,
+              "src": "1605:25:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IJBTiered721DelegateStore_$24034",
+                "typeString": "contract IJBTiered721DelegateStore"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24224,
+            "mutability": "mutable",
+            "name": "flags",
+            "nameLocation": "1657:5:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1640:22:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_JBTiered721Flags_$24370_storage_ptr",
+              "typeString": "struct JBTiered721Flags"
+            },
+            "typeName": {
+              "id": 24223,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 24222,
+                "name": "JBTiered721Flags",
+                "nameLocations": [
+                  "1640:16:22"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 24370,
+                "src": "1640:16:22"
+              },
+              "referencedDeclaration": 24370,
+              "src": "1640:16:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_JBTiered721Flags_$24370_storage_ptr",
+                "typeString": "struct JBTiered721Flags"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24227,
+            "mutability": "mutable",
+            "name": "governanceType",
+            "nameLocation": "1686:14:22",
+            "nodeType": "VariableDeclaration",
+            "scope": 24228,
+            "src": "1666:34:22",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_enum$_JB721GovernanceType_$23379",
+              "typeString": "enum JB721GovernanceType"
+            },
+            "typeName": {
+              "id": 24226,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 24225,
+                "name": "JB721GovernanceType",
+                "nameLocations": [
+                  "1666:19:22"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 23379,
+                "src": "1666:19:22"
+              },
+              "referencedDeclaration": 23379,
+              "src": "1666:19:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_enum$_JB721GovernanceType_$23379",
+                "typeString": "enum JB721GovernanceType"
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "name": "JBDeployTiered721DelegateData",
+        "nameLocation": "1334:29:22",
+        "scope": 24229,
+        "visibility": "public"
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 22
+}

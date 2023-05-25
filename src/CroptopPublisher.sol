@@ -36,6 +36,7 @@ contract CroptopPublisher {
     error TOTAL_SUPPY_MUST_BE_POSITIVE();
     error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource);
     error INSUFFICIENT_ETH_SENT(uint256 expected, uint256 sent);
+    error MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
     error PRICE_TOO_SMALL(uint256 minimumPrice);
     error TOTAL_SUPPLY_TOO_SMALL(uint256 minimumTotalSupply);
     error TOTAL_SUPPLY_TOO_BIG(uint256 maximumTotalSupply);
@@ -50,7 +51,8 @@ contract CroptopPublisher {
     /// @custom:param _projectId The ID of the project.
     /// @custom:param _nft The NFT contract for which this allowance applies.
     /// @custom:param _category The category for which the allowance applies
-    mapping(uint256 _projectId => mapping(address _nft => mapping(uint256 _category => uint256))) internal _packedAllowanceFor;
+    mapping(uint256 _projectId => mapping(address _nft => mapping(uint256 _category => uint256))) internal
+        _packedAllowanceFor;
 
     /// @notice The ID of the tier that an IPFS metadata has been saved to.
     /// @custom:param _projectId The ID of the project.
@@ -214,7 +216,7 @@ contract CroptopPublisher {
     /// @notice Project owners can set the allowed criteria for publishing a new NFT to their project.
     /// @param _projectId The ID of the project having its publishing allowances set.
     /// @param _allowedPosts An array of criteria for allowed posts.
-    function configure(uint256 _projectId, AllowedPost[] memory _allowedPosts) external {
+    function configure(uint256 _projectId, AllowedPost[] memory _allowedPosts) public {
         // Make sure the caller is the owner of the project.
         if (msg.sender != controller.projects().ownerOf(_projectId)) {
             revert UNAUTHORIZED();
@@ -239,6 +241,11 @@ contract CroptopPublisher {
                 revert TOTAL_SUPPY_MUST_BE_POSITIVE();
             }
 
+            // Make sure there is a minimum supply.
+            if (_allowedPost.minimumTotalSupply > _allowedPost.maximumTotalSupply) {
+                revert MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
+            }
+
             // Set the _nft as the current data source if not set.
             if (_allowedPost.nft == address(0)) {
                 _allowedPost.nft = _metadata.dataSource;
@@ -250,7 +257,7 @@ contract CroptopPublisher {
             // minimum total supply in bits 104-135 (32 bits).
             _packed |= uint256(_allowedPost.minimumTotalSupply) << 104;
             // maximum total supply in bits 136-167 (32 bits).
-            _packed |= uint256(_allowedPost.minimumTotalSupply) << 136;
+            _packed |= uint256(_allowedPost.maximumTotalSupply) << 136;
             // Store the packed value.
             _packedAllowanceFor[_projectId][_allowedPost.nft][_allowedPost.category] = _packed;
 
@@ -306,31 +313,32 @@ contract CroptopPublisher {
 
             // If no tier already exists, post the tier.
             if (tierIdsToMint[_i] == 0) {
-               // Scoped error handling section to prevent Stack Too Deep.
-               {
-                // Get references to the allowance.
-                (uint256 _minimumPrice, uint256 _minimumTotalSupply, uint256 _maximumTotalSupply) = allowanceFor(_projectId, _nft, _post.category);
+                // Scoped error handling section to prevent Stack Too Deep.
+                {
+                    // Get references to the allowance.
+                    (uint256 _minimumPrice, uint256 _minimumTotalSupply, uint256 _maximumTotalSupply) =
+                        allowanceFor(_projectId, _nft, _post.category);
 
-                // Make sure the category being posted to allows publishing.
-                if (_minimumTotalSupply == 0) {
-                    revert UNAUTHORIZED_TO_POST_IN_CATEGORY();
-                }
+                    // Make sure the category being posted to allows publishing.
+                    if (_minimumTotalSupply == 0) {
+                        revert UNAUTHORIZED_TO_POST_IN_CATEGORY();
+                    }
 
-                // Make sure the price being paid for the post is at least the allowed minimum price.
-                if (_post.price < _minimumPrice) {
-                    revert PRICE_TOO_SMALL(_minimumPrice);
-                }
+                    // Make sure the price being paid for the post is at least the allowed minimum price.
+                    if (_post.price < _minimumPrice) {
+                        revert PRICE_TOO_SMALL(_minimumPrice);
+                    }
 
-                // Make sure the total supply being made available for the post is at least the allowed minimum total supply.
-                if (_post.totalSupply < _minimumTotalSupply) {
-                    revert TOTAL_SUPPLY_TOO_SMALL(_minimumTotalSupply);
-                }
+                    // Make sure the total supply being made available for the post is at least the allowed minimum total supply.
+                    if (_post.totalSupply < _minimumTotalSupply) {
+                        revert TOTAL_SUPPLY_TOO_SMALL(_minimumTotalSupply);
+                    }
 
-                // Make sure the total supply being made available for the post is at most the allowed maximum total supply.
-                if (_post.totalSupply > _maximumTotalSupply) {
-                    revert TOTAL_SUPPLY_TOO_BIG(_maximumTotalSupply);
+                    // Make sure the total supply being made available for the post is at most the allowed maximum total supply.
+                    if (_post.totalSupply > _maximumTotalSupply) {
+                        revert TOTAL_SUPPLY_TOO_BIG(_maximumTotalSupply);
+                    }
                 }
-               }
 
                 // Set the tier.
                 tierDataToAdd[_numberOfTiersBeingAdded] = JB721TierParams({

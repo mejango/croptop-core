@@ -1,0 +1,515 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JBPayDataSourceFundingCycleMetadata.sol",
+    "id": 24333,
+    "exportedSymbols": {
+      "JBGlobalFundingCycleMetadata": [
+        26285
+      ],
+      "JBPayDataSourceFundingCycleMetadata": [
+        24332
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:2591:25",
+    "nodes": [
+      {
+        "id": 24296,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:25",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 24297,
+        "nodeType": "ImportDirective",
+        "src": "57:93:25",
+        "nodes": [],
+        "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBGlobalFundingCycleMetadata.sol",
+        "file": "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGlobalFundingCycleMetadata.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 24333,
+        "sourceUnit": 26286,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 24332,
+        "nodeType": "StructDefinition",
+        "src": "2146:476:25",
+        "nodes": [],
+        "canonicalName": "JBPayDataSourceFundingCycleMetadata",
+        "documentation": {
+          "id": 24298,
+          "nodeType": "StructuredDocumentation",
+          "src": "152:1993:25",
+          "text": "@member global Data used globally in non-migratable ecosystem contracts.\n@member reservedRate The reserved rate of the funding cycle. This number is a percentage calculated out of `JBConstants.MAX_RESERVED_RATE`.\n@member redemptionRate The redemption rate of the funding cycle. This number is a percentage calculated out of `JBConstants.MAX_REDEMPTION_RATE`.\n@member ballotRedemptionRate The redemption rate to use during an active ballot of the funding cycle. This number is a percentage calculated out of `JBConstants.MAX_REDEMPTION_RATE`.\n@member pausePay A flag indicating if the pay functionality should be paused during the funding cycle.\n@member pauseDistributions A flag indicating if the distribute functionality should be paused during the funding cycle.\n@member pauseRedeem A flag indicating if the redeem functionality should be paused during the funding cycle.\n@member pauseBurn A flag indicating if the burn functionality should be paused during the funding cycle.\n@member allowMinting A flag indicating if minting tokens should be allowed during this funding cycle.\n@member allowTerminalMigration A flag indicating if migrating terminals should be allowed during this funding cycle.\n@member allowControllerMigration A flag indicating if migrating controllers should be allowed during this funding cycle.\n@member holdFees A flag indicating if fees should be held during this funding cycle.\n@member preferClaimedTokenOverride A flag indicating if claimed tokens should always be prefered to unclaimed tokens when minting.\n@member useTotalOverflowForRedemptions A flag indicating if redemptions should use the project's balance held in all terminals instead of the project's local terminal balance from which the redemption is being fulfilled.\n@member useDataSourceForRedeem A flag indicating if the data source should be used for redeem transactions during this funding cycle.\n@member metadata Metadata of the metadata, up to uint8 in size."
+        },
+        "members": [
+          {
+            "constant": false,
+            "id": 24301,
+            "mutability": "mutable",
+            "name": "global",
+            "nameLocation": "2222:6:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2193:35:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_JBGlobalFundingCycleMetadata_$26285_storage_ptr",
+              "typeString": "struct JBGlobalFundingCycleMetadata"
+            },
+            "typeName": {
+              "id": 24300,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 24299,
+                "name": "JBGlobalFundingCycleMetadata",
+                "nameLocations": [
+                  "2193:28:25"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 26285,
+                "src": "2193:28:25"
+              },
+              "referencedDeclaration": 26285,
+              "src": "2193:28:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_JBGlobalFundingCycleMetadata_$26285_storage_ptr",
+                "typeString": "struct JBGlobalFundingCycleMetadata"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24303,
+            "mutability": "mutable",
+            "name": "reservedRate",
+            "nameLocation": "2240:12:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2232:20:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 24302,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "2232:7:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24305,
+            "mutability": "mutable",
+            "name": "redemptionRate",
+            "nameLocation": "2264:14:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2256:22:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 24304,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "2256:7:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24307,
+            "mutability": "mutable",
+            "name": "ballotRedemptionRate",
+            "nameLocation": "2290:20:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2282:28:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 24306,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "2282:7:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24309,
+            "mutability": "mutable",
+            "name": "pausePay",
+            "nameLocation": "2319:8:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2314:13:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24308,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2314:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24311,
+            "mutability": "mutable",
+            "name": "pauseDistributions",
+            "nameLocation": "2336:18:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2331:23:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24310,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2331:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24313,
+            "mutability": "mutable",
+            "name": "pauseRedeem",
+            "nameLocation": "2363:11:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2358:16:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24312,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2358:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24315,
+            "mutability": "mutable",
+            "name": "pauseBurn",
+            "nameLocation": "2383:9:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2378:14:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24314,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2378:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24317,
+            "mutability": "mutable",
+            "name": "allowMinting",
+            "nameLocation": "2401:12:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2396:17:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24316,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2396:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24319,
+            "mutability": "mutable",
+            "name": "allowTerminalMigration",
+            "nameLocation": "2422:22:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2417:27:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24318,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2417:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24321,
+            "mutability": "mutable",
+            "name": "allowControllerMigration",
+            "nameLocation": "2453:24:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2448:29:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24320,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2448:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24323,
+            "mutability": "mutable",
+            "name": "holdFees",
+            "nameLocation": "2486:8:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2481:13:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24322,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2481:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24325,
+            "mutability": "mutable",
+            "name": "preferClaimedTokenOverride",
+            "nameLocation": "2503:26:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2498:31:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24324,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2498:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24327,
+            "mutability": "mutable",
+            "name": "useTotalOverflowForRedemptions",
+            "nameLocation": "2538:30:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2533:35:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24326,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2533:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24329,
+            "mutability": "mutable",
+            "name": "useDataSourceForRedeem",
+            "nameLocation": "2577:22:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2572:27:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 24328,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "2572:4:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 24331,
+            "mutability": "mutable",
+            "name": "metadata",
+            "nameLocation": "2611:8:25",
+            "nodeType": "VariableDeclaration",
+            "scope": 24332,
+            "src": "2603:16:25",
+            "stateVariable": false,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 24330,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "2603:7:25",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "name": "JBPayDataSourceFundingCycleMetadata",
+        "nameLocation": "2153:35:25",
+        "scope": 24333,
+        "visibility": "public"
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 25
+}
