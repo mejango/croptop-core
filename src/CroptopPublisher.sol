@@ -11,12 +11,14 @@ import "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delega
 /// @custom:member minimumPrice The minimum price that a post to the specified category should cost.
 /// @custom:member minimumTotalSupply The minimum total supply of NFTs that can be made available when minting.
 /// @custom:member maxTotalSupply The max total supply of NFTs that can be made available when minting. Leave as 0 for max.
+/// @custom:member allowedAddresses A list of addresses that are allowed to post on the category through Croptop.
 struct AllowedPost {
     address nft;
     uint256 category;
     uint256 minimumPrice;
     uint256 minimumTotalSupply;
     uint256 maximumTotalSupply;
+    address[] allowedAddresses;
 }
 
 /// @notice A post to be published.
@@ -34,8 +36,10 @@ struct Post {
 /// @notice A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
 contract CroptopPublisher {
     error TOTAL_SUPPY_MUST_BE_POSITIVE();
+    error EMPTY_ENCODED_IPFS_URI(bytes32 encodedUri);
     error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource);
     error INSUFFICIENT_ETH_SENT(uint256 expected, uint256 sent);
+    error NOT_IN_ALLOW_LIST(address[] allowedAddresses);
     error MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
     error PRICE_TOO_SMALL(uint256 minimumPrice);
     error TOTAL_SUPPLY_TOO_SMALL(uint256 minimumTotalSupply);
@@ -53,6 +57,14 @@ contract CroptopPublisher {
     /// @custom:param _category The category for which the allowance applies
     mapping(uint256 _projectId => mapping(address _nft => mapping(uint256 _category => uint256))) internal
         _packedAllowanceFor;
+
+    /// @notice Stores addresses that are allowed to post onto an NFT category.
+    /// @custom:param _projectId The ID of the project.
+    /// @custom:param _nft The NFT contract for which this allowance applies.
+    /// @custom:param _category The category for which the allowance applies.
+    /// @custom:param _address The address to check an allowance for.
+    mapping(uint256 _projectId => mapping(address _nft => mapping(uint256 _category => address[]))) internal
+        _allowedAddresses;
 
     /// @notice The ID of the tier that an IPFS metadata has been saved to.
     /// @custom:param _projectId The ID of the project.
@@ -115,10 +127,16 @@ contract CroptopPublisher {
     /// @return minimumPrice The minimum price that a poster must pay to record a new NFT.
     /// @return minimumTotalSupply The minimum total number of available tokens that a minter must set to record a new NFT.
     /// @return maximumTotalSupply The max total supply of NFTs that can be made available when minting. Leave as 0 for max.
+    /// @return allowedAddresses The addresses allowed to post. Returns empty if all addresses are allowed.
     function allowanceFor(uint256 _projectId, address _nft, uint256 _category)
         public
         view
-        returns (uint256 minimumPrice, uint256 minimumTotalSupply, uint256 maximumTotalSupply)
+        returns (
+            uint256 minimumPrice,
+            uint256 minimumTotalSupply,
+            uint256 maximumTotalSupply,
+            address[] memory allowedAddresses
+        )
     {
         if (_nft == address(0)) {
             // Get the projects current data source from its current funding cyce's metadata.
@@ -137,6 +155,8 @@ contract CroptopPublisher {
         minimumTotalSupply = uint256(uint32(_packed >> 104));
         // minimum supply in bits 136-67 (32 bits).
         maximumTotalSupply = uint256(uint32(_packed >> 136));
+
+        allowedAddresses = _allowedAddresses[_projectId][_nft][_category];
     }
 
     /// @param _controller The controller that directs the projects being posted to.
@@ -152,44 +172,57 @@ contract CroptopPublisher {
     /// @param _posts An array of posts that should be published as NFTs to the specified project.
     /// @param _nftBeneficiary The beneficiary of the NFT mints.
     /// @param _feeBeneficiary The beneficiary of the fee project's token.
-    function collect(uint256 _projectId, Post[] memory _posts, address _nftBeneficiary, address _feeBeneficiary)
+    /// @param _nftMetadataChunk 32 bytes that should be included in the pay function's metadata.
+    /// @param _feeMetadata The metadata to send alongside the fee payment.
+    function collectFrom(uint256 _projectId, Post[] memory _posts, address _nftBeneficiary, address _feeBeneficiary, bytes32 _nftMetadataChunk, bytes calldata _feeMetadata)
         external
         payable
     {
-        // Get the projects current data source from its current funding cyce's metadata.
-        (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+        // Keep a reference to the project terminal.
+        IJBPaymentTerminal _projectTerminal; 
 
-        // Check to make sure the project's current data source is a IJBTiered721Delegate.
-        if (!IERC165(_metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
-            revert INCOMPATIBLE_PROJECT(_projectId, _metadata.dataSource);
+        // Keep a reference a reference to the fee.
+        uint256 _fee;
+
+        // Keep a reference to the mint metadata.
+        bytes memory _mintMetadata;
+
+        {
+          // Get the projects current data source from its current funding cyce's metadata.
+          (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+
+          // Check to make sure the project's current data source is a IJBTiered721Delegate.
+          if (!IERC165(_metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
+              revert INCOMPATIBLE_PROJECT(_projectId, _metadata.dataSource);
+          }
+
+          // Setup the posts.
+          (JB721TierParams[] memory _tierDataToAdd, uint256[] memory _tierIdsToMint, uint256 _totalPrice) =
+              _setupPosts(_projectId, _metadata.dataSource, _posts);
+
+          // Keep a reference to the fee that will be paid.
+          _fee = _projectId == feeProjectId ? 0 : (_totalPrice / feeDivisor);
+
+          // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
+          if (_totalPrice + _fee < msg.value) {
+              revert INSUFFICIENT_ETH_SENT(_totalPrice, msg.value);
+          }
+
+          // Add the new tiers.
+          IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
+
+          // Get a reference to the project's current ETH payment terminal.
+          _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
+
+          // Create the metadata for the payment to specify the tier IDs that should be minted.
+          _mintMetadata = abi.encode(
+              bytes32(feeProjectId), // Referral project ID.
+              _nftMetadataChunk,
+              type(IJBTiered721Delegate).interfaceId,
+              true, // Allow overspending.
+              _tierIdsToMint
+          );
         }
-
-        // Setup the posts.
-        (JB721TierParams[] memory _tierDataToAdd, uint256[] memory _tierIdsToMint, uint256 _totalPrice) =
-            _setupPosts(_projectId, _metadata.dataSource, _posts);
-
-        // Keep a reference to the fee that will be paid.
-        uint256 _fee = _projectId == feeProjectId ? 0 : (_totalPrice / feeDivisor);
-
-        // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
-        if (_totalPrice + _fee < msg.value) {
-            revert INSUFFICIENT_ETH_SENT(_totalPrice, msg.value);
-        }
-
-        // Add the new tiers.
-        IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
-
-        // Get a reference to the project's current ETH payment terminal.
-        IJBPaymentTerminal _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
-
-        // Create the metadata for the payment to specify the tier IDs that should be minted.
-        bytes memory _mintMetadata = abi.encode(
-            bytes32(feeProjectId), // Referral project ID.
-            bytes32(0),
-            type(IJBTiered721Delegate).interfaceId,
-            true, // Allow overspending.
-            _tierIdsToMint
-        );
 
         // Make the payment.
         _projectTerminal.pay{value: msg.value - _fee}(
@@ -200,9 +233,6 @@ contract CroptopPublisher {
         if (address(this).balance != 0) {
             // Get a reference to the fee project's current ETH payment terminal.
             IJBPaymentTerminal _feeTerminal = controller.directory().primaryTerminalOf(feeProjectId, JBTokens.ETH);
-
-            // Referral project ID.
-            bytes memory _feeMetadata = abi.encode(bytes32(feeProjectId));
 
             // Make the fee payment.
             _feeTerminal.pay{value: address(this).balance}(
@@ -216,7 +246,7 @@ contract CroptopPublisher {
     /// @notice Project owners can set the allowed criteria for publishing a new NFT to their project.
     /// @param _projectId The ID of the project having its publishing allowances set.
     /// @param _allowedPosts An array of criteria for allowed posts.
-    function configure(uint256 _projectId, AllowedPost[] memory _allowedPosts) public {
+    function configureFor(uint256 _projectId, AllowedPost[] memory _allowedPosts) public {
         // Make sure the caller is the owner of the project.
         if (msg.sender != controller.projects().ownerOf(_projectId)) {
             revert UNAUTHORIZED();
@@ -261,6 +291,21 @@ contract CroptopPublisher {
             // Store the packed value.
             _packedAllowanceFor[_projectId][_allowedPost.nft][_allowedPost.category] = _packed;
 
+            // Store the allow list.
+            uint256 _numberOfAddresses = _allowedPost.allowedAddresses.length;
+            // Reset the addresses.
+            delete _allowedAddresses[_projectId][_allowedPost.nft][_allowedPost.category];
+            // Add the number allowed addresses.
+            if (_numberOfAddresses != 0) {
+                // Keep a reference to the storage of the allowed addresses.
+                for (uint256 _j = 0; _j < _numberOfAddresses;) {
+                    _allowedAddresses[_projectId][_allowedPost.nft][_allowedPost.category].push(_allowedPost.allowedAddresses[_j]);
+                    unchecked {
+                        ++_j;
+                    }
+                }
+            }
+
             unchecked {
                 ++_i;
             }
@@ -303,6 +348,11 @@ contract CroptopPublisher {
             // Get the current post being iterated on.
             _post = _posts[_i];
 
+            // Make sure the post includes an encodedIPFSUri.
+            if (_post.encodedIPFSUri == bytes32("")) {
+                revert EMPTY_ENCODED_IPFS_URI(_post.encodedIPFSUri);
+            }
+
             // Scoped section to prevent stack too deep.
             {
                 // Check if there's an ID of a tier already minted for this encodedIPFSUri.
@@ -316,8 +366,12 @@ contract CroptopPublisher {
                 // Scoped error handling section to prevent Stack Too Deep.
                 {
                     // Get references to the allowance.
-                    (uint256 _minimumPrice, uint256 _minimumTotalSupply, uint256 _maximumTotalSupply) =
-                        allowanceFor(_projectId, _nft, _post.category);
+                    (
+                        uint256 _minimumPrice,
+                        uint256 _minimumTotalSupply,
+                        uint256 _maximumTotalSupply,
+                        address[] memory _addresses
+                    ) = allowanceFor(_projectId, _nft, _post.category);
 
                     // Make sure the category being posted to allows publishing.
                     if (_minimumTotalSupply == 0) {
@@ -337,6 +391,11 @@ contract CroptopPublisher {
                     // Make sure the total supply being made available for the post is at most the allowed maximum total supply.
                     if (_post.totalSupply > _maximumTotalSupply) {
                         revert TOTAL_SUPPLY_TOO_BIG(_maximumTotalSupply);
+                    }
+
+                    // Make sure the address is allowed to post.
+                    if (_addresses.length != 0 && !_isAllowed(msg.sender, _addresses)) {
+                        revert NOT_IN_ALLOW_LIST(_addresses);
                     }
                 }
 
@@ -376,5 +435,19 @@ contract CroptopPublisher {
                 mstore(tierDataToAdd, _numberOfTiersBeingAdded)
             }
         }
+    }
+
+    /// @notice Check if an address is included in an allow list.
+    /// @param _address The candidate address.
+    /// @param _addresses An array of allowed addresses.
+    function _isAllowed(address _address, address[] memory _addresses) internal pure returns (bool) {
+        uint256 _numberOfAddresses = _addresses.length;
+        for (uint256 _i; _i < _numberOfAddresses;) {
+            if (_address == _addresses[_i]) return true;
+            unchecked {
+                ++_i;
+            }
+        }
+        return false;
     }
 }
