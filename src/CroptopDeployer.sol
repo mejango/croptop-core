@@ -1,15 +1,30 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBCurrencies.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/structs/JBProjectMetadata.sol";
-import "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateProjectDeployer.sol";
-import "@jbx-protocol/juice-721-delegate/contracts/enums/JB721GovernanceType.sol";
-import "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721FundingCycleMetadata.sol";
-import "@jbx-protocol/juice-721-delegate/contracts/libraries/JBTiered721FundingCycleMetadataResolver.sol";
-import "./CroptopPublisher.sol";
+import { IERC721Receiver } from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import { IJBPaymentTerminal } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPaymentTerminal.sol"; 
+import { IJBController3_1 } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
+import { IJBFundingCycleBallot } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFundingCycleBallot.sol";
+import { JBCurrencies } from "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBCurrencies.sol";
+import { JBFundingCycleData } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundingCycleData.sol";
+import { JBGlobalFundingCycleMetadata } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGlobalFundingCycleMetadata.sol";
+import { JBGroupedSplits } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGroupedSplits.sol";
+import { JBFundAccessConstraints } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundAccessConstraints.sol";
+import { JBProjectMetadata } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBProjectMetadata.sol";
+import { IJBPrices } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPrices.sol";
+import { IJBTiered721DelegateStore } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateStore.sol";
+import { IJB721TokenUriResolver} from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJB721TokenUriResolver.sol";
+import { IJBTiered721DelegateProjectDeployer } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateProjectDeployer.sol";
+import { JB721GovernanceType } from "@jbx-protocol/juice-721-delegate/contracts/enums/JB721GovernanceType.sol";
+import { JBLaunchProjectData } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBLaunchProjectData.sol"; 
+import { JBTiered721FundingCycleMetadata } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721FundingCycleMetadata.sol";
+import { JBPayDataSourceFundingCycleMetadata } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JBPayDataSourceFundingCycleMetadata.sol";
+import { JBDeployTiered721DelegateData } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JBDeployTiered721DelegateData.sol";
+import { JB721TierParams } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol";
+import { JB721PricingParams } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JB721PricingParams.sol";
+import { JBTiered721Flags } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721Flags.sol";
+import { JBTiered721FundingCycleMetadataResolver } from "@jbx-protocol/juice-721-delegate/contracts/libraries/JBTiered721FundingCycleMetadataResolver.sol";
+import { CroptopPublisher, AllowedPost } from "./CroptopPublisher.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
 contract CroptopDeployer is IERC721Receiver {
@@ -65,15 +80,14 @@ contract CroptopDeployer is IERC721Receiver {
 
         // Deploy a blank project.
         projectId = deployer.launchProjectFor({
-            _owner: address(this),
-            _deployTieredNFTRewardDelegateData: JBDeployTiered721DelegateData({
+            owner: address(this),
+            deployTiered721DelegateData: JBDeployTiered721DelegateData({
                 name: _name,
                 symbol: _symbol,
                 fundingCycleStore: controller.fundingCycleStore(),
                 baseUri: "ipfs://",
-                tokenUriResolver: IJBTokenUriResolver(address(0)),
+                tokenUriResolver: IJB721TokenUriResolver(address(0)),
                 contractUri: _contractUri,
-                owner: _owner,
                 pricing: JB721PricingParams({
                     tiers: new JB721TierParams[](0),
                     currency: uint48(JBCurrencies.ETH),
@@ -90,7 +104,7 @@ contract CroptopDeployer is IERC721Receiver {
                 }),
                 governanceType: JB721GovernanceType.NONE
             }),
-            _launchProjectData: JBLaunchProjectData({
+            launchProjectData: JBLaunchProjectData({
                 projectMetadata: _projectMetadata,
                 data: JBFundingCycleData({
                     duration: 0,
@@ -128,7 +142,7 @@ contract CroptopDeployer is IERC721Receiver {
                 terminals: _terminals,
                 memo: "Deployed from Croptop"
             }),
-            _controller: controller
+            controller: controller
         });
 
         // Configure allowed posts.

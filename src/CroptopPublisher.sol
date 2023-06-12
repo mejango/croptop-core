@@ -1,9 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol";
-import "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delegate.sol";
+import { IERC165 } from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import { IJBPaymentTerminal } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPaymentTerminal.sol";
+import { IJBController3_1 } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
+import { JBTokens } from "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol";
+import { JBFundingCycleMetadata } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundingCycleMetadata.sol";
+import { IJBTiered721Delegate } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delegate.sol";
+import { JB721Tier } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721Tier.sol";
+import { JB721TierParams } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol";
 
 /// @notice Criteria for allowed posts.
 /// @custom:member nft The NFT to which this allowance applies.
@@ -172,15 +177,12 @@ contract CroptopPublisher {
     /// @param _posts An array of posts that should be published as NFTs to the specified project.
     /// @param _nftBeneficiary The beneficiary of the NFT mints.
     /// @param _feeBeneficiary The beneficiary of the fee project's token.
-    /// @param _nftMetadataChunk 32 bytes that should be included in the pay function's metadata.
+    /// @param _nftMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the payload needed for NFT creation.
     /// @param _feeMetadata The metadata to send alongside the fee payment.
-    function collectFrom(uint256 _projectId, Post[] memory _posts, address _nftBeneficiary, address _feeBeneficiary, bytes32 _nftMetadataChunk, bytes calldata _feeMetadata)
+    function collectFrom(uint256 _projectId, Post[] memory _posts, address _nftBeneficiary, address _feeBeneficiary, bytes calldata _nftMetadata, bytes calldata _feeMetadata)
         external
         payable
     {
-        // Keep a reference to the project terminal.
-        IJBPaymentTerminal _projectTerminal; 
-
         // Keep a reference a reference to the fee.
         uint256 _fee;
 
@@ -211,23 +213,25 @@ contract CroptopPublisher {
           // Add the new tiers.
           IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
 
-          // Get a reference to the project's current ETH payment terminal.
-          _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
-
           // Create the metadata for the payment to specify the tier IDs that should be minted.
           _mintMetadata = abi.encode(
               bytes32(feeProjectId), // Referral project ID.
-              _nftMetadataChunk,
+              (_nftMetadata.length == 0 ? abi.encodePacked(bytes32(0)) : _nftMetadata),
               type(IJBTiered721Delegate).interfaceId,
               true, // Allow overspending.
               _tierIdsToMint
           );
         }
+        
+        {
+          // Get a reference to the project's current ETH payment terminal.
+          IJBPaymentTerminal _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
 
-        // Make the payment.
-        _projectTerminal.pay{value: msg.value - _fee}(
-            _projectId, msg.value - _fee, JBTokens.ETH, _nftBeneficiary, 0, false, "Minted from Croptop", _mintMetadata
-        );
+          // Make the payment.
+          _projectTerminal.pay{value: msg.value - _fee}(
+              _projectId, msg.value - _fee, JBTokens.ETH, _nftBeneficiary, 0, false, "Minted from Croptop", _mintMetadata
+          );
+        }
 
         // Pay a fee if there are funds left.
         if (address(this).balance != 0) {

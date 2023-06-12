@@ -17,7 +17,7 @@
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:72:12",
+    "src": "32:76:12",
     "nodes": [
       {
         "id": 23376,
@@ -34,23 +34,23 @@
       {
         "id": 23379,
         "nodeType": "EnumDefinition",
-        "src": "57:46:12",
+        "src": "57:50:12",
         "nodes": [],
         "canonicalName": "JB721GovernanceType",
         "members": [
           {
             "id": 23377,
             "name": "NONE",
-            "nameLocation": "86:4:12",
+            "nameLocation": "88:4:12",
             "nodeType": "EnumValue",
-            "src": "86:4:12"
+            "src": "88:4:12"
           },
           {
             "id": 23378,
             "name": "ONCHAIN",
-            "nameLocation": "94:7:12",
+            "nameLocation": "98:7:12",
             "nodeType": "EnumValue",
-            "src": "94:7:12"
+            "src": "98:7:12"
           }
         ],
         "name": "JB721GovernanceType",
