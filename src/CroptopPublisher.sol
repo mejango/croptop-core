@@ -42,7 +42,7 @@ struct Post {
 contract CroptopPublisher {
     error TOTAL_SUPPY_MUST_BE_POSITIVE();
     error EMPTY_ENCODED_IPFS_URI(bytes32 encodedUri);
-    error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource);
+    error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource, bytes4 expectedInterfaceId);
     error INSUFFICIENT_ETH_SENT(uint256 expected, uint256 sent);
     error NOT_IN_ALLOW_LIST(address[] allowedAddresses);
     error MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
@@ -195,7 +195,7 @@ contract CroptopPublisher {
 
           // Check to make sure the project's current data source is a IJBTiered721Delegate.
           if (!IERC165(_metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
-              revert INCOMPATIBLE_PROJECT(_projectId, _metadata.dataSource);
+              revert INCOMPATIBLE_PROJECT(_projectId, _metadata.dataSource, type(IJBTiered721Delegate).interfaceId);
           }
 
           // Setup the posts.

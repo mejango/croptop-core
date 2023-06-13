@@ -152,7 +152,7 @@ contract CroptopDeployer is IERC721Receiver {
         controller.projects().transferFrom(address(this), _owner, projectId);
     }
 
-    // Need to implement this to own a Juicebox project.
+    /// @dev Make sure only mints can be received.
     function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes calldata _data)
         view
         external

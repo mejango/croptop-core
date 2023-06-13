@@ -1,4 +1,4 @@
-name: juice-contracts-publish
+name: croptop-publish
 on:
   push:
     branches:
