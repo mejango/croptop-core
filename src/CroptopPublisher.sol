@@ -52,8 +52,14 @@ contract CroptopPublisher {
     error UNAUTHORIZED();
     error UNAUTHORIZED_TO_POST_IN_CATEGORY();
 
+    event Configured(
+      uint256 indexed projectId,
+      AllowedPost[] allowedPosts,
+      address caller
+    );
+
     event Collected(
-        uint256 projectId, Post[] posts, address nftBeneficiary, address feeBeneficiary, uint256 fee, address caller
+        uint256 indexed projectId, address indexed nftBeneficiary, address indexed feeBeneficiary, Post[] posts, uint256 fee, address caller
     );
 
     /// @notice Packed values that determine the allowance of posts.
@@ -244,7 +250,7 @@ contract CroptopPublisher {
             );
         }
 
-        emit Collected(_projectId, _posts, _nftBeneficiary, _feeBeneficiary, _fee, msg.sender);
+        emit Collected(_projectId, _nftBeneficiary, _feeBeneficiary, _posts, _fee, msg.sender);
     }
 
     /// @notice Project owners can set the allowed criteria for publishing a new NFT to their project.
@@ -314,6 +320,8 @@ contract CroptopPublisher {
                 ++_i;
             }
         }
+
+        emit Configured(_projectId, _allowedPosts, msg.sender);
     }
 
     /// @notice Setup the posts.

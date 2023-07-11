@@ -14,7 +14,7 @@ import { CroptopProjectOwner } from  "../src/CroptopProjectOwner.sol";
 contract DeployMainnet is Script {
     function setUp() public {}
 
-    function run() public {
+    function _run() internal {
         vm.broadcast();
     }
 }

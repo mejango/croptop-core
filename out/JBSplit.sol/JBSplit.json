@@ -10,28 +10,22 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBSplit.sol",
-    "id": 29746,
+    "id": 30087,
     "exportedSymbols": {
-      "IERC165": [
-        29902
-      ],
       "IJBSplitAllocator": [
-        29166
+        29492
       ],
       "JBSplit": [
-        29745
-      ],
-      "JBSplitAllocationData": [
-        29763
+        30086
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:1945:65",
+    "src": "32:2025:76",
     "nodes": [
       {
-        "id": 29727,
+        "id": 30067,
         "nodeType": "PragmaDirective",
-        "src": "32:23:65",
+        "src": "32:23:76",
         "nodes": [],
         "literals": [
           "solidity",
@@ -41,40 +35,53 @@
         ]
       },
       {
-        "id": 29728,
+        "id": 30069,
         "nodeType": "ImportDirective",
-        "src": "57:47:65",
+        "src": "57:72:76",
         "nodes": [],
         "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBSplitAllocator.sol",
         "file": "./../interfaces/IJBSplitAllocator.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 29746,
-        "sourceUnit": 29167,
-        "symbolAliases": [],
+        "scope": 30087,
+        "sourceUnit": 29493,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 30068,
+              "name": "IJBSplitAllocator",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 29492,
+              "src": "65:17:76",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
         "unitAlias": ""
       },
       {
-        "id": 29745,
+        "id": 30086,
         "nodeType": "StructDefinition",
-        "src": "1784:192:65",
+        "src": "1864:192:76",
         "nodes": [],
         "canonicalName": "JBSplit",
         "documentation": {
-          "id": 29729,
+          "id": 30070,
           "nodeType": "StructuredDocumentation",
-          "src": "106:1677:65",
-          "text": "@member preferClaimed A flag that only has effect if a projectId is also specified, and the project has a token contract attached. If so, this flag indicates if the tokens that result from making a payment to the project should be delivered claimed into the beneficiary's wallet, or unclaimed to save gas.\n@member preferAddToBalance A flag indicating if a distribution to a project should prefer triggering it's addToBalance function instead of its pay function.\n@member percent The percent of the whole group that this split occupies. This number is out of `JBConstants.SPLITS_TOTAL_PERCENT`.\n@member projectId The ID of a project. If an allocator is not set but a projectId is set, funds will be sent to the protocol treasury belonging to the project who's ID is specified. Resulting tokens will be routed to the beneficiary with the claimed token preference respected.\n@member beneficiary An address. The role the of the beneficary depends on whether or not projectId is specified, and whether or not an allocator is specified. If allocator is set, the beneficiary will be forwarded to the allocator for it to use. If allocator is not set but projectId is set, the beneficiary is the address to which the project's tokens will be sent that result from a payment to it. If neither allocator or projectId are set, the beneficiary is where the funds from the split will be sent.\n@member lockedUntil Specifies if the split should be unchangeable until the specified time, with the exception of extending the locked period.\n@member allocator If an allocator is specified, funds will be sent to the allocator contract along with all properties of this split."
+          "src": "131:1733:76",
+          "text": "@custom:member preferClaimed A flag that only has effect if a projectId is also specified, and the project has a token contract attached. If so, this flag indicates if the tokens that result from making a payment to the project should be delivered claimed into the beneficiary's wallet, or unclaimed to save gas.\n @custom:member preferAddToBalance A flag indicating if a distribution to a project should prefer triggering it's addToBalance function instead of its pay function.\n @custom:member percent The percent of the whole group that this split occupies. This number is out of `JBConstants.SPLITS_TOTAL_PERCENT`.\n @custom:member projectId The ID of a project. If an allocator is not set but a projectId is set, funds will be sent to the protocol treasury belonging to the project who's ID is specified. Resulting tokens will be routed to the beneficiary with the claimed token preference respected.\n @custom:member beneficiary An address. The role the of the beneficary depends on whether or not projectId is specified, and whether or not an allocator is specified. If allocator is set, the beneficiary will be forwarded to the allocator for it to use. If allocator is not set but projectId is set, the beneficiary is the address to which the project's tokens will be sent that result from a payment to it. If neither allocator or projectId are set, the beneficiary is where the funds from the split will be sent.\n @custom:member lockedUntil Specifies if the split should be unchangeable until the specified time, with the exception of extending the locked period.\n @custom:member allocator If an allocator is specified, funds will be sent to the allocator contract along with all properties of this split."
         },
         "members": [
           {
             "constant": false,
-            "id": 29731,
+            "id": 30072,
             "mutability": "mutable",
             "name": "preferClaimed",
-            "nameLocation": "1808:13:65",
+            "nameLocation": "1888:13:76",
             "nodeType": "VariableDeclaration",
-            "scope": 29745,
-            "src": "1803:18:65",
+            "scope": 30086,
+            "src": "1883:18:76",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -82,10 +89,10 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 29730,
+              "id": 30071,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "1803:4:65",
+              "src": "1883:4:76",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -95,13 +102,13 @@
           },
           {
             "constant": false,
-            "id": 29733,
+            "id": 30074,
             "mutability": "mutable",
             "name": "preferAddToBalance",
-            "nameLocation": "1830:18:65",
+            "nameLocation": "1910:18:76",
             "nodeType": "VariableDeclaration",
-            "scope": 29745,
-            "src": "1825:23:65",
+            "scope": 30086,
+            "src": "1905:23:76",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -109,10 +116,10 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 29732,
+              "id": 30073,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "1825:4:65",
+              "src": "1905:4:76",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -122,13 +129,13 @@
           },
           {
             "constant": false,
-            "id": 29735,
+            "id": 30076,
             "mutability": "mutable",
             "name": "percent",
-            "nameLocation": "1860:7:65",
+            "nameLocation": "1940:7:76",
             "nodeType": "VariableDeclaration",
-            "scope": 29745,
-            "src": "1852:15:65",
+            "scope": 30086,
+            "src": "1932:15:76",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -136,10 +143,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29734,
+              "id": 30075,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1852:7:65",
+              "src": "1932:7:76",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -149,13 +156,13 @@
           },
           {
             "constant": false,
-            "id": 29737,
+            "id": 30078,
             "mutability": "mutable",
             "name": "projectId",
-            "nameLocation": "1879:9:65",
+            "nameLocation": "1959:9:76",
             "nodeType": "VariableDeclaration",
-            "scope": 29745,
-            "src": "1871:17:65",
+            "scope": 30086,
+            "src": "1951:17:76",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -163,10 +170,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29736,
+              "id": 30077,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1871:7:65",
+              "src": "1951:7:76",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -176,13 +183,13 @@
           },
           {
             "constant": false,
-            "id": 29739,
+            "id": 30080,
             "mutability": "mutable",
             "name": "beneficiary",
-            "nameLocation": "1908:11:65",
+            "nameLocation": "1988:11:76",
             "nodeType": "VariableDeclaration",
-            "scope": 29745,
-            "src": "1892:27:65",
+            "scope": 30086,
+            "src": "1972:27:76",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -190,10 +197,10 @@
               "typeString": "address payable"
             },
             "typeName": {
-              "id": 29738,
+              "id": 30079,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1892:15:65",
+              "src": "1972:15:76",
               "stateMutability": "payable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -204,13 +211,13 @@
           },
           {
             "constant": false,
-            "id": 29741,
+            "id": 30082,
             "mutability": "mutable",
             "name": "lockedUntil",
-            "nameLocation": "1931:11:65",
+            "nameLocation": "2011:11:76",
             "nodeType": "VariableDeclaration",
-            "scope": 29745,
-            "src": "1923:19:65",
+            "scope": 30086,
+            "src": "2003:19:76",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -218,10 +225,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29740,
+              "id": 30081,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1923:7:65",
+              "src": "2003:7:76",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -231,36 +238,36 @@
           },
           {
             "constant": false,
-            "id": 29744,
+            "id": 30085,
             "mutability": "mutable",
             "name": "allocator",
-            "nameLocation": "1964:9:65",
+            "nameLocation": "2044:9:76",
             "nodeType": "VariableDeclaration",
-            "scope": 29745,
-            "src": "1946:27:65",
+            "scope": 30086,
+            "src": "2026:27:76",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IJBSplitAllocator_$29166",
+              "typeIdentifier": "t_contract$_IJBSplitAllocator_$29492",
               "typeString": "contract IJBSplitAllocator"
             },
             "typeName": {
-              "id": 29743,
+              "id": 30084,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 29742,
+                "id": 30083,
                 "name": "IJBSplitAllocator",
                 "nameLocations": [
-                  "1946:17:65"
+                  "2026:17:76"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 29166,
-                "src": "1946:17:65"
+                "referencedDeclaration": 29492,
+                "src": "2026:17:76"
               },
-              "referencedDeclaration": 29166,
-              "src": "1946:17:65",
+              "referencedDeclaration": 29492,
+              "src": "2026:17:76",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IJBSplitAllocator_$29166",
+                "typeIdentifier": "t_contract$_IJBSplitAllocator_$29492",
                 "typeString": "contract IJBSplitAllocator"
               }
             },
@@ -268,12 +275,12 @@
           }
         ],
         "name": "JBSplit",
-        "nameLocation": "1791:7:65",
-        "scope": 29746,
+        "nameLocation": "1871:7:76",
+        "scope": 30087,
         "visibility": "public"
       }
     ],
     "license": "MIT"
   },
-  "id": 65
+  "id": 76
 }

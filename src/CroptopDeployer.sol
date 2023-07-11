@@ -71,7 +71,7 @@ contract CroptopDeployer is IERC721Receiver {
         JBProjectMetadata calldata _projectMetadata,
         AllowedPost[] calldata _allowedPosts,
         string calldata _contractUri,
-        string memory _name,
+        string calldata _name,
         string memory _symbol
     ) external returns (uint256 projectId) {
         // Initialize the terminal array .

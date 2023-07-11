@@ -10,19 +10,19 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBFee.sol",
-    "id": 29579,
+    "id": 29923,
     "exportedSymbols": {
       "JBFee": [
-        29578
+        29922
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:504:55",
+    "src": "32:532:67",
     "nodes": [
       {
-        "id": 29568,
+        "id": 29912,
         "nodeType": "PragmaDirective",
-        "src": "32:23:55",
+        "src": "32:23:67",
         "nodes": [],
         "literals": [
           "solidity",
@@ -32,27 +32,27 @@
         ]
       },
       {
-        "id": 29578,
+        "id": 29922,
         "nodeType": "StructDefinition",
-        "src": "442:93:55",
+        "src": "470:93:67",
         "nodes": [],
         "canonicalName": "JBFee",
         "documentation": {
-          "id": 29569,
+          "id": 29913,
           "nodeType": "StructuredDocumentation",
-          "src": "57:384:55",
-          "text": "@member amount The total amount the fee was taken from, as a fixed point number with the same number of decimals as the terminal in which this struct was created.\n@member fee The percent of the fee, out of MAX_FEE.\n@member feeDiscount The discount of the fee.\n@member beneficiary The address that will receive the tokens that are minted as a result of the fee payment."
+          "src": "57:413:67",
+          "text": "@custom:member amount The total amount the fee was taken from, as a fixed point number with the same number of decimals as the terminal in which this struct was created.\n @custom:member fee The percent of the fee, out of MAX_FEE.\n @custom:member feeDiscount The discount of the fee.\n @custom:member beneficiary The address that will receive the tokens that are minted as a result of the fee payment."
         },
         "members": [
           {
             "constant": false,
-            "id": 29571,
+            "id": 29915,
             "mutability": "mutable",
             "name": "amount",
-            "nameLocation": "467:6:55",
+            "nameLocation": "495:6:67",
             "nodeType": "VariableDeclaration",
-            "scope": 29578,
-            "src": "459:14:55",
+            "scope": 29922,
+            "src": "487:14:67",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -60,10 +60,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29570,
+              "id": 29914,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "459:7:55",
+              "src": "487:7:67",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -73,13 +73,13 @@
           },
           {
             "constant": false,
-            "id": 29573,
+            "id": 29917,
             "mutability": "mutable",
             "name": "fee",
-            "nameLocation": "484:3:55",
+            "nameLocation": "512:3:67",
             "nodeType": "VariableDeclaration",
-            "scope": 29578,
-            "src": "477:10:55",
+            "scope": 29922,
+            "src": "505:10:67",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -87,10 +87,10 @@
               "typeString": "uint32"
             },
             "typeName": {
-              "id": 29572,
+              "id": 29916,
               "name": "uint32",
               "nodeType": "ElementaryTypeName",
-              "src": "477:6:55",
+              "src": "505:6:67",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint32",
                 "typeString": "uint32"
@@ -100,13 +100,13 @@
           },
           {
             "constant": false,
-            "id": 29575,
+            "id": 29919,
             "mutability": "mutable",
             "name": "feeDiscount",
-            "nameLocation": "498:11:55",
+            "nameLocation": "526:11:67",
             "nodeType": "VariableDeclaration",
-            "scope": 29578,
-            "src": "491:18:55",
+            "scope": 29922,
+            "src": "519:18:67",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -114,10 +114,10 @@
               "typeString": "uint32"
             },
             "typeName": {
-              "id": 29574,
+              "id": 29918,
               "name": "uint32",
               "nodeType": "ElementaryTypeName",
-              "src": "491:6:55",
+              "src": "519:6:67",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint32",
                 "typeString": "uint32"
@@ -127,13 +127,13 @@
           },
           {
             "constant": false,
-            "id": 29577,
+            "id": 29921,
             "mutability": "mutable",
             "name": "beneficiary",
-            "nameLocation": "521:11:55",
+            "nameLocation": "549:11:67",
             "nodeType": "VariableDeclaration",
-            "scope": 29578,
-            "src": "513:19:55",
+            "scope": 29922,
+            "src": "541:19:67",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -141,10 +141,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 29576,
+              "id": 29920,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "513:7:55",
+              "src": "541:7:67",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -155,12 +155,12 @@
           }
         ],
         "name": "JBFee",
-        "nameLocation": "449:5:55",
-        "scope": 29579,
+        "nameLocation": "477:5:67",
+        "scope": 29923,
         "visibility": "public"
       }
     ],
     "license": "MIT"
   },
-  "id": 55
+  "id": 67
 }
