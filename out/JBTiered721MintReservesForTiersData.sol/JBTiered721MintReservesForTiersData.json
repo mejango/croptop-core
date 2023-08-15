@@ -10,19 +10,19 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721MintReservesForTiersData.sol",
-    "id": 24433,
+    "id": 27576,
     "exportedSymbols": {
       "JBTiered721MintReservesForTiersData": [
-        24432
+        27575
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:236:31",
+    "src": "32:236:36",
     "nodes": [
       {
-        "id": 24426,
+        "id": 27569,
         "nodeType": "PragmaDirective",
-        "src": "32:23:31",
+        "src": "32:23:36",
         "nodes": [],
         "literals": [
           "solidity",
@@ -32,27 +32,27 @@
         ]
       },
       {
-        "id": 24432,
+        "id": 27575,
         "nodeType": "StructDefinition",
-        "src": "182:85:31",
+        "src": "182:85:36",
         "nodes": [],
         "canonicalName": "JBTiered721MintReservesForTiersData",
         "documentation": {
-          "id": 24427,
+          "id": 27570,
           "nodeType": "StructuredDocumentation",
-          "src": "57:125:31",
+          "src": "57:125:36",
           "text": "@custom:member tierId The ID of the tier to mint within.\n @custom:member count The number of reserved tokens to mint."
         },
         "members": [
           {
             "constant": false,
-            "id": 24429,
+            "id": 27572,
             "mutability": "mutable",
             "name": "tierId",
-            "nameLocation": "239:6:31",
+            "nameLocation": "239:6:36",
             "nodeType": "VariableDeclaration",
-            "scope": 24432,
-            "src": "231:14:31",
+            "scope": 27575,
+            "src": "231:14:36",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -60,10 +60,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24428,
+              "id": 27571,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "231:7:31",
+              "src": "231:7:36",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -73,13 +73,13 @@
           },
           {
             "constant": false,
-            "id": 24431,
+            "id": 27574,
             "mutability": "mutable",
             "name": "count",
-            "nameLocation": "259:5:31",
+            "nameLocation": "259:5:36",
             "nodeType": "VariableDeclaration",
-            "scope": 24432,
-            "src": "251:13:31",
+            "scope": 27575,
+            "src": "251:13:36",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -87,10 +87,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24430,
+              "id": 27573,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "251:7:31",
+              "src": "251:7:36",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -100,12 +100,12 @@
           }
         ],
         "name": "JBTiered721MintReservesForTiersData",
-        "nameLocation": "189:35:31",
-        "scope": 24433,
+        "nameLocation": "189:35:36",
+        "scope": 27576,
         "visibility": "public"
       }
     ],
     "license": "MIT"
   },
-  "id": 31
+  "id": 36
 }

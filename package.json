@@ -1,10 +1,11 @@
 {
   "name": "@croptop/publisher",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
-    "@jbx-protocol/juice-721-delegate": "^7.0.0",
-    "@jbx-protocol/juice-contracts-v3": "^4.0.1",
-    "@openzeppelin/contracts": "^4.8.1"
+    "@jbx-protocol/juice-721-delegate": "^8.0.0",
+    "@jbx-protocol/juice-contracts-v3": "^5.0.0",
+    "@openzeppelin/contracts": "^4.8.1",
+    "@jbx-protocol/juice-delegate-metadata-lib": "https://github.com/jbx-protocol/juice-delegate-metadata-lib.git"
   },
   "scripts": {
     "preinstall": "forge install",

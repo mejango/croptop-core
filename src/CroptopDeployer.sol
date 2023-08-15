@@ -2,28 +2,36 @@
 pragma solidity ^0.8.20;
 
 import { IERC721Receiver } from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-import { IJBPaymentTerminal } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPaymentTerminal.sol"; 
+import { IJBPaymentTerminal } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPaymentTerminal.sol";
 import { IJBController3_1 } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
 import { IJBFundingCycleBallot } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFundingCycleBallot.sol";
 import { JBCurrencies } from "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBCurrencies.sol";
 import { JBFundingCycleData } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundingCycleData.sol";
-import { JBGlobalFundingCycleMetadata } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGlobalFundingCycleMetadata.sol";
+import { JBGlobalFundingCycleMetadata } from
+    "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGlobalFundingCycleMetadata.sol";
 import { JBGroupedSplits } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGroupedSplits.sol";
 import { JBFundAccessConstraints } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundAccessConstraints.sol";
 import { JBProjectMetadata } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBProjectMetadata.sol";
 import { IJBPrices } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPrices.sol";
-import { IJBTiered721DelegateStore } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateStore.sol";
-import { IJB721TokenUriResolver} from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJB721TokenUriResolver.sol";
-import { IJBTiered721DelegateProjectDeployer } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateProjectDeployer.sol";
+import { IJBTiered721DelegateStore } from
+    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateStore.sol";
+import { IJB721TokenUriResolver } from
+    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJB721TokenUriResolver.sol";
+import { IJBTiered721DelegateProjectDeployer } from
+    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateProjectDeployer.sol";
 import { JB721GovernanceType } from "@jbx-protocol/juice-721-delegate/contracts/enums/JB721GovernanceType.sol";
-import { JBLaunchProjectData } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBLaunchProjectData.sol"; 
-import { JBTiered721FundingCycleMetadata } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721FundingCycleMetadata.sol";
-import { JBPayDataSourceFundingCycleMetadata } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JBPayDataSourceFundingCycleMetadata.sol";
-import { JBDeployTiered721DelegateData } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JBDeployTiered721DelegateData.sol";
-import { JB721TierParams } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol";
-import { JB721PricingParams } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JB721PricingParams.sol";
-import { JBTiered721Flags } from  "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721Flags.sol";
-import { JBTiered721FundingCycleMetadataResolver } from "@jbx-protocol/juice-721-delegate/contracts/libraries/JBTiered721FundingCycleMetadataResolver.sol";
+import { JBLaunchProjectData } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBLaunchProjectData.sol";
+import { JBTiered721FundingCycleMetadata } from
+    "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721FundingCycleMetadata.sol";
+import { JBPayDataSourceFundingCycleMetadata } from
+    "@jbx-protocol/juice-721-delegate/contracts/structs/JBPayDataSourceFundingCycleMetadata.sol";
+import { JBDeployTiered721DelegateData } from
+    "@jbx-protocol/juice-721-delegate/contracts/structs/JBDeployTiered721DelegateData.sol";
+import { JB721TierParams } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol";
+import { JB721PricingParams } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721PricingParams.sol";
+import { JBTiered721Flags } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721Flags.sol";
+import { JBTiered721FundingCycleMetadataResolver } from
+    "@jbx-protocol/juice-721-delegate/contracts/libraries/JBTiered721FundingCycleMetadataResolver.sol";
 import { CroptopPublisher, AllowedPost } from "./CroptopPublisher.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
@@ -73,7 +81,10 @@ contract CroptopDeployer is IERC721Receiver {
         string calldata _contractUri,
         string calldata _name,
         string memory _symbol
-    ) external returns (uint256 projectId) {
+    )
+        external
+        returns (uint256 projectId)
+    {
         // Initialize the terminal array .
         IJBPaymentTerminal[] memory _terminals = new IJBPaymentTerminal[](1);
         _terminals[0] = _terminal;
@@ -108,7 +119,7 @@ contract CroptopDeployer is IERC721Receiver {
                 projectMetadata: _projectMetadata,
                 data: JBFundingCycleData({
                     duration: 0,
-                    weight: 1000000000000000000000000,
+                    weight: 1_000_000_000_000_000_000_000_000,
                     discountRate: 0,
                     ballot: IJBFundingCycleBallot(address(0))
                 }),
@@ -132,8 +143,8 @@ contract CroptopDeployer is IERC721Receiver {
                     preferClaimedTokenOverride: false,
                     useTotalOverflowForRedemptions: false,
                     useDataSourceForRedeem: false,
-                    metadata: JBTiered721FundingCycleMetadataResolver.packFundingCycleGlobalMetadata(
-                        JBTiered721FundingCycleMetadata({pauseTransfers: false, pauseMintingReserves: false})
+                    metadata: JBTiered721FundingCycleMetadataResolver.packTiered721FundingCycleMetadata(
+                        JBTiered721FundingCycleMetadata({ pauseTransfers: false, pauseMintingReserves: false })
                         )
                 }),
                 mustStartAtOrAfter: 0,
@@ -153,9 +164,14 @@ contract CroptopDeployer is IERC721Receiver {
     }
 
     /// @dev Make sure only mints can be received.
-    function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes calldata _data)
-        view
+    function onERC721Received(
+        address _operator,
+        address _from,
+        uint256 _tokenId,
+        bytes calldata _data
+    )
         external
+        view
         returns (bytes4)
     {
         _data;

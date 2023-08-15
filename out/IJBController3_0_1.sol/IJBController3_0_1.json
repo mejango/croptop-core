@@ -53,10 +53,10 @@
     "reservedTokenBalanceOf(uint256)": "bdd504d7",
     "totalOutstandingTokensOf(uint256)": "c18f2d31"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"projectId\",\"type\":\"uint256\"}],\"name\":\"reservedTokenBalanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"projectId\",\"type\":\"uint256\"}],\"name\":\"totalOutstandingTokensOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_0_1.sol\":\"IJBController3_0_1\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":5000000},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_0_1.sol\":{\"keccak256\":\"0xf64926bf7ab5850ea9b7ec27d92a021f02344a3fadb0396af80966ad08b3dd2b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://803da92446a210c66b1226ae88f13b185040ecbd53b292d363e60ac5abaf82de\",\"dweb:/ipfs/Qmb9MWB9bnCakpjokXN9ncEAmVYLctabq3oVt8r8jF7YFW\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"projectId\",\"type\":\"uint256\"}],\"name\":\"reservedTokenBalanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"projectId\",\"type\":\"uint256\"}],\"name\":\"totalOutstandingTokensOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_0_1.sol\":\"IJBController3_0_1\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":5000000},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_0_1.sol\":{\"keccak256\":\"0xf64926bf7ab5850ea9b7ec27d92a021f02344a3fadb0396af80966ad08b3dd2b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://803da92446a210c66b1226ae88f13b185040ecbd53b292d363e60ac5abaf82de\",\"dweb:/ipfs/Qmb9MWB9bnCakpjokXN9ncEAmVYLctabq3oVt8r8jF7YFW\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
-      "version": "0.8.20+commit.a1b79de6"
+      "version": "0.8.21+commit.d9974bed"
     },
     "language": "Solidity",
     "output": {
@@ -113,10 +113,10 @@
     },
     "settings": {
       "remappings": [
-        ":@jbx-protocol/=node_modules/@jbx-protocol/",
-        ":@openzeppelin/=node_modules/@openzeppelin/",
-        ":ds-test/=lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/"
+        "@jbx-protocol/=node_modules/@jbx-protocol/",
+        "@openzeppelin/=node_modules/@openzeppelin/",
+        "ds-test/=lib/ds-test/src/",
+        "forge-std/=lib/forge-std/src/"
       ],
       "optimizer": {
         "enabled": true,
@@ -144,17 +144,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_0_1.sol",
-    "id": 28040,
+    "id": 28041,
     "exportedSymbols": {
       "IJBController3_0_1": [
-        28039
+        28040
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:233:40",
     "nodes": [
       {
-        "id": 28024,
+        "id": 28025,
         "nodeType": "PragmaDirective",
         "src": "32:23:40",
         "nodes": [],
@@ -166,12 +166,12 @@
         ]
       },
       {
-        "id": 28039,
+        "id": 28040,
         "nodeType": "ContractDefinition",
         "src": "57:207:40",
         "nodes": [
           {
-            "id": 28031,
+            "id": 28032,
             "nodeType": "FunctionDefinition",
             "src": "90:83:40",
             "nodes": [],
@@ -182,17 +182,17 @@
             "name": "reservedTokenBalanceOf",
             "nameLocation": "99:22:40",
             "parameters": {
-              "id": 28027,
+              "id": 28028,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28026,
+                  "id": 28027,
                   "mutability": "mutable",
                   "name": "projectId",
                   "nameLocation": "130:9:40",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28031,
+                  "scope": 28032,
                   "src": "122:17:40",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -201,7 +201,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28025,
+                    "id": 28026,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "122:7:40",
@@ -216,17 +216,17 @@
               "src": "121:19:40"
             },
             "returnParameters": {
-              "id": 28030,
+              "id": 28031,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28029,
+                  "id": 28030,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28031,
+                  "scope": 28032,
                   "src": "164:7:40",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -235,7 +235,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28028,
+                    "id": 28029,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "164:7:40",
@@ -249,13 +249,13 @@
               ],
               "src": "163:9:40"
             },
-            "scope": 28039,
+            "scope": 28040,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 28038,
+            "id": 28039,
             "nodeType": "FunctionDefinition",
             "src": "177:85:40",
             "nodes": [],
@@ -266,17 +266,17 @@
             "name": "totalOutstandingTokensOf",
             "nameLocation": "186:24:40",
             "parameters": {
-              "id": 28034,
+              "id": 28035,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28033,
+                  "id": 28034,
                   "mutability": "mutable",
                   "name": "projectId",
                   "nameLocation": "219:9:40",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28038,
+                  "scope": 28039,
                   "src": "211:17:40",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -285,7 +285,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28032,
+                    "id": 28033,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "211:7:40",
@@ -300,17 +300,17 @@
               "src": "210:19:40"
             },
             "returnParameters": {
-              "id": 28037,
+              "id": 28038,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 28036,
+                  "id": 28037,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 28038,
+                  "scope": 28039,
                   "src": "253:7:40",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -319,7 +319,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 28035,
+                    "id": 28036,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "253:7:40",
@@ -333,7 +333,7 @@
               ],
               "src": "252:9:40"
             },
-            "scope": 28039,
+            "scope": 28040,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -346,11 +346,11 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          28039
+          28040
         ],
         "name": "IJBController3_0_1",
         "nameLocation": "67:18:40",
-        "scope": 28040,
+        "scope": 28041,
         "usedErrors": [],
         "usedEvents": []
       }

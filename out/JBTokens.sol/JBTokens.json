@@ -15,22 +15,22 @@
     }
   ],
   "bytecode": {
-    "object": "0x609f610038600b82828239805160001a607314602b57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea2646970667358221220c8be54f2bb4975f970aa018f1313273af45bc0b65667730b79c1bb02e236361e64736f6c63430008140033",
+    "object": "0x609f610038600b82828239805160001a607314602b57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea26469706673582212207b1b2e2259b772ae922bed4bc2f578fff926d679d8ddb44f467efb0aee5edc1464736f6c63430008150033",
     "sourceMap": "57:215:64:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;57:215:64;;;;;;;;;;;;;;;;;",
     "linkReferences": {}
   },
   "deployedBytecode": {
-    "object": "0x730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea2646970667358221220c8be54f2bb4975f970aa018f1313273af45bc0b65667730b79c1bb02e236361e64736f6c63430008140033",
-    "sourceMap": "57:215:64:-:0;;;;;;;;;;;;;;;;;;;;;;;;188:81;;226:42;188:81;;;;;198:42:87;186:55;;;168:74;;156:2;141:18;188:81:64;;;;;;",
+    "object": "0x730000000000000000000000000000000000000000301460806040526004361060335760003560e01c80638322fff2146038575b600080fd5b604061eeee81565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f3fea26469706673582212207b1b2e2259b772ae922bed4bc2f578fff926d679d8ddb44f467efb0aee5edc1464736f6c63430008150033",
+    "sourceMap": "57:215:64:-:0;;;;;;;;;;;;;;;;;;;;;;;;188:81;;226:42;188:81;;;;;198:42:90;186:55;;;168:74;;156:2;141:18;188:81:64;;;;;;",
     "linkReferences": {}
   },
   "methodIdentifiers": {
     "ETH()": "8322fff2"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"ETH\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"ETH()\":{\"notice\":\"The ETH token address in Juicebox is represented by 0x000000000000000000000000000000000000EEEe.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":\"JBTokens\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":5000000},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":{\"keccak256\":\"0x9e724a7e65c6d6e01e7f0c1419d750307ed6ce8bc29bbd959e029bcdd4b4e479\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e9039e94584b5b1aec3b91706691bdd8d78cf2f12e22112be7bfbfe145ad9e2b\",\"dweb:/ipfs/QmdLBkncsv4bY1vgPFe9A1YJ3ZDB6S9CCAPp7btWhHa2dk\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"ETH\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"ETH()\":{\"notice\":\"The ETH token address in Juicebox is represented by 0x000000000000000000000000000000000000EEEe.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":\"JBTokens\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":5000000},\"remappings\":[\":@jbx-protocol/=node_modules/@jbx-protocol/\",\":@openzeppelin/=node_modules/@openzeppelin/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol\":{\"keccak256\":\"0x9e724a7e65c6d6e01e7f0c1419d750307ed6ce8bc29bbd959e029bcdd4b4e479\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e9039e94584b5b1aec3b91706691bdd8d78cf2f12e22112be7bfbfe145ad9e2b\",\"dweb:/ipfs/QmdLBkncsv4bY1vgPFe9A1YJ3ZDB6S9CCAPp7btWhHa2dk\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
-      "version": "0.8.20+commit.a1b79de6"
+      "version": "0.8.21+commit.d9974bed"
     },
     "language": "Solidity",
     "output": {
@@ -66,10 +66,10 @@
     },
     "settings": {
       "remappings": [
-        ":@jbx-protocol/=node_modules/@jbx-protocol/",
-        ":@openzeppelin/=node_modules/@openzeppelin/",
-        ":ds-test/=lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/"
+        "@jbx-protocol/=node_modules/@jbx-protocol/",
+        "@openzeppelin/=node_modules/@openzeppelin/",
+        "ds-test/=lib/ds-test/src/",
+        "forge-std/=lib/forge-std/src/"
       ],
       "optimizer": {
         "enabled": true,
@@ -97,17 +97,17 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol",
-    "id": 29857,
+    "id": 29858,
     "exportedSymbols": {
       "JBTokens": [
-        29856
+        29857
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:241:64",
     "nodes": [
       {
-        "id": 29848,
+        "id": 29849,
         "nodeType": "PragmaDirective",
         "src": "32:23:64",
         "nodes": [],
@@ -119,18 +119,18 @@
         ]
       },
       {
-        "id": 29856,
+        "id": 29857,
         "nodeType": "ContractDefinition",
         "src": "57:215:64",
         "nodes": [
           {
-            "id": 29855,
+            "id": 29856,
             "nodeType": "VariableDeclaration",
             "src": "188:81:64",
             "nodes": [],
             "constant": true,
             "documentation": {
-              "id": 29849,
+              "id": 29850,
               "nodeType": "StructuredDocumentation",
               "src": "78:107:64",
               "text": "@notice The ETH token address in Juicebox is represented by 0x000000000000000000000000000000000000EEEe."
@@ -139,7 +139,7 @@
             "mutability": "constant",
             "name": "ETH",
             "nameLocation": "212:3:64",
-            "scope": 29856,
+            "scope": 29857,
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -147,7 +147,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 29850,
+              "id": 29851,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "188:7:64",
@@ -161,7 +161,7 @@
               "arguments": [
                 {
                   "hexValue": "307830303030303030303030303030303030303030303030303030303030303030303030303045454565",
-                  "id": 29853,
+                  "id": 29854,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
@@ -183,7 +183,7 @@
                     "typeString": "address"
                   }
                 ],
-                "id": 29852,
+                "id": 29853,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
@@ -195,14 +195,14 @@
                   "typeString": "type(address)"
                 },
                 "typeName": {
-                  "id": 29851,
+                  "id": 29852,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "218:7:64",
                   "typeDescriptions": {}
                 }
               },
-              "id": 29854,
+              "id": 29855,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -228,11 +228,11 @@
         "contractKind": "library",
         "fullyImplemented": true,
         "linearizedBaseContracts": [
-          29856
+          29857
         ],
         "name": "JBTokens",
         "nameLocation": "65:8:64",
-        "scope": 29857,
+        "scope": 29858,
         "usedErrors": [],
         "usedEvents": []
       }

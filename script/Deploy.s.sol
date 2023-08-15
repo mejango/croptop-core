@@ -5,20 +5,22 @@ import "forge-std/Script.sol";
 
 import { IJBController3_1 } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
 import { IJBOperatable } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBOperatable.sol";
-import { IJBTiered721DelegateProjectDeployer } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateProjectDeployer.sol";
-import { IJBTiered721DelegateStore } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateStore.sol";
+import { IJBTiered721DelegateProjectDeployer } from
+    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateProjectDeployer.sol";
+import { IJBTiered721DelegateStore } from
+    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateStore.sol";
 import { CroptopPublisher } from "../src/CroptopPublisher.sol";
-import { CroptopDeployer } from  "../src/CroptopDeployer.sol";
-import { CroptopProjectOwner } from  "../src/CroptopProjectOwner.sol";
+import { CroptopDeployer } from "../src/CroptopDeployer.sol";
+import { CroptopProjectOwner } from "../src/CroptopProjectOwner.sol";
 
 contract DeployMainnet is Script {
-    function setUp() public {}
+    function setUp() public { }
 
     function _run() internal {
         vm.broadcast();
     }
 }
- 
+
 contract DeployGoerli is Script {
     // V3_1 goerli controller.
     IJBController3_1 _controller = IJBController3_1(0x1d260DE91233e650F136Bf35f8A4ea1F2b68aDB6);

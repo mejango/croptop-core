@@ -9,13 +9,15 @@ import { JBFundingCycleMetadata } from "@jbx-protocol/juice-contracts-v3/contrac
 import { IJBTiered721Delegate } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delegate.sol";
 import { JB721Tier } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721Tier.sol";
 import { JB721TierParams } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol";
+import { JBDelegateMetadataLib } from "@jbx-protocol/juice-delegate-metadata-lib/src/JBDelegateMetadataLib.sol";
 
 /// @notice Criteria for allowed posts.
 /// @custom:member nft The NFT to which this allowance applies.
 /// @custom:member category A category that should allow posts.
 /// @custom:member minimumPrice The minimum price that a post to the specified category should cost.
 /// @custom:member minimumTotalSupply The minimum total supply of NFTs that can be made available when minting.
-/// @custom:member maxTotalSupply The max total supply of NFTs that can be made available when minting. Leave as 0 for max.
+/// @custom:member maxTotalSupply The max total supply of NFTs that can be made available when minting. Leave as 0 for
+/// max.
 /// @custom:member allowedAddresses A list of addresses that are allowed to post on the category through Croptop.
 struct AllowedPost {
     address nft;
@@ -28,7 +30,8 @@ struct AllowedPost {
 
 /// @notice A post to be published.
 /// @custom:member encodedIPFSUri The encoded IPFS URI of the post that is being published.
-/// @custom:member totalSupply The number of NFTs that should be made available, including the 1 that will be minted alongside this transaction.
+/// @custom:member totalSupply The number of NFTs that should be made available, including the 1 that will be minted
+/// alongside this transaction.
 /// @custom:member price The price being paid for buying the post that is being published.
 /// @custom:member category The category that the post should be published in.
 struct Post {
@@ -52,14 +55,15 @@ contract CroptopPublisher {
     error UNAUTHORIZED();
     error UNAUTHORIZED_TO_POST_IN_CATEGORY();
 
-    event Configured(
-      uint256 indexed projectId,
-      AllowedPost[] allowedPosts,
-      address caller
-    );
+    event Configured(uint256 indexed projectId, AllowedPost[] allowedPosts, address caller);
 
     event Collected(
-        uint256 indexed projectId, address indexed nftBeneficiary, address indexed feeBeneficiary, Post[] posts, uint256 fee, address caller
+        uint256 indexed projectId,
+        address indexed nftBeneficiary,
+        address indexed feeBeneficiary,
+        Post[] posts,
+        uint256 fee,
+        address caller
     );
 
     /// @notice Packed values that determine the allowance of posts.
@@ -96,8 +100,13 @@ contract CroptopPublisher {
     /// @param _projectId The ID of the project from which the tiers are being sought.
     /// @param _nft The NFT from which to get tiers.
     /// @param _encodedIPFSUris The URIs to get tiers of.
-    /// @return tiers The tiers that correspond to the provided encoded IPFS URIs. If there's no tier yet, an empty tier is returned.
-    function tiersFor(uint256 _projectId, address _nft, bytes32[] memory _encodedIPFSUris)
+    /// @return tiers The tiers that correspond to the provided encoded IPFS URIs. If there's no tier yet, an empty tier
+    /// is returned.
+    function tiersFor(
+        uint256 _projectId,
+        address _nft,
+        bytes32[] memory _encodedIPFSUris
+    )
         external
         view
         returns (JB721Tier[] memory tiers)
@@ -136,10 +145,16 @@ contract CroptopPublisher {
     /// @param _nft The NFT contract for which this allowance applies.
     /// @param _category The category for which this allowance applies.
     /// @return minimumPrice The minimum price that a poster must pay to record a new NFT.
-    /// @return minimumTotalSupply The minimum total number of available tokens that a minter must set to record a new NFT.
-    /// @return maximumTotalSupply The max total supply of NFTs that can be made available when minting. Leave as 0 for max.
+    /// @return minimumTotalSupply The minimum total number of available tokens that a minter must set to record a new
+    /// NFT.
+    /// @return maximumTotalSupply The max total supply of NFTs that can be made available when minting. Leave as 0 for
+    /// max.
     /// @return allowedAddresses The addresses allowed to post. Returns empty if all addresses are allowed.
-    function allowanceFor(uint256 _projectId, address _nft, uint256 _category)
+    function allowanceFor(
+        uint256 _projectId,
+        address _nft,
+        uint256 _category
+    )
         public
         view
         returns (
@@ -183,9 +198,17 @@ contract CroptopPublisher {
     /// @param _posts An array of posts that should be published as NFTs to the specified project.
     /// @param _nftBeneficiary The beneficiary of the NFT mints.
     /// @param _feeBeneficiary The beneficiary of the fee project's token.
-    /// @param _nftMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the payload needed for NFT creation.
+    /// @param _nftMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the
+    /// payload needed for NFT creation.
     /// @param _feeMetadata The metadata to send alongside the fee payment.
-    function collectFrom(uint256 _projectId, Post[] memory _posts, address _nftBeneficiary, address _feeBeneficiary, bytes calldata _nftMetadata, bytes calldata _feeMetadata)
+    function collectFrom(
+        uint256 _projectId,
+        Post[] memory _posts,
+        address _nftBeneficiary,
+        address _feeBeneficiary,
+        bytes calldata _nftMetadata,
+        bytes calldata _feeMetadata
+    )
         external
         payable
     {
@@ -196,47 +219,52 @@ contract CroptopPublisher {
         bytes memory _mintMetadata;
 
         {
-          // Get the projects current data source from its current funding cyce's metadata.
-          (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+            // Get the projects current data source from its current funding cyce's metadata.
+            (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
 
-          // Check to make sure the project's current data source is a IJBTiered721Delegate.
-          if (!IERC165(_metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
-              revert INCOMPATIBLE_PROJECT(_projectId, _metadata.dataSource, type(IJBTiered721Delegate).interfaceId);
-          }
+            // Check to make sure the project's current data source is a IJBTiered721Delegate.
+            if (!IERC165(_metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
+                revert INCOMPATIBLE_PROJECT(_projectId, _metadata.dataSource, type(IJBTiered721Delegate).interfaceId);
+            }
 
-          // Setup the posts.
-          (JB721TierParams[] memory _tierDataToAdd, uint256[] memory _tierIdsToMint, uint256 _totalPrice) =
-              _setupPosts(_projectId, _metadata.dataSource, _posts);
+            // Setup the posts.
+            (JB721TierParams[] memory _tierDataToAdd, uint256[] memory _tierIdsToMint, uint256 _totalPrice) =
+                _setupPosts(_projectId, _metadata.dataSource, _posts);
 
-          // Keep a reference to the fee that will be paid.
-          _fee = _projectId == feeProjectId ? 0 : (_totalPrice / feeDivisor);
+            // Keep a reference to the fee that will be paid.
+            _fee = _projectId == feeProjectId ? 0 : (_totalPrice / feeDivisor);
 
-          // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
-          if (_totalPrice + _fee < msg.value) {
-              revert INSUFFICIENT_ETH_SENT(_totalPrice, msg.value);
-          }
+            // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
+            if (_totalPrice + _fee < msg.value) {
+                revert INSUFFICIENT_ETH_SENT(_totalPrice, msg.value);
+            }
 
-          // Add the new tiers.
-          IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
+            // Add the new tiers.
+            IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
 
-          // Create the metadata for the payment to specify the tier IDs that should be minted.
-          _mintMetadata = abi.encode(
-              bytes32(feeProjectId), // Referral project ID.
-              (_nftMetadata.length == 0 ? abi.encodePacked(bytes32(0)) : _nftMetadata),
-              type(IJBTiered721Delegate).interfaceId,
-              true, // Allow overspending.
-              _tierIdsToMint
-          );
+            // Create the metadata for the payment to specify the tier IDs that should be minted.
+            _mintMetadata = JBDelegateMetadataLib.addToMetadata(
+                IJBTiered721Delegate(_metadata.dataSource).payMetadataDelegateId(),
+                abi.encode(true, _tierIdsToMint),
+                abi.encodePacked(bytes32(feeProjectId), _nftMetadata)
+            );
         }
-        
-        {
-          // Get a reference to the project's current ETH payment terminal.
-          IJBPaymentTerminal _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
 
-          // Make the payment.
-          _projectTerminal.pay{value: msg.value - _fee}(
-              _projectId, msg.value - _fee, JBTokens.ETH, _nftBeneficiary, 0, false, "Minted from Croptop", _mintMetadata
-          );
+        {
+            // Get a reference to the project's current ETH payment terminal.
+            IJBPaymentTerminal _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
+
+            // Make the payment.
+            _projectTerminal.pay{ value: msg.value - _fee }(
+                _projectId,
+                msg.value - _fee,
+                JBTokens.ETH,
+                _nftBeneficiary,
+                0,
+                false,
+                "Minted from Croptop",
+                _mintMetadata
+            );
         }
 
         // Pay a fee if there are funds left.
@@ -245,7 +273,7 @@ contract CroptopPublisher {
             IJBPaymentTerminal _feeTerminal = controller.directory().primaryTerminalOf(feeProjectId, JBTokens.ETH);
 
             // Make the fee payment.
-            _feeTerminal.pay{value: address(this).balance}(
+            _feeTerminal.pay{ value: address(this).balance }(
                 feeProjectId, address(this).balance, JBTokens.ETH, _feeBeneficiary, 0, false, "", _feeMetadata
             );
         }
@@ -309,7 +337,9 @@ contract CroptopPublisher {
             if (_numberOfAddresses != 0) {
                 // Keep a reference to the storage of the allowed addresses.
                 for (uint256 _j = 0; _j < _numberOfAddresses;) {
-                    _allowedAddresses[_projectId][_allowedPost.nft][_allowedPost.category].push(_allowedPost.allowedAddresses[_j]);
+                    _allowedAddresses[_projectId][_allowedPost.nft][_allowedPost.category].push(
+                        _allowedPost.allowedAddresses[_j]
+                    );
                     unchecked {
                         ++_j;
                     }
@@ -331,7 +361,11 @@ contract CroptopPublisher {
     /// @return tierDataToAdd The tier data that will be created to represent the posts.
     /// @return tierIdsToMint The tier IDs of the posts that should be minted once published.
     /// @return totalPrice The total price being paid.
-    function _setupPosts(uint256 _projectId, address _nft, Post[] memory _posts)
+    function _setupPosts(
+        uint256 _projectId,
+        address _nft,
+        Post[] memory _posts
+    )
         internal
         returns (JB721TierParams[] memory tierDataToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
     {
@@ -346,7 +380,8 @@ contract CroptopPublisher {
         // Set the size of the tier IDs of the posts that should be minted once published.
         tierIdsToMint = new uint256[](_numberOfMints);
 
-        // The tier ID that will be created, and the first one that should be minted from, is one more than the current max.
+        // The tier ID that will be created, and the first one that should be minted from, is one more than the current
+        // max.
         uint256 _startingTierId = IJBTiered721Delegate(_nft).store().maxTierIdOf(_nft) + 1;
 
         // Keep a reference to the post being iterated on.
@@ -355,7 +390,8 @@ contract CroptopPublisher {
         // Keep a reference to the total number of tiers being added.
         uint256 _numberOfTiersBeingAdded;
 
-        // For each post, create tiers after validating to make sure they fulfill the allowance specified by the project's owner.
+        // For each post, create tiers after validating to make sure they fulfill the allowance specified by the
+        // project's owner.
         for (uint256 _i; _i < _numberOfMints;) {
             // Get the current post being iterated on.
             _post = _posts[_i];
@@ -395,12 +431,14 @@ contract CroptopPublisher {
                         revert PRICE_TOO_SMALL(_minimumPrice);
                     }
 
-                    // Make sure the total supply being made available for the post is at least the allowed minimum total supply.
+                    // Make sure the total supply being made available for the post is at least the allowed minimum
+                    // total supply.
                     if (_post.totalSupply < _minimumTotalSupply) {
                         revert TOTAL_SUPPLY_TOO_SMALL(_minimumTotalSupply);
                     }
 
-                    // Make sure the total supply being made available for the post is at most the allowed maximum total supply.
+                    // Make sure the total supply being made available for the post is at most the allowed maximum total
+                    // supply.
                     if (_post.totalSupply > _maximumTotalSupply) {
                         revert TOTAL_SUPPLY_TOO_BIG(_maximumTotalSupply);
                     }

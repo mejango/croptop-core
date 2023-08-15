@@ -10,19 +10,19 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-721-delegate/contracts/structs/JB721Tier.sol",
-    "id": 24201,
+    "id": 27344,
     "exportedSymbols": {
       "JB721Tier": [
-        24200
+        27343
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:1558:21",
+    "src": "32:1558:26",
     "nodes": [
       {
-        "id": 24174,
+        "id": 27317,
         "nodeType": "PragmaDirective",
-        "src": "32:24:21",
+        "src": "32:24:26",
         "nodes": [],
         "literals": [
           "solidity",
@@ -32,27 +32,27 @@
         ]
       },
       {
-        "id": 24200,
+        "id": 27343,
         "nodeType": "StructDefinition",
-        "src": "1257:332:21",
+        "src": "1257:332:26",
         "nodes": [],
         "canonicalName": "JB721Tier",
         "documentation": {
-          "id": 24175,
+          "id": 27318,
           "nodeType": "StructuredDocumentation",
-          "src": "58:1199:21",
+          "src": "58:1199:26",
           "text": "@custom:member id The tier's ID.\n @custom:member price The price that must be paid to qualify for this tier.\n @custom:member remainingQuantity Remaining number of tokens in this tier. Together with idCeiling this enables for consecutive, increasing token ids to be issued to contributors.\n @custom:member initialQuantity The initial `remainingAllowance` value when the tier was set.\n @custom:member votingUnits The amount of voting significance to give this tier compared to others.\n @custom:member reservedRate The number of minted tokens needed in the tier to allow for minting another reserved token.\n @custom:member reservedRateBeneficiary The beneificary of the reserved tokens for this tier.\n @custom:member encodedIPFSUri The URI to use for each token within the tier.\n @custom:member category A category to group NFT tiers by.\n @custom:member allowManualMint A flag indicating if the contract's owner can mint from this tier on demand.\n @custom:member transfersPausable A flag indicating if transfers from this tier can be pausable. \n @custom:member resolvedTokenUri A resolved token URI if a resolver is included for the NFT to which this tier belongs."
         },
         "members": [
           {
             "constant": false,
-            "id": 24177,
+            "id": 27320,
             "mutability": "mutable",
             "name": "id",
-            "nameLocation": "1288:2:21",
+            "nameLocation": "1288:2:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1280:10:21",
+            "scope": 27343,
+            "src": "1280:10:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -60,10 +60,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24176,
+              "id": 27319,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1280:7:21",
+              "src": "1280:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -73,13 +73,13 @@
           },
           {
             "constant": false,
-            "id": 24179,
+            "id": 27322,
             "mutability": "mutable",
             "name": "price",
-            "nameLocation": "1304:5:21",
+            "nameLocation": "1304:5:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1296:13:21",
+            "scope": 27343,
+            "src": "1296:13:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -87,10 +87,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24178,
+              "id": 27321,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1296:7:21",
+              "src": "1296:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -100,13 +100,13 @@
           },
           {
             "constant": false,
-            "id": 24181,
+            "id": 27324,
             "mutability": "mutable",
             "name": "remainingQuantity",
-            "nameLocation": "1323:17:21",
+            "nameLocation": "1323:17:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1315:25:21",
+            "scope": 27343,
+            "src": "1315:25:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -114,10 +114,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24180,
+              "id": 27323,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1315:7:21",
+              "src": "1315:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -127,13 +127,13 @@
           },
           {
             "constant": false,
-            "id": 24183,
+            "id": 27326,
             "mutability": "mutable",
             "name": "initialQuantity",
-            "nameLocation": "1354:15:21",
+            "nameLocation": "1354:15:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1346:23:21",
+            "scope": 27343,
+            "src": "1346:23:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -141,10 +141,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24182,
+              "id": 27325,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1346:7:21",
+              "src": "1346:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -154,13 +154,13 @@
           },
           {
             "constant": false,
-            "id": 24185,
+            "id": 27328,
             "mutability": "mutable",
             "name": "votingUnits",
-            "nameLocation": "1383:11:21",
+            "nameLocation": "1383:11:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1375:19:21",
+            "scope": 27343,
+            "src": "1375:19:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -168,10 +168,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24184,
+              "id": 27327,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1375:7:21",
+              "src": "1375:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -181,13 +181,13 @@
           },
           {
             "constant": false,
-            "id": 24187,
+            "id": 27330,
             "mutability": "mutable",
             "name": "reservedRate",
-            "nameLocation": "1408:12:21",
+            "nameLocation": "1408:12:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1400:20:21",
+            "scope": 27343,
+            "src": "1400:20:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -195,10 +195,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24186,
+              "id": 27329,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1400:7:21",
+              "src": "1400:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -208,13 +208,13 @@
           },
           {
             "constant": false,
-            "id": 24189,
+            "id": 27332,
             "mutability": "mutable",
             "name": "reservedTokenBeneficiary",
-            "nameLocation": "1434:24:21",
+            "nameLocation": "1434:24:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1426:32:21",
+            "scope": 27343,
+            "src": "1426:32:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -222,10 +222,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 24188,
+              "id": 27331,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1426:7:21",
+              "src": "1426:7:26",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -236,13 +236,13 @@
           },
           {
             "constant": false,
-            "id": 24191,
+            "id": 27334,
             "mutability": "mutable",
             "name": "encodedIPFSUri",
-            "nameLocation": "1472:14:21",
+            "nameLocation": "1472:14:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1464:22:21",
+            "scope": 27343,
+            "src": "1464:22:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -250,10 +250,10 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 24190,
+              "id": 27333,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
-              "src": "1464:7:21",
+              "src": "1464:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes32",
                 "typeString": "bytes32"
@@ -263,13 +263,13 @@
           },
           {
             "constant": false,
-            "id": 24193,
+            "id": 27336,
             "mutability": "mutable",
             "name": "category",
-            "nameLocation": "1500:8:21",
+            "nameLocation": "1500:8:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1492:16:21",
+            "scope": 27343,
+            "src": "1492:16:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -277,10 +277,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 24192,
+              "id": 27335,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1492:7:21",
+              "src": "1492:7:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -290,13 +290,13 @@
           },
           {
             "constant": false,
-            "id": 24195,
+            "id": 27338,
             "mutability": "mutable",
             "name": "allowManualMint",
-            "nameLocation": "1519:15:21",
+            "nameLocation": "1519:15:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1514:20:21",
+            "scope": 27343,
+            "src": "1514:20:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -304,10 +304,10 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 24194,
+              "id": 27337,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "1514:4:21",
+              "src": "1514:4:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -317,13 +317,13 @@
           },
           {
             "constant": false,
-            "id": 24197,
+            "id": 27340,
             "mutability": "mutable",
             "name": "transfersPausable",
-            "nameLocation": "1545:17:21",
+            "nameLocation": "1545:17:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1540:22:21",
+            "scope": 27343,
+            "src": "1540:22:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -331,10 +331,10 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 24196,
+              "id": 27339,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "1540:4:21",
+              "src": "1540:4:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -344,13 +344,13 @@
           },
           {
             "constant": false,
-            "id": 24199,
+            "id": 27342,
             "mutability": "mutable",
             "name": "resolvedUri",
-            "nameLocation": "1575:11:21",
+            "nameLocation": "1575:11:26",
             "nodeType": "VariableDeclaration",
-            "scope": 24200,
-            "src": "1568:18:21",
+            "scope": 27343,
+            "src": "1568:18:26",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -358,10 +358,10 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 24198,
+              "id": 27341,
               "name": "string",
               "nodeType": "ElementaryTypeName",
-              "src": "1568:6:21",
+              "src": "1568:6:26",
               "typeDescriptions": {
                 "typeIdentifier": "t_string_storage_ptr",
                 "typeString": "string"
@@ -371,12 +371,12 @@
           }
         ],
         "name": "JB721Tier",
-        "nameLocation": "1264:9:21",
-        "scope": 24201,
+        "nameLocation": "1264:9:26",
+        "scope": 27344,
         "visibility": "public"
       }
     ],
     "license": "MIT"
   },
-  "id": 21
+  "id": 26
 }

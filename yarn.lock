@@ -433,19 +433,19 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@jbx-protocol/juice-721-delegate@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-721-delegate/-/juice-721-delegate-7.0.0.tgz#3c9b812b7b22c8a8126166b3f341ee16007b01c3"
-  integrity sha512-aW9eO/eeMItlGxadq4xwLtuajJOxdHUzA6kVxhO99jJxBLJF4vzZNWJvivKGQLE32NXHo6TM1q7JKCHd18iVjw==
+"@jbx-protocol/juice-721-delegate@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-721-delegate/-/juice-721-delegate-8.0.0.tgz#99a636424436c7443412bf1cf9a38b3ba39f0351"
+  integrity sha512-6w5SiZccGp1IyfZNrRuUm2Nika2bYc4H3LoHCE7sM27wZXhoJUGOzIUggYXwMMS6XF/82VfLi1lRqtyaSpXcTQ==
   dependencies:
-    "@jbx-protocol/juice-contracts-v3" "^2.0.4"
-    "@jbx-protocol/juice-delegates-registry" "^1.0.0"
+    "@jbx-protocol/juice-contracts-v3" "^5.0.0"
+    "@jbx-protocol/juice-delegate-metadata-lib" "https://github.com/jbx-protocol/juice-delegate-metadata-lib.git"
+    "@jbx-protocol/juice-delegates-registry" "^1.0.3"
     "@jbx-protocol/juice-ownable" "https://github.com/jbx-protocol/juice-ownable"
-    "@openzeppelin/contracts" "^4.6.0"
-    "@paulrberg/contracts" "^3.7.0"
-    prb-math "^2.4.3"
+    "@openzeppelin/contracts" "^4.9.2"
+    "@prb/math" "^4.0.1"
 
-"@jbx-protocol/juice-contracts-v3@^2.0.2", "@jbx-protocol/juice-contracts-v3@^2.0.4":
+"@jbx-protocol/juice-contracts-v3@^2.0.2":
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-2.0.5.tgz#b75e5547d3ffe660a3fb9124e5e747fc52b5d642"
   integrity sha512-pQSJbzz96nzHc2HDlN0Xx6uJufnRPAiUsilSwGRLjX38KZaeOtC7LU+YY0G5OHpH8tQPyAC/G/m5EwjpObIh3A==
@@ -455,27 +455,34 @@
   resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-2.0.3.tgz#0b0acd14a6ad51da4e425b8d55bad8db5c7dbbc1"
   integrity sha512-lYXRYlhUzsR9xLrzXTq95Ps3rE6xNDrgKhZ+yiitdPRRkAPPA887BtSt72BamsKUiHl3xAoKGYIvv+3b/h9/UA==
 
-"@jbx-protocol/juice-contracts-v3@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-4.0.1.tgz#24291a9fb5813442fc0e82429eceb1e76069b963"
-  integrity sha512-ObBzoSqVTYzRkQDnO2th8sHN9y/96MoIC/s9TcrhzlnNJ7Mzq/2Qf14HHImvF5Tz0omFnx2FJW/6+ZIExldKWw==
+"@jbx-protocol/juice-contracts-v3@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-contracts-v3/-/juice-contracts-v3-5.0.0.tgz#019139c6c6a461e7b7093f58ae1c0ceb10220acd"
+  integrity sha512-9flESdrOHDN9y/fiUyeJoh55DHlJHOlVpWhCsIPEamksoVtz6KOInJ727lp8YWAGJdH3U1sHisWSL30nwhIFOg==
   dependencies:
     "@chainlink/contracts" "^0.1.6"
     "@openzeppelin/contracts" "^4.5.0-rc.0"
     "@paulrberg/contracts" "^3.4.0"
 
-"@jbx-protocol/juice-delegates-registry@^1.0.0":
+"@jbx-protocol/juice-delegate-metadata-lib@git+https://github.com/jbx-protocol/juice-delegate-metadata-lib.git":
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-delegates-registry/-/juice-delegates-registry-1.0.1.tgz#88badca1dd2e271605e62e4d300bb3e616604622"
-  integrity sha512-kAN/xv8VBK/GkdkKKjOGV6nzOS0RI9/eyPWsR9UExZIcFr8fBoO7fLlTIWA/YSvQNdrMYd8urUJJpGPiXkRlLw==
+  resolved "git+https://github.com/jbx-protocol/juice-delegate-metadata-lib.git#da5a4b405dd77812ee819145a5c71885119339d3"
+  dependencies:
+    ds-test "https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0"
+    forge-std "https://github.com/foundry-rs/forge-std.git#e8a047e3f40f13fa37af6fe14e6e06283d9a060e"
+
+"@jbx-protocol/juice-delegates-registry@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@jbx-protocol/juice-delegates-registry/-/juice-delegates-registry-1.0.3.tgz#9b8ff159b74ffc7f8c0272da690f0ca0ef46902a"
+  integrity sha512-jsvhhXKu7AF93Ji1JdOpM3kwp07uVT6IaSwR59NpdA1M9QcHkn0G4+MFuvsCZ4mUhKBn/8aR0z93eM3ouWQqCA==
   dependencies:
     "@jbx-protocol/juice-contracts-v3" "^2.0.3"
     "@openzeppelin/contracts" "^4.8.0"
     "@paulrberg/contracts" "^3.7.0"
 
-"@jbx-protocol/juice-ownable@https://github.com/jbx-protocol/juice-ownable":
+"@jbx-protocol/juice-ownable@git+https://github.com/jbx-protocol/juice-ownable.git":
   version "0.0.2"
-  resolved "https://github.com/jbx-protocol/juice-ownable#b2f98133c7bea013db967e8a204ce0d9cc06d21f"
+  resolved "git+https://github.com/jbx-protocol/juice-ownable.git#b2f98133c7bea013db967e8a204ce0d9cc06d21f"
   dependencies:
     "@jbx-protocol/juice-contracts-v3" "^2.0.2"
     "@openzeppelin/contracts" "^4.8.0"
@@ -485,7 +492,7 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.9.2.tgz#1cb2d5e4d3360141a17dbc45094a8cad6aac16c1"
   integrity sha512-mO+y6JaqXjWeMh9glYVzVu8HYPGknAAnWyxTRhGeckOruyXQMNnlcW6w/Dx9ftLeIQk6N+ZJFuVmTwF7lEIFrg==
 
-"@openzeppelin/contracts@^4.6.0", "@openzeppelin/contracts@^4.8.0":
+"@openzeppelin/contracts@^4.8.0":
   version "4.8.3"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.3.tgz#cbef3146bfc570849405f59cba18235da95a252a"
   integrity sha512-bQHV8R9Me8IaJoJ2vPG4rXcL7seB7YVuskr4f+f5RyOStSZetwzkWtoqDMl5erkBJy0lDRUnIR2WIkPiC0GJlg==
@@ -495,12 +502,22 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.1.tgz#709cfc4bbb3ca9f4460d60101f15dac6b7a2d5e4"
   integrity sha512-xQ6eUZl+RDyb/FiZe1h+U7qr/f4p/SrTSQcTPH2bjur3C5DbuW/zFgCU/b1P/xcIaEqJep+9ju4xDRi3rmChdQ==
 
+"@openzeppelin/contracts@^4.9.2":
+  version "4.9.3"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.9.3.tgz#00d7a8cf35a475b160b3f0293a6403c511099364"
+  integrity sha512-He3LieZ1pP2TNt5JbkPA4PNT9WC3gOTOlDcFGJW4Le4QKqwmiNJCRt44APfxMxvq7OugU/cqYuPcSBzOw38DAg==
+
 "@paulrberg/contracts@^3.4.0", "@paulrberg/contracts@^3.7.0":
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/@paulrberg/contracts/-/contracts-3.7.0.tgz#d7fb09d3d75f47f979a666bba19727571e419d98"
   integrity sha512-vOBN0P1xjT0rJqQs8DZ1B48qO0tHx6tabfGomsWC57EUMQzEYY/Kw8jS6uVbpeJRes1X+mPXcxmEoilAvUN7Ng==
   dependencies:
     prb-math "^2.4.1"
+
+"@prb/math@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@prb/math/-/math-4.0.1.tgz#bc90277f4f1c085c973f502455bf12c2b3b67666"
+  integrity sha512-ANTz2KMV+dMdZ57mWgDTR6jZo5uQzUczQEHCxd7CvJZZ9yafnfPhUUILHvvigIOZ85fZbTPVkC8YoRG1z5Qf7g==
 
 "@sindresorhus/is@^4.0.0", "@sindresorhus/is@^4.6.0":
   version "4.6.0"
@@ -1413,6 +1430,10 @@ dot-case@^2.1.0:
   dependencies:
     no-case "^2.2.0"
 
+"ds-test@https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0":
+  version "1.0.0"
+  resolved "https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0"
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -1770,6 +1791,10 @@ forever-agent@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==
+
+"forge-std@https://github.com/foundry-rs/forge-std.git#e8a047e3f40f13fa37af6fe14e6e06283d9a060e":
+  version "1.5.6"
+  resolved "https://github.com/foundry-rs/forge-std.git#e8a047e3f40f13fa37af6fe14e6e06283d9a060e"
 
 form-data-encoder@1.7.1:
   version "1.7.1"
@@ -2828,7 +2853,7 @@ pinkie@^2.0.0:
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==
 
-prb-math@^2.4.1, prb-math@^2.4.3:
+prb-math@^2.4.1:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/prb-math/-/prb-math-2.4.3.tgz#a0121111aeae49fe5686db4aef422b785101bf7b"
   integrity sha512-t5jncEscKmWg7COkMkmbXXxSeDI6Xl21rxx5e+oxUCqskNvsu6Q9RqdVfGY6y+sMwyMQE8DJ/OOyQ9ExH1yfbw==

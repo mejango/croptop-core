@@ -10,20 +10,20 @@
   },
   "ast": {
     "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundingCycleMetadata.sol",
-    "id": 30025,
+    "id": 30026,
     "exportedSymbols": {
       "JBFundingCycleMetadata": [
-        30024
+        30025
       ],
       "JBGlobalFundingCycleMetadata": [
-        30034
+        30035
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:2970:71",
     "nodes": [
       {
-        "id": 29983,
+        "id": 29984,
         "nodeType": "PragmaDirective",
         "src": "32:23:71",
         "nodes": [],
@@ -35,23 +35,23 @@
         ]
       },
       {
-        "id": 29985,
+        "id": 29986,
         "nodeType": "ImportDirective",
         "src": "57:80:71",
         "nodes": [],
         "absolutePath": "node_modules/@jbx-protocol/juice-contracts-v3/contracts/structs/JBGlobalFundingCycleMetadata.sol",
         "file": "./JBGlobalFundingCycleMetadata.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 30025,
-        "sourceUnit": 30035,
+        "scope": 30026,
+        "sourceUnit": 30036,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 29984,
+              "id": 29985,
               "name": "JBGlobalFundingCycleMetadata",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "referencedDeclaration": 30034,
+              "referencedDeclaration": 30035,
               "src": "65:28:71",
               "typeDescriptions": {}
             },
@@ -61,13 +61,13 @@
         "unitAlias": ""
       },
       {
-        "id": 30024,
+        "id": 30025,
         "nodeType": "StructDefinition",
         "src": "2488:513:71",
         "nodes": [],
         "canonicalName": "JBFundingCycleMetadata",
         "documentation": {
-          "id": 29986,
+          "id": 29987,
           "nodeType": "StructuredDocumentation",
           "src": "139:2349:71",
           "text": "@custom:member global Data used globally in non-migratable ecosystem contracts.\n @custom:member reservedRate The reserved rate of the funding cycle. This number is a percentage calculated out of `JBConstants.MAX_RESERVED_RATE`.\n @custom:member redemptionRate The redemption rate of the funding cycle. This number is a percentage calculated out of `JBConstants.MAX_REDEMPTION_RATE`.\n @custom:member ballotRedemptionRate The redemption rate to use during an active ballot of the funding cycle. This number is a percentage calculated out of `JBConstants.MAX_REDEMPTION_RATE`.\n @custom:member pausePay A flag indicating if the pay functionality should be paused during the funding cycle.\n @custom:member pauseDistributions A flag indicating if the distribute functionality should be paused during the funding cycle.\n @custom:member pauseRedeem A flag indicating if the redeem functionality should be paused during the funding cycle.\n @custom:member pauseBurn A flag indicating if the burn functionality should be paused during the funding cycle.\n @custom:member allowMinting A flag indicating if minting tokens should be allowed during this funding cycle.\n @custom:member allowTerminalMigration A flag indicating if migrating terminals should be allowed during this funding cycle.\n @custom:member allowControllerMigration A flag indicating if migrating controllers should be allowed during this funding cycle.\n @custom:member holdFees A flag indicating if fees should be held during this funding cycle.\n @custom:member preferClaimedTokenOverride A flag indicating if claimed tokens should always be prefered to unclaimed tokens when minting.\n @custom:member useTotalOverflowForRedemptions A flag indicating if redemptions should use the project's balance held in all terminals instead of the project's local terminal balance from which the redemption is being fulfilled.\n @custom:member useDataSourceForPay A flag indicating if the data source should be used for pay transactions during this funding cycle.\n @custom:member useDataSourceForRedeem A flag indicating if the data source should be used for redeem transactions during this funding cycle.\n @custom:member dataSource The data source to use during this funding cycle.\n @custom:member metadata Metadata of the metadata, up to uint8 in size."
@@ -75,36 +75,36 @@
         "members": [
           {
             "constant": false,
-            "id": 29989,
+            "id": 29990,
             "mutability": "mutable",
             "name": "global",
             "nameLocation": "2551:6:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2522:35:71",
             "stateVariable": false,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_struct$_JBGlobalFundingCycleMetadata_$30034_storage_ptr",
+              "typeIdentifier": "t_struct$_JBGlobalFundingCycleMetadata_$30035_storage_ptr",
               "typeString": "struct JBGlobalFundingCycleMetadata"
             },
             "typeName": {
-              "id": 29988,
+              "id": 29989,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 29987,
+                "id": 29988,
                 "name": "JBGlobalFundingCycleMetadata",
                 "nameLocations": [
                   "2522:28:71"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 30034,
+                "referencedDeclaration": 30035,
                 "src": "2522:28:71"
               },
-              "referencedDeclaration": 30034,
+              "referencedDeclaration": 30035,
               "src": "2522:28:71",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_JBGlobalFundingCycleMetadata_$30034_storage_ptr",
+                "typeIdentifier": "t_struct$_JBGlobalFundingCycleMetadata_$30035_storage_ptr",
                 "typeString": "struct JBGlobalFundingCycleMetadata"
               }
             },
@@ -112,12 +112,12 @@
           },
           {
             "constant": false,
-            "id": 29991,
+            "id": 29992,
             "mutability": "mutable",
             "name": "reservedRate",
             "nameLocation": "2569:12:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2561:20:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -126,7 +126,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29990,
+              "id": 29991,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "2561:7:71",
@@ -139,12 +139,12 @@
           },
           {
             "constant": false,
-            "id": 29993,
+            "id": 29994,
             "mutability": "mutable",
             "name": "redemptionRate",
             "nameLocation": "2593:14:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2585:22:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -153,7 +153,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29992,
+              "id": 29993,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "2585:7:71",
@@ -166,12 +166,12 @@
           },
           {
             "constant": false,
-            "id": 29995,
+            "id": 29996,
             "mutability": "mutable",
             "name": "ballotRedemptionRate",
             "nameLocation": "2619:20:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2611:28:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -180,7 +180,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 29994,
+              "id": 29995,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "2611:7:71",
@@ -193,12 +193,12 @@
           },
           {
             "constant": false,
-            "id": 29997,
+            "id": 29998,
             "mutability": "mutable",
             "name": "pausePay",
             "nameLocation": "2648:8:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2643:13:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -207,7 +207,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 29996,
+              "id": 29997,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2643:4:71",
@@ -220,12 +220,12 @@
           },
           {
             "constant": false,
-            "id": 29999,
+            "id": 30000,
             "mutability": "mutable",
             "name": "pauseDistributions",
             "nameLocation": "2665:18:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2660:23:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -234,7 +234,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 29998,
+              "id": 29999,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2660:4:71",
@@ -247,12 +247,12 @@
           },
           {
             "constant": false,
-            "id": 30001,
+            "id": 30002,
             "mutability": "mutable",
             "name": "pauseRedeem",
             "nameLocation": "2692:11:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2687:16:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -261,7 +261,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30000,
+              "id": 30001,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2687:4:71",
@@ -274,12 +274,12 @@
           },
           {
             "constant": false,
-            "id": 30003,
+            "id": 30004,
             "mutability": "mutable",
             "name": "pauseBurn",
             "nameLocation": "2712:9:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2707:14:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -288,7 +288,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30002,
+              "id": 30003,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2707:4:71",
@@ -301,12 +301,12 @@
           },
           {
             "constant": false,
-            "id": 30005,
+            "id": 30006,
             "mutability": "mutable",
             "name": "allowMinting",
             "nameLocation": "2730:12:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2725:17:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -315,7 +315,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30004,
+              "id": 30005,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2725:4:71",
@@ -328,12 +328,12 @@
           },
           {
             "constant": false,
-            "id": 30007,
+            "id": 30008,
             "mutability": "mutable",
             "name": "allowTerminalMigration",
             "nameLocation": "2751:22:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2746:27:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -342,7 +342,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30006,
+              "id": 30007,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2746:4:71",
@@ -355,12 +355,12 @@
           },
           {
             "constant": false,
-            "id": 30009,
+            "id": 30010,
             "mutability": "mutable",
             "name": "allowControllerMigration",
             "nameLocation": "2782:24:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2777:29:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -369,7 +369,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30008,
+              "id": 30009,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2777:4:71",
@@ -382,12 +382,12 @@
           },
           {
             "constant": false,
-            "id": 30011,
+            "id": 30012,
             "mutability": "mutable",
             "name": "holdFees",
             "nameLocation": "2815:8:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2810:13:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -396,7 +396,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30010,
+              "id": 30011,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2810:4:71",
@@ -409,12 +409,12 @@
           },
           {
             "constant": false,
-            "id": 30013,
+            "id": 30014,
             "mutability": "mutable",
             "name": "preferClaimedTokenOverride",
             "nameLocation": "2832:26:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2827:31:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -423,7 +423,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30012,
+              "id": 30013,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2827:4:71",
@@ -436,12 +436,12 @@
           },
           {
             "constant": false,
-            "id": 30015,
+            "id": 30016,
             "mutability": "mutable",
             "name": "useTotalOverflowForRedemptions",
             "nameLocation": "2867:30:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2862:35:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -450,7 +450,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30014,
+              "id": 30015,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2862:4:71",
@@ -463,12 +463,12 @@
           },
           {
             "constant": false,
-            "id": 30017,
+            "id": 30018,
             "mutability": "mutable",
             "name": "useDataSourceForPay",
             "nameLocation": "2906:19:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2901:24:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -477,7 +477,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30016,
+              "id": 30017,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2901:4:71",
@@ -490,12 +490,12 @@
           },
           {
             "constant": false,
-            "id": 30019,
+            "id": 30020,
             "mutability": "mutable",
             "name": "useDataSourceForRedeem",
             "nameLocation": "2934:22:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2929:27:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -504,7 +504,7 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 30018,
+              "id": 30019,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
               "src": "2929:4:71",
@@ -517,12 +517,12 @@
           },
           {
             "constant": false,
-            "id": 30021,
+            "id": 30022,
             "mutability": "mutable",
             "name": "dataSource",
             "nameLocation": "2968:10:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2960:18:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -531,7 +531,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 30020,
+              "id": 30021,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "2960:7:71",
@@ -545,12 +545,12 @@
           },
           {
             "constant": false,
-            "id": 30023,
+            "id": 30024,
             "mutability": "mutable",
             "name": "metadata",
             "nameLocation": "2990:8:71",
             "nodeType": "VariableDeclaration",
-            "scope": 30024,
+            "scope": 30025,
             "src": "2982:16:71",
             "stateVariable": false,
             "storageLocation": "default",
@@ -559,7 +559,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 30022,
+              "id": 30023,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "2982:7:71",
@@ -573,7 +573,7 @@
         ],
         "name": "JBFundingCycleMetadata",
         "nameLocation": "2495:22:71",
-        "scope": 30025,
+        "scope": 30026,
         "visibility": "public"
       }
     ],
