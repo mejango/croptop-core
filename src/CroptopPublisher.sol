@@ -198,7 +198,7 @@ contract CroptopPublisher {
     /// @param _posts An array of posts that should be published as NFTs to the specified project.
     /// @param _nftBeneficiary The beneficiary of the NFT mints.
     /// @param _feeBeneficiary The beneficiary of the fee project's token.
-    /// @param _nftMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the
+    /// @param _additionalPayMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the
     /// payload needed for NFT creation.
     /// @param _feeMetadata The metadata to send alongside the fee payment.
     function collectFrom(
@@ -206,7 +206,7 @@ contract CroptopPublisher {
         Post[] memory _posts,
         address _nftBeneficiary,
         address _feeBeneficiary,
-        bytes calldata _nftMetadata,
+        bytes calldata _additionalPayMetadata,
         bytes calldata _feeMetadata
     )
         external
@@ -243,11 +243,11 @@ contract CroptopPublisher {
             IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
 
             // Create the metadata for the payment to specify the tier IDs that should be minted.
-            _mintMetadata = JBDelegateMetadataLib.addToMetadata(
-                IJBTiered721Delegate(_metadata.dataSource).payMetadataDelegateId(),
-                abi.encode(true, _tierIdsToMint),
-                abi.encodePacked(bytes32(feeProjectId), _nftMetadata)
-            );
+            _mintMetadata = JBDelegateMetadataLib.addToMetadata({
+                _idToAdd: IJBTiered721Delegate(_metadata.dataSource).payMetadataDelegateId(),
+                _dataToAdd: abi.encode(true, _tierIdsToMint),
+                _originalMetadata: abi.encodePacked(bytes32(feeProjectId), _additionalPayMetadata)
+            });
         }
 
         {
