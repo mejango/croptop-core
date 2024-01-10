@@ -60,9 +60,9 @@ contract CroptopDeployer is IERC721Receiver {
     /// @return projectId The ID of the newly created project.
     function deployProjectFor(
         address owner,
-        JBTerminalConfig[] memory terminalConfigurations,
+        JBTerminalConfig[] calldata terminalConfigurations,
         string memory projectMetadata,
-        AllowedPost[] memory allowedPosts,
+        AllowedPost[] calldata allowedPosts,
         string memory contractUri,
         string memory name,
         string memory symbol
@@ -109,7 +109,7 @@ contract CroptopDeployer is IERC721Receiver {
         });
 
         // Configure allowed posts.
-        if (allowedPosts.length > 0) PUBLISHER.configureFor(projectId, allowedPosts);
+        if (allowedPosts.length > 0) PUBLISHER.configurePostingCriteriaFor(projectId, allowedPosts);
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);

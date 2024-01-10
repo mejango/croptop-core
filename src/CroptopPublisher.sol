@@ -88,7 +88,7 @@ contract CroptopPublisher {
 
     /// @notice The divisor that describes the fee that should be taken.
     /// @dev This is equal to 100 divided by the fee percent.
-    uint256 public feeDivisor = 20;
+    uint256 constant public FEE_DIVISOR = 20;
 
     /// @notice The controller that directs the projects being posted to.
     IJBController public immutable CONTROLLER;
@@ -198,7 +198,7 @@ contract CroptopPublisher {
     /// prepends the
     /// payload needed for NFT creation.
     /// @param feeMetadata The metadata to send alongside the fee payment.
-    function collectFrom(
+    function mintFrom(
         uint256 projectId,
         Post[] memory posts,
         address nftBeneficiary,
@@ -229,7 +229,7 @@ contract CroptopPublisher {
                 _setupPosts(projectId, metadata.dataHook, posts);
 
             // Keep a reference to the fee that will be paid.
-            fee = projectId == FEE_PROJECT_ID ? 0 : (totalPrice / feeDivisor);
+            fee = projectId == FEE_PROJECT_ID ? 0 : (totalPrice / FEE_DIVISOR);
 
             // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
             if (totalPrice + fee < msg.value) {
@@ -286,7 +286,7 @@ contract CroptopPublisher {
     /// @notice Project owners can set the allowed criteria for publishing a new NFT to their project.
     /// @param projectId The ID of the project having its publishing allowances set.
     /// @param allowedPosts An array of criteria for allowed posts.
-    function configureFor(uint256 projectId, AllowedPost[] memory allowedPosts) public {
+    function configurePostingCriteriaFor(uint256 projectId, AllowedPost[] memory allowedPosts) public {
         // Make sure the caller is the owner of the project.
         if (msg.sender != CONTROLLER.PROJECTS().ownerOf(projectId)) {
             revert UNAUTHORIZED();
