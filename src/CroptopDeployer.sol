@@ -1,107 +1,109 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.23;
 
-import { IERC721Receiver } from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-import { IJBPaymentTerminal } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPaymentTerminal.sol";
-import { IJBController3_1 } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
-import { IJBFundingCycleBallot } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFundingCycleBallot.sol";
-import { JBCurrencies } from "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBCurrencies.sol";
-import { JBFundingCycleData } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundingCycleData.sol";
-import { JBGlobalFundingCycleMetadata } from
-    "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGlobalFundingCycleMetadata.sol";
-import { JBGroupedSplits } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBGroupedSplits.sol";
-import { JBFundAccessConstraints } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundAccessConstraints.sol";
-import { JBProjectMetadata } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBProjectMetadata.sol";
-import { IJBPrices } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPrices.sol";
-import { IJBTiered721DelegateStore } from
-    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateStore.sol";
+import { IERC721Receiver } from "lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol";
+import { IJBPaymentTerminal } from "lib/juice-contracts-v4/src/interfaces/IJBPaymentTerminal.sol";
+import { IJBController } from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
+import { IJBRulesetApprovalHook } from "lib/juice-contracts-v4/src/interfaces/IJBRulesetApprovalHook.sol";
+import { JBConstants } from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
+import { JBRulesetConfig } from "lib/juice-contracts-v4/src/structs/JBRulesetConfig.sol";
+import { JBRulesetMetadata } from
+    "lib/juice-contracts-v4/src/structs/JBGlobalFundingCycleMetadata.sol";
+import { JBGroupedSplits } from "lib/juice-contracts-v4/src/structs/JBGroupedSplits.sol";
+import { JBFundAccessLimitGroup } from "lib/juice-contracts-v4/src/structs/JBFundAccessLimitGroup.sol";
+import { IJBPrices } from "lib/juice-contracts-v4/src/interfaces/IJBPrices.sol";
+import { IJB721TiersHookStore } from
+    "lib/juice-721-hook/src/interfaces/IJB721TiersHookStore.sol";
 import { IJB721TokenUriResolver } from
-    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJB721TokenUriResolver.sol";
-import { IJBTiered721DelegateProjectDeployer } from
-    "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721DelegateProjectDeployer.sol";
-import { JB721GovernanceType } from "@jbx-protocol/juice-721-delegate/contracts/enums/JB721GovernanceType.sol";
-import { JBLaunchProjectData } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBLaunchProjectData.sol";
-import { JBTiered721FundingCycleMetadata } from
-    "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721FundingCycleMetadata.sol";
-import { JBPayDataSourceFundingCycleMetadata } from
-    "@jbx-protocol/juice-721-delegate/contracts/structs/JBPayDataSourceFundingCycleMetadata.sol";
+    "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import { IJB721TiersHookProjectDeployer } from
+    "lib/juice-721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
+import { JBLaunchProjectConfig } from "lib/juice-721-hook/src/structs/JBLaunchProjectConfig.sol";
+import { JB721TiersRulesetMetadata } from
+    "lib/juice-721-hook/src/structs/JB721TiersRulesetMetadata.sol";
+import { JBPayDataHookRulesetMetadata } from
+    "lib/juice-721-hook/src/structs/JBPayDataHookRulesetMetadata.sol";
 import { JBDeployTiered721DelegateData } from
-    "@jbx-protocol/juice-721-delegate/contracts/structs/JBDeployTiered721DelegateData.sol";
-import { JB721TierParams } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol";
-import { JB721PricingParams } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721PricingParams.sol";
-import { JBTiered721Flags } from "@jbx-protocol/juice-721-delegate/contracts/structs/JBTiered721Flags.sol";
-import { JBTiered721FundingCycleMetadataResolver } from
-    "@jbx-protocol/juice-721-delegate/contracts/libraries/JBTiered721FundingCycleMetadataResolver.sol";
+    "lib/juice-721-hook/src/structs/JBDeployTiered721DelegateData.sol";
+import { JB721TierConfig } from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
+import { JB721InitTiersConfig } from "lib/juice-721-hook/src/structs/JB721InitTiersConfig.sol";
+import { JB721TiersHookFlags } from "lib/juice-721-hook/src/structs/JB721TiersHookFlags.sol";
+import { JB721TiersRulesetMetadataResolver } from
+    "lib/juice-721-hook/src/libraries/JB721TiersRulesetMetadataResolver.sol";
 import { CroptopPublisher, AllowedPost } from "./CroptopPublisher.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
 contract CroptopDeployer is IERC721Receiver {
     /// @notice The controller that projects are made from.
-    IJBController3_1 public controller;
+    IJBController immutable public CONTROLLER;
 
     /// @notice The deployer to launch Croptop recorded collections from.
-    IJBTiered721DelegateProjectDeployer public deployer;
+    IJB721TiersHookProjectDeployer immutable public DEPLOYER;
 
     /// @notice The contract storing NFT data for newly deployed collections.
-    IJBTiered721DelegateStore public store;
+    IJB721TiersHookStore public STORE;
 
     /// @notice The Croptop publisher.
-    CroptopPublisher public publisher;
+    CroptopPublisher public PUBLISHER;
 
-    /// @param _controller The controller that projects are made from.
-    /// @param _deployer The deployer to launch Croptop projects from.
-    /// @param _store The contract storing NFT data for newly deployed collections.
-    /// @param _publisher The croptop publisher.
+    /// @param controller The controller that projects are made from.
+    /// @param deployer The deployer to launch Croptop projects from.
+    /// @param store The contract storing NFT data for newly deployed collections.
+    /// @param publisher The croptop publisher.
     constructor(
-        IJBController3_1 _controller,
-        IJBTiered721DelegateProjectDeployer _deployer,
-        IJBTiered721DelegateStore _store,
-        CroptopPublisher _publisher
+        IJBController controller,
+        IJB721TiersHookProjectDeployer deployer,
+        IJB721TiersHookStore store,
+        CroptopPublisher publisher
     ) {
-        controller = _controller;
-        deployer = _deployer;
-        store = _store;
-        publisher = _publisher;
+        CONTROLLER = controller;
+        DEPLOYER = deployer;
+        STORE = store;
+        PUBLISHER = publisher;
     }
 
     /// @notice Deploy a simple project meant to receive posts from Croptop templates.
-    /// @param _owner The address that'll own the project.
-    /// @param _terminal The contract that the project will begin receiving funds from.
-    /// @param _projectMetadata The metadata containing project info.
-    /// @param _allowedPosts The type of posts that the project should allow.
-    /// @param _contractUri A link to the collection's metadata.
-    /// @param _name The name of the collection where posts will go.
-    /// @param _symbol The symbol of the collection where posts will go.
+    /// @param owner The address that'll own the project.
+    /// @param terminalConfigurations The terminals that the network uses to accept payments through.    
+    /// @param projectMetadata The metadata containing project info.
+    /// @param allowedPosts The type of posts that the project should allow.
+    /// @param contractUri A link to the collection's metadata.
+    /// @param name The name of the collection where posts will go.
+    /// @param symbol The symbol of the collection where posts will go.
     /// @return projectId The ID of the newly created project.
     function deployProjectFor(
-        address _owner,
-        IJBPaymentTerminal _terminal,
-        JBProjectMetadata calldata _projectMetadata,
-        AllowedPost[] calldata _allowedPosts,
-        string calldata _contractUri,
-        string calldata _name,
-        string memory _symbol
+        address owner,
+        JBTerminalConfig[] memory terminalConfigurations,
+        string calldata projectMetadata,
+        AllowedPost[] calldata allowedPosts,
+        string calldata contractUri,
+        string calldata name,
+        string memory symbol
     )
         external
         returns (uint256 projectId)
     {
         // Initialize the terminal array .
-        IJBPaymentTerminal[] memory _terminals = new IJBPaymentTerminal[](1);
-        _terminals[0] = _terminal;
+        IJBTerminal[] memory terminals = new IJBTerminal[](1);
+        terminals[0] = terminal;
+
+        JBPayDataHookRulesetConfig[] memory rulesetConfigurations = new JBPayDataHookRulesetConfig[](1);
+        rulesetConfigurations[0].weight = 1_000_000 * 10 * 18;
+        rulesetConfigurations[0].metadata.baseCurrency = uint32(JBConstants.NATIVE_TOKEN); 
 
         // Deploy a blank project.
         projectId = deployer.launchProjectFor({
             owner: address(this),
-            deployTiered721DelegateData: JBDeployTiered721DelegateData({
-                name: _name,
-                symbol: _symbol,
-                fundingCycleStore: controller.fundingCycleStore(),
+            deployTiersHookConfig: JBDeploy721TiersHookConfig({
+                name: name,
+                symbol: symbol,
+                rulesets: controller.RULESETS(),
                 baseUri: "ipfs://",
                 tokenUriResolver: IJB721TokenUriResolver(address(0)),
-                contractUri: _contractUri,
+                contractUri: contractUri,
                 pricing: JB721PricingParams({
                     tiers: new JB721TierParams[](0),
-                    currency: uint48(JBCurrencies.ETH),
+                    currency: uint32(JBConstants.NATIVE_TOKEN),
                     decimals: 18,
                     prices: IJBPrices(address(0))
                 }),
@@ -112,76 +114,43 @@ contract CroptopDeployer is IERC721Receiver {
                     lockVotingUnitChanges: false,
                     lockManualMintingChanges: false,
                     preventOverspending: false
-                }),
-                governanceType: JB721GovernanceType.NONE
+                })
             }),
-            launchProjectData: JBLaunchProjectData({
-                projectMetadata: _projectMetadata,
-                data: JBFundingCycleData({
-                    duration: 0,
-                    weight: 1_000_000_000_000_000_000_000_000,
-                    discountRate: 0,
-                    ballot: IJBFundingCycleBallot(address(0))
-                }),
-                metadata: JBPayDataSourceFundingCycleMetadata({
-                    global: JBGlobalFundingCycleMetadata({
-                        allowSetTerminals: false,
-                        allowSetController: false,
-                        pauseTransfers: false
-                    }),
-                    reservedRate: 0,
-                    redemptionRate: 0,
-                    ballotRedemptionRate: 0,
-                    pausePay: false,
-                    pauseDistributions: false,
-                    pauseRedeem: false,
-                    pauseBurn: false,
-                    allowMinting: false,
-                    allowTerminalMigration: false,
-                    allowControllerMigration: false,
-                    holdFees: false,
-                    preferClaimedTokenOverride: false,
-                    useTotalOverflowForRedemptions: false,
-                    useDataSourceForRedeem: false,
-                    metadata: JBTiered721FundingCycleMetadataResolver.packTiered721FundingCycleMetadata(
-                        JBTiered721FundingCycleMetadata({ pauseTransfers: false, pauseMintingReserves: false })
-                        )
-                }),
-                mustStartAtOrAfter: 0,
-                groupedSplits: new JBGroupedSplits[](0),
-                fundAccessConstraints: new JBFundAccessConstraints[](0),
-                terminals: _terminals,
+            launchProjectConfig: JBLaunchProjectConfig({
+                projectMetadata: projectMetadata,
+                rulesetConfigurations: rulesetConfigurations,
+                terminalConfigurations: terminalConfigurations
                 memo: "Deployed from Croptop"
             }),
             controller: controller
         });
 
         // Configure allowed posts.
-        if (_allowedPosts.length > 0) publisher.configureFor(projectId, _allowedPosts);
+        if (allowedPosts.length > 0) publisher.configureFor(projectId, allowedPosts);
 
         //transfer to _owner.
-        controller.projects().transferFrom(address(this), _owner, projectId);
+        controller.projects().transferFrom(address(this), owner, projectId);
     }
 
     /// @dev Make sure only mints can be received.
     function onERC721Received(
-        address _operator,
-        address _from,
-        uint256 _tokenId,
-        bytes calldata _data
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
     )
         external
         view
         returns (bytes4)
     {
-        _data;
-        _tokenId;
-        _operator;
+        data;
+        tokenId;
+        operator;
 
         // Make sure the 721 received is the JBProjects contract.
         if (msg.sender != address(controller.projects())) revert();
         // Make sure the 721 is being received as a mint.
-        if (_from != address(0)) revert();
+        if (from != address(0)) revert();
         return IERC721Receiver.onERC721Received.selector;
     }
 }

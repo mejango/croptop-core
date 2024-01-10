@@ -2,11 +2,11 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBDirectory.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBFundingCycleStore.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPayoutRedemptionPaymentTerminal.sol";
-import "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBProjects.sol";
+import "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
+import "lib/juice-contracts-v4/src/interfaces/IJBDirectory.sol";
+import "lib/juice-contracts-v4/src/interfaces/IJBFundingCycleStore.sol";
+import "lib/juice-contracts-v4/src/interfaces/IJBPayoutRedemptionPaymentTerminal.sol";
+import "lib/juice-contracts-v4/src/interfaces/IJBProjects.sol";
 
 // import "../src/Empty.sol";
 

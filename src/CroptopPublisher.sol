@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.23;
 
-import { IERC165 } from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-import { IJBPaymentTerminal } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBPaymentTerminal.sol";
-import { IJBController3_1 } from "@jbx-protocol/juice-contracts-v3/contracts/interfaces/IJBController3_1.sol";
-import { JBTokens } from "@jbx-protocol/juice-contracts-v3/contracts/libraries/JBTokens.sol";
-import { JBFundingCycleMetadata } from "@jbx-protocol/juice-contracts-v3/contracts/structs/JBFundingCycleMetadata.sol";
-import { IJBTiered721Delegate } from "@jbx-protocol/juice-721-delegate/contracts/interfaces/IJBTiered721Delegate.sol";
-import { JB721Tier } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721Tier.sol";
-import { JB721TierParams } from "@jbx-protocol/juice-721-delegate/contracts/structs/JB721TierParams.sol";
+import { IERC165 } from "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
+import { IJBPaymentTerminal } from "lib/juice-contracts-v4/src/interfaces/IJBTerminal.sol";
+import { IJBController } from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
+import { JBConstants } from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
+import { JBMetadataResolver } from "lib/juice-contracts-v4/src/libraries/JBMetadataResolver.sol";
+import { JBRulesetMetadata } from "lib/juice-contracts-v4/src/structs/JBRulesetMetadata.sol";
+import { IJB721TiersHook } from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
+import { JB721Tier } from "lib/juice-721-hook/src/structs/JB721Tier.sol";
+import { JB721TierConfig } from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
 import { JBDelegateMetadataLib } from "@jbx-protocol/juice-delegate-metadata-lib/src/JBDelegateMetadataLib.sol";
 
 /// @notice Criteria for allowed posts.
@@ -67,34 +68,34 @@ contract CroptopPublisher {
     );
 
     /// @notice Packed values that determine the allowance of posts.
-    /// @custom:param _projectId The ID of the project.
-    /// @custom:param _nft The NFT contract for which this allowance applies.
-    /// @custom:param _category The category for which the allowance applies
-    mapping(uint256 _projectId => mapping(address _nft => mapping(uint256 _category => uint256))) internal
+    /// @custom:param projectId The ID of the project.
+    /// @custom:param nft The NFT contract for which this allowance applies.
+    /// @custom:param category The category for which the allowance applies
+    mapping(uint256 projectId => mapping(address nft => mapping(uint256 category => uint256))) internal
         _packedAllowanceFor;
 
     /// @notice Stores addresses that are allowed to post onto an NFT category.
-    /// @custom:param _projectId The ID of the project.
-    /// @custom:param _nft The NFT contract for which this allowance applies.
-    /// @custom:param _category The category for which the allowance applies.
-    /// @custom:param _address The address to check an allowance for.
-    mapping(uint256 _projectId => mapping(address _nft => mapping(uint256 _category => address[]))) internal
+    /// @custom:param projectId The ID of the project.
+    /// @custom:param nft The NFT contract for which this allowance applies.
+    /// @custom:param category The category for which the allowance applies.
+    /// @custom:param address The address to check an allowance for.
+    mapping(uint256 projectId => mapping(address nft => mapping(uint256 category => address[]))) internal
         _allowedAddresses;
 
     /// @notice The ID of the tier that an IPFS metadata has been saved to.
-    /// @custom:param _projectId The ID of the project.
-    /// @custom:param _encodedIPFSUri The IPFS URI.
-    mapping(uint256 _projectId => mapping(bytes32 _encodedIPFSUri => uint256)) public tierIdForEncodedIPFSUriOf;
+    /// @custom:param projectId The ID of the project.
+    /// @custom:param encodedIPFSUri The IPFS URI.
+    mapping(uint256 projectId => mapping(bytes32 encodedIPFSUri => uint256)) public tierIdForEncodedIPFSUriOf;
 
     /// @notice The divisor that describes the fee that should be taken.
     /// @dev This is equal to 100 divided by the fee percent.
     uint256 public feeDivisor = 20;
 
     /// @notice The controller that directs the projects being posted to.
-    IJBController3_1 public controller;
+    IJBController immutable public CONTROLLER;
 
     /// @notice The ID of the project to which fees will be routed.
-    uint256 public feeProjectId;
+    uint256 immutable public FEE_PROJECT_ID;
 
     /// @notice Get the tiers for the provided encoded IPFS URIs.
     /// @param _projectId The ID of the project from which the tiers are being sought.
@@ -103,47 +104,43 @@ contract CroptopPublisher {
     /// @return tiers The tiers that correspond to the provided encoded IPFS URIs. If there's no tier yet, an empty tier
     /// is returned.
     function tiersFor(
-        uint256 _projectId,
-        address _nft,
-        bytes32[] memory _encodedIPFSUris
+        uint256 projectId,
+        address nft,
+        bytes32[] memory encodedIPFSUris
     )
         external
         view
         returns (JB721Tier[] memory tiers)
     {
-        uint256 _numberOfEncodedIPFSUris = _encodedIPFSUris.length;
+        uint256 numberOfEncodedIPFSUris = encodedIPFSUris.length;
 
         // Initialize the tier array being returned.
-        tiers = new JB721Tier[](_numberOfEncodedIPFSUris);
+        tiers = new JB721Tier[](numberOfEncodedIPFSUris);
 
-        if (_nft == address(0)) {
-            // Get the projects current data source from its current funding cyce's metadata.
-            (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+        if (nft == address(0)) {
+            // Get the projects current data source from its current ruleset's metadata.
+            (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
 
-            // Set the NFT as the data source.
-            _nft = _metadata.dataSource;
+            // Set the NFT as the data hook.
+            nft = metadata.dataHook;
         }
 
         // Get the tier for each provided encoded IPFS URI.
-        for (uint256 _i; _i < _numberOfEncodedIPFSUris;) {
+        for (uint256 i; i < numberOfEncodedIPFSUris; i++) {
             // Check if there's a tier ID stored for the encoded IPFS URI.
-            uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_encodedIPFSUris[_i]];
+            uint256 tierId = tierIdForEncodedIPFSUriOf[projectId][_encodedIPFSUris[i]];
 
             // If there's a tier ID stored, resolve it.
-            if (_tierId != 0) {
-                tiers[_i] = IJBTiered721Delegate(_nft).store().tierOf(_nft, _tierId, false);
-            }
-
-            unchecked {
-                ++_i;
+            if (tierId != 0) {
+                tiers[i] = IJBTiered721Delegate(nft).store().tierOf(nft, tierId, false);
             }
         }
     }
 
     /// @notice Post allowances for a particular category on a particular NFT.
-    /// @param _projectId The ID of the project.
-    /// @param _nft The NFT contract for which this allowance applies.
-    /// @param _category The category for which this allowance applies.
+    /// @param projectId The ID of the project.
+    /// @param nft The NFT contract for which this allowance applies.
+    /// @param category The category for which this allowance applies.
     /// @return minimumPrice The minimum price that a poster must pay to record a new NFT.
     /// @return minimumTotalSupply The minimum total number of available tokens that a minter must set to record a new
     /// NFT.
@@ -151,9 +148,9 @@ contract CroptopPublisher {
     /// max.
     /// @return allowedAddresses The addresses allowed to post. Returns empty if all addresses are allowed.
     function allowanceFor(
-        uint256 _projectId,
-        address _nft,
-        uint256 _category
+        uint256 projectId,
+        address nft,
+        uint256 category
     )
         public
         view
@@ -164,300 +161,298 @@ contract CroptopPublisher {
             address[] memory allowedAddresses
         )
     {
-        if (_nft == address(0)) {
+        if (nft == address(0)) {
             // Get the projects current data source from its current funding cyce's metadata.
-            (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+            (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
 
-            // Set the NFT as the data source.
-            _nft = _metadata.dataSource;
+            // Set the NFT as the data hook.
+            nft = metadata.dataHook;
         }
 
         // Get a reference to the packed values.
-        uint256 _packed = _packedAllowanceFor[_projectId][_nft][_category];
+        uint256 packed = _packedAllowanceFor[projectId][nft][category];
 
         // minimum price in bits 0-103 (104 bits).
-        minimumPrice = uint256(uint104(_packed));
+        minimumPrice = uint256(uint104(packed));
         // minimum supply in bits 104-135 (32 bits).
-        minimumTotalSupply = uint256(uint32(_packed >> 104));
+        minimumTotalSupply = uint256(uint32(packed >> 104));
         // minimum supply in bits 136-67 (32 bits).
-        maximumTotalSupply = uint256(uint32(_packed >> 136));
+        maximumTotalSupply = uint256(uint32(packed >> 136));
 
-        allowedAddresses = _allowedAddresses[_projectId][_nft][_category];
+        allowedAddresses = _allowedAddresses[projectId][nft][category];
     }
 
-    /// @param _controller The controller that directs the projects being posted to.
-    /// @param _feeProjectId The ID of the project to which fees will be routed.
-    constructor(IJBController3_1 _controller, uint256 _feeProjectId) {
-        controller = _controller;
-        feeProjectId = _feeProjectId;
+    /// @param controller The controller that directs the projects being posted to.
+    /// @param feeProjectId The ID of the project to which fees will be routed.
+    constructor(IJBController controller, uint256 feeProjectId) {
+        CONTROLLER = controller;
+        FEE_PROJECT_ID = feeProjectId;
     }
 
     /// @notice Publish an NFT to become mintable, and mint a first copy.
     /// @dev A fee is taken into the appropriate treasury.
-    /// @param _projectId The ID of the project to which the NFT should be added.
-    /// @param _posts An array of posts that should be published as NFTs to the specified project.
-    /// @param _nftBeneficiary The beneficiary of the NFT mints.
-    /// @param _feeBeneficiary The beneficiary of the fee project's token.
-    /// @param _additionalPayMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the
+    /// @param projectId The ID of the project to which the NFT should be added.
+    /// @param posts An array of posts that should be published as NFTs to the specified project.
+    /// @param nftBeneficiary The beneficiary of the NFT mints.
+    /// @param feeBeneficiary The beneficiary of the fee project's token.
+    /// @param additionalPayMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the
     /// payload needed for NFT creation.
-    /// @param _feeMetadata The metadata to send alongside the fee payment.
+    /// @param feeMetadata The metadata to send alongside the fee payment.
     function collectFrom(
-        uint256 _projectId,
-        Post[] memory _posts,
-        address _nftBeneficiary,
-        address _feeBeneficiary,
-        bytes calldata _additionalPayMetadata,
-        bytes calldata _feeMetadata
+        uint256 projectId,
+        Post[] memory posts,
+        address nftBeneficiary,
+        address feeBeneficiary,
+        bytes calldata additionalPayMetadata,
+        bytes calldata feeMetadata
     )
         external
         payable
     {
         // Keep a reference a reference to the fee.
-        uint256 _fee;
+        uint256 fee;
 
         // Keep a reference to the mint metadata.
-        bytes memory _mintMetadata;
+        bytes memory mintMetadata;
 
         {
             // Get the projects current data source from its current funding cyce's metadata.
-            (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+            (, JBFundingCycleMetadata memory metadata) = controller.currentFundingCycleOf(projectId);
 
             // Check to make sure the project's current data source is a IJBTiered721Delegate.
-            if (!IERC165(_metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
-                revert INCOMPATIBLE_PROJECT(_projectId, _metadata.dataSource, type(IJBTiered721Delegate).interfaceId);
+            if (!IERC165(metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
+                revert INCOMPATIBLE_PROJECT(projectId, metadata.dataSource, type(IJBTiered721Delegate).interfaceId);
             }
 
             // Setup the posts.
-            (JB721TierParams[] memory _tierDataToAdd, uint256[] memory _tierIdsToMint, uint256 _totalPrice) =
-                _setupPosts(_projectId, _metadata.dataSource, _posts);
+            (JB721TierParams[] memory tierDataToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice) =
+                _setupPosts(projectId, metadata.dataHook, posts);
 
             // Keep a reference to the fee that will be paid.
-            _fee = _projectId == feeProjectId ? 0 : (_totalPrice / feeDivisor);
+            fee = projectId == FEE_PROJECT_ID ? 0 : (totalPrice / feeDivisor);
 
             // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
-            if (_totalPrice + _fee < msg.value) {
-                revert INSUFFICIENT_ETH_SENT(_totalPrice, msg.value);
+            if (totalPrice + fee < msg.value) {
+                revert INSUFFICIENT_ETH_SENT(totalPrice, msg.value);
             }
 
             // Add the new tiers.
-            IJBTiered721Delegate(_metadata.dataSource).adjustTiers(_tierDataToAdd, new uint256[](0));
+            IJBTiered721Delegate(metadata.dataHook).adjustTiers(tierDataToAdd, new uint256[](0));
 
             // Create the metadata for the payment to specify the tier IDs that should be minted.
-            _mintMetadata = JBDelegateMetadataLib.addToMetadata({
-                _idToAdd: IJBTiered721Delegate(_metadata.dataSource).payMetadataDelegateId(),
-                _dataToAdd: abi.encode(true, _tierIdsToMint),
-                _originalMetadata: abi.encodePacked(bytes32(feeProjectId), _additionalPayMetadata)
+            mintMetadata = JBDelegateMetadataLib.addToMetadata({
+                idToAdd: IJBTiered721Delegate(metadata.dataHook).payMetadataDelegateId(),
+                dataToAdd: abi.encode(true, tierIdsToMint),
+                originalMetadata: abi.encodePacked(bytes32(feeProjectId), additionalPayMetadata)
             });
         }
 
         {
             // Get a reference to the project's current ETH payment terminal.
-            IJBPaymentTerminal _projectTerminal = controller.directory().primaryTerminalOf(_projectId, JBTokens.ETH);
+            IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
 
             // Make the payment.
-            _projectTerminal.pay{ value: msg.value - _fee }(
-                _projectId,
-                msg.value - _fee,
-                JBTokens.ETH,
-                _nftBeneficiary,
-                0,
-                false,
-                "Minted from Croptop",
-                _mintMetadata
-            );
+            projectTerminal.pay{ value: msg.value - fee }({
+                projectId: projectId,
+                token: JBConstants.NATIVE_TOKEN,
+                amount: msg.value - fee,
+                beneficiary: nftBeneficiary,
+                minReturnedTokens: 0,
+                memo: "Minted from Croptop",
+                metadata: mintMetadata
+            });
         }
 
         // Pay a fee if there are funds left.
         if (address(this).balance != 0) {
             // Get a reference to the fee project's current ETH payment terminal.
-            IJBPaymentTerminal _feeTerminal = controller.directory().primaryTerminalOf(feeProjectId, JBTokens.ETH);
+            IJBTerminal feeTerminal = CONTROLLER.DIRECTORY.primaryTerminalOf(FEE_PROJECT_ID, JBConstants.NATIVE_TOKEN);
 
             // Make the fee payment.
-            _feeTerminal.pay{ value: address(this).balance }(
-                feeProjectId, address(this).balance, JBTokens.ETH, _feeBeneficiary, 0, false, "", _feeMetadata
-            );
+            feeTerminal.pay{ value: address(this).balance }({
+                projectId: feeProjectId, 
+                amount: address(this).balance, 
+                token: JBConstants.NATIVE_TOKEN, 
+                beneficiary: feeBeneficiary, 
+                minReturnedTokens: 0, 
+                memo: "", 
+                metadata: feeMetadata
+            });
         }
 
-        emit Collected(_projectId, _nftBeneficiary, _feeBeneficiary, _posts, _fee, msg.sender);
+        emit Collected(projectId, nftBeneficiary, feeBeneficiary, posts, fee, msg.sender);
     }
 
     /// @notice Project owners can set the allowed criteria for publishing a new NFT to their project.
-    /// @param _projectId The ID of the project having its publishing allowances set.
-    /// @param _allowedPosts An array of criteria for allowed posts.
-    function configureFor(uint256 _projectId, AllowedPost[] memory _allowedPosts) public {
+    /// @param projectId The ID of the project having its publishing allowances set.
+    /// @param allowedPosts An array of criteria for allowed posts.
+    function configureFor(uint256 projectId, AllowedPost[] memory allowedPosts) public {
         // Make sure the caller is the owner of the project.
-        if (msg.sender != controller.projects().ownerOf(_projectId)) {
+        if (msg.sender != CONTROLLER.PROJECTS().ownerOf(projectId)) {
             revert UNAUTHORIZED();
         }
 
-        // Get the projects current data source from its current funding cyce's metadata.
-        (, JBFundingCycleMetadata memory _metadata) = controller.currentFundingCycleOf(_projectId);
+        // Get the projects current data source from its current ruleset's metadata.
+        (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetsOf(projectId);
 
         // Keep a reference to the number of post criteria.
-        uint256 _numberOfAllowedPosts = _allowedPosts.length;
+        uint256 numberOfAllowedPosts = allowedPosts.length;
 
         // Keep a reference to the post criteria being iterated on.
-        AllowedPost memory _allowedPost;
+        AllowedPost memory allowedPost;
 
         // For each post criteria, save the specifications.
-        for (uint256 _i; _i < _numberOfAllowedPosts;) {
+        for (uint256 i; i < _numberOfAllowedPosts; i++) {
             // Set the post criteria being iterated on.
-            _allowedPost = _allowedPosts[_i];
+            allowedPost = allowedPosts[i];
 
             // Make sure there is a minimum supply.
-            if (_allowedPost.minimumTotalSupply == 0) {
+            if (allowedPost.minimumTotalSupply == 0) {
                 revert TOTAL_SUPPY_MUST_BE_POSITIVE();
             }
 
             // Make sure there is a minimum supply.
-            if (_allowedPost.minimumTotalSupply > _allowedPost.maximumTotalSupply) {
+            if (allowedPost.minimumTotalSupply > allowedPost.maximumTotalSupply) {
                 revert MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
             }
 
             // Set the _nft as the current data source if not set.
-            if (_allowedPost.nft == address(0)) {
-                _allowedPost.nft = _metadata.dataSource;
+            if (allowedPost.nft == address(0)) {
+                allowedPost.nft = metadata.dataSource;
             }
 
-            uint256 _packed;
+            uint256 packed;
             // minimum price in bits 0-103 (104 bits).
-            _packed |= uint256(_allowedPost.minimumPrice);
+            packed |= uint256(allowedPost.minimumPrice);
             // minimum total supply in bits 104-135 (32 bits).
-            _packed |= uint256(_allowedPost.minimumTotalSupply) << 104;
+            packed |= uint256(allowedPost.minimumTotalSupply) << 104;
             // maximum total supply in bits 136-167 (32 bits).
-            _packed |= uint256(_allowedPost.maximumTotalSupply) << 136;
+            packed |= uint256(allowedPost.maximumTotalSupply) << 136;
             // Store the packed value.
-            _packedAllowanceFor[_projectId][_allowedPost.nft][_allowedPost.category] = _packed;
+            _packedAllowanceFor[projectId][allowedPost.nft][allowedPost.category] = packed;
 
             // Store the allow list.
-            uint256 _numberOfAddresses = _allowedPost.allowedAddresses.length;
+            uint256 numberOfAddresses = allowedPost.allowedAddresses.length;
             // Reset the addresses.
-            delete _allowedAddresses[_projectId][_allowedPost.nft][_allowedPost.category];
+            delete _allowedAddresses[projectId][allowedPost.nft][allowedPost.category];
             // Add the number allowed addresses.
-            if (_numberOfAddresses != 0) {
+            if (numberOfAddresses != 0) {
                 // Keep a reference to the storage of the allowed addresses.
-                for (uint256 _j = 0; _j < _numberOfAddresses;) {
-                    _allowedAddresses[_projectId][_allowedPost.nft][_allowedPost.category].push(
-                        _allowedPost.allowedAddresses[_j]
+                for (uint256 j = 0; j < _numberOfAddresses; j++) {
+                    _allowedAddresses[projectId][allowedPost.nft][allowedPost.category].push(
+                        allowedPost.allowedAddresses[j]
                     );
-                    unchecked {
-                        ++_j;
-                    }
                 }
-            }
-
-            unchecked {
-                ++_i;
             }
         }
 
-        emit Configured(_projectId, _allowedPosts, msg.sender);
+        emit Configured(projectId, allowedPosts, msg.sender);
     }
 
     /// @notice Setup the posts.
-    /// @param _projectId The ID of the project having posts set up.
-    /// @param _nft The NFT address on which the posts will apply.
-    /// @param _posts An array of posts that should be published as NFTs to the specified project.
+    /// @param projectId The ID of the project having posts set up.
+    /// @param nft The NFT address on which the posts will apply.
+    /// @param posts An array of posts that should be published as NFTs to the specified project.
     /// @return tierDataToAdd The tier data that will be created to represent the posts.
     /// @return tierIdsToMint The tier IDs of the posts that should be minted once published.
     /// @return totalPrice The total price being paid.
     function _setupPosts(
-        uint256 _projectId,
-        address _nft,
-        Post[] memory _posts
+        uint256 projectId,
+        address nft,
+        Post[] memory posts
     )
         internal
         returns (JB721TierParams[] memory tierDataToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
     {
         // Keep a reference to the number of posts being published.
-        uint256 _numberOfMints = _posts.length;
+        uint256 numberOfMints = posts.length;
 
         // Set the max size of the tier data that will be added.
         tierDataToAdd = new JB721TierParams[](
-                _numberOfMints
+                numberOfMints
             );
 
         // Set the size of the tier IDs of the posts that should be minted once published.
-        tierIdsToMint = new uint256[](_numberOfMints);
+        tierIdsToMint = new uint256[](numberOfMints);
 
         // The tier ID that will be created, and the first one that should be minted from, is one more than the current
         // max.
-        uint256 _startingTierId = IJBTiered721Delegate(_nft).store().maxTierIdOf(_nft) + 1;
+        uint256 startingTierId = IJBTiered721Delegate(nft).store().maxTierIdOf(nft) + 1;
 
         // Keep a reference to the post being iterated on.
-        Post memory _post;
+        Post memory post;
 
         // Keep a reference to the total number of tiers being added.
-        uint256 _numberOfTiersBeingAdded;
+        uint256 numberOfTiersBeingAdded;
 
         // For each post, create tiers after validating to make sure they fulfill the allowance specified by the
         // project's owner.
-        for (uint256 _i; _i < _numberOfMints;) {
+        for (uint256 i; i < _numberOfMints; i++) {
             // Get the current post being iterated on.
-            _post = _posts[_i];
+            post = posts[i];
 
             // Make sure the post includes an encodedIPFSUri.
-            if (_post.encodedIPFSUri == bytes32("")) {
-                revert EMPTY_ENCODED_IPFS_URI(_post.encodedIPFSUri);
+            if (post.encodedIPFSUri == bytes32("")) {
+                revert EMPTY_ENCODED_IPFS_URI(post.encodedIPFSUri);
             }
 
             // Scoped section to prevent stack too deep.
             {
                 // Check if there's an ID of a tier already minted for this encodedIPFSUri.
-                uint256 _tierId = tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri];
+                uint256 tierId = tierIdForEncodedIPFSUriOf[projectId][post.encodedIPFSUri];
 
-                if (_tierId != 0) tierIdsToMint[_i] = _tierId;
+                if (tierId != 0) tierIdsToMint[i] = tierId;
             }
 
             // If no tier already exists, post the tier.
-            if (tierIdsToMint[_i] == 0) {
+            if (tierIdsToMint[i] == 0) {
                 // Scoped error handling section to prevent Stack Too Deep.
                 {
                     // Get references to the allowance.
                     (
-                        uint256 _minimumPrice,
-                        uint256 _minimumTotalSupply,
-                        uint256 _maximumTotalSupply,
-                        address[] memory _addresses
-                    ) = allowanceFor(_projectId, _nft, _post.category);
+                        uint256 minimumPrice,
+                        uint256 minimumTotalSupply,
+                        uint256 maximumTotalSupply,
+                        address[] memory addresses
+                    ) = allowanceFor(projectId, nft, post.category);
 
                     // Make sure the category being posted to allows publishing.
-                    if (_minimumTotalSupply == 0) {
+                    if (minimumTotalSupply == 0) {
                         revert UNAUTHORIZED_TO_POST_IN_CATEGORY();
                     }
 
                     // Make sure the price being paid for the post is at least the allowed minimum price.
-                    if (_post.price < _minimumPrice) {
-                        revert PRICE_TOO_SMALL(_minimumPrice);
+                    if (post.price < minimumPrice) {
+                        revert PRICE_TOO_SMALL(minimumPrice);
                     }
 
                     // Make sure the total supply being made available for the post is at least the allowed minimum
                     // total supply.
-                    if (_post.totalSupply < _minimumTotalSupply) {
-                        revert TOTAL_SUPPLY_TOO_SMALL(_minimumTotalSupply);
+                    if (post.totalSupply < minimumTotalSupply) {
+                        revert TOTAL_SUPPLY_TOO_SMALL(minimumTotalSupply);
                     }
 
                     // Make sure the total supply being made available for the post is at most the allowed maximum total
                     // supply.
-                    if (_post.totalSupply > _maximumTotalSupply) {
-                        revert TOTAL_SUPPLY_TOO_BIG(_maximumTotalSupply);
+                    if (post.totalSupply > maximumTotalSupply) {
+                        revert TOTAL_SUPPLY_TOO_BIG(maximumTotalSupply);
                     }
 
                     // Make sure the address is allowed to post.
-                    if (_addresses.length != 0 && !_isAllowed(msg.sender, _addresses)) {
-                        revert NOT_IN_ALLOW_LIST(_addresses);
+                    if (addresses.length != 0 && !_isAllowed(msg.sender, addresses)) {
+                        revert NOT_IN_ALLOW_LIST(addresses);
                     }
                 }
 
                 // Set the tier.
                 tierDataToAdd[_numberOfTiersBeingAdded] = JB721TierParams({
-                    price: uint80(_post.price),
-                    initialQuantity: _post.totalSupply,
+                    price: uint80(post.price),
+                    initialQuantity: post.totalSupply,
                     votingUnits: 0,
                     reservedRate: 0,
                     reservedTokenBeneficiary: address(0),
-                    encodedIPFSUri: _post.encodedIPFSUri,
-                    category: uint8(_post.category),
+                    encodedIPFSUri: post.encodedIPFSUri,
+                    category: uint8(post.category),
                     allowManualMint: false,
                     shouldUseReservedTokenBeneficiaryAsDefault: false,
                     transfersPausable: false,
@@ -465,38 +460,31 @@ contract CroptopPublisher {
                 });
 
                 // Set the ID of the tier to mint.
-                tierIdsToMint[_i] = _startingTierId + _numberOfTiersBeingAdded++;
+                tierIdsToMint[i] = startingTierId + numberOfTiersBeingAdded++;
 
                 // Save the encodedIPFSUri as minted.
-                tierIdForEncodedIPFSUriOf[_projectId][_post.encodedIPFSUri] = tierIdsToMint[_i];
+                tierIdForEncodedIPFSUriOf[projectId][post.encodedIPFSUri] = tierIdsToMint[i];
             }
 
             // Increment the total price.
-            totalPrice += _post.price;
-
-            unchecked {
-                ++_i;
-            }
+            totalPrice += post.price;
         }
 
         // Resize the array if there's a mismatch in length.
-        if (_numberOfTiersBeingAdded != _numberOfMints) {
+        if (numberOfTiersBeingAdded != numberOfMints) {
             assembly ("memory-safe") {
-                mstore(tierDataToAdd, _numberOfTiersBeingAdded)
+                mstore(tierDataToAdd, numberOfTiersBeingAdded)
             }
         }
     }
 
     /// @notice Check if an address is included in an allow list.
-    /// @param _address The candidate address.
-    /// @param _addresses An array of allowed addresses.
-    function _isAllowed(address _address, address[] memory _addresses) internal pure returns (bool) {
-        uint256 _numberOfAddresses = _addresses.length;
-        for (uint256 _i; _i < _numberOfAddresses;) {
-            if (_address == _addresses[_i]) return true;
-            unchecked {
-                ++_i;
-            }
+    /// @param addrs The candidate address.
+    /// @param addresses An array of allowed addresses.
+    function _isAllowed(address addrs, address[] memory addresses) internal pure returns (bool) {
+        uint256 numberOfAddresses = addresses.length;
+        for (uint256 i; i < numberOfAddresses; i++) {
+            if (addrs == addresses[i]) return true;
         }
         return false;
     }
