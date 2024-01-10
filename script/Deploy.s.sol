@@ -1,40 +1,93 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.23;
 
-import "forge-std/Script.sol";
+import {Script, stdJson} from "lib/forge-std/src/Script.sol";
+import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
+import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
+import {IJBPermissioned} from "lib/juice-contracts-v4/src/interfaces/IJBPermissioned.sol";
+import {CroptopPublisher} from "src/CroptopPublisher.sol";
+import {CroptopDeployer} from "src/CroptopDeployer.sol";
+import {CroptopProjectOwner} from "src/CroptopProjectOwner.sol";
+import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissions.sol";
+import {JB721TiersHookProjectDeployer} from "lib/juice-721-hook/src/JB721TiersHookProjectDeployer.sol";
+import {JB721TiersHookStore} from "lib/juice-721-hook/src/JB721TiersHookStore.sol";
 
-import { IJBController } from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
-import { IJBOperatable } from "lib/juice-contracts-v4/src/interfaces/IJBOperatable.sol";
-import { IJBTiered721DelegateProjectDeployer } from
-    "lib/juice-721-hook/src/interfaces/IJBTiered721DelegateProjectDeployer.sol";
-import { IJBTiered721DelegateStore } from
-    "lib/juice-721-hook/src/interfaces/IJBTiered721DelegateStore.sol";
-import { CroptopPublisher } from "../src/CroptopPublisher.sol";
-import { CroptopDeployer } from "../src/CroptopDeployer.sol";
-import { CroptopProjectOwner } from "../src/CroptopProjectOwner.sol";
+contract Deploy is Script {
+    uint256 FEE_PROJECT_ID = 1;
 
-contract DeployMainnet is Script {
-    function setUp() public { }
+    function run() public {
+        uint256 chainId = block.chainid;
+        string memory chain;
 
-    function _run() internal {
-        vm.broadcast();
-    }
-}
+        // Ethereum Mainnet
+        if (chainId == 1) {
+            chain = "1";
+            // Ethereum Sepolia
+        } else if (chainId == 11_155_111) {
+            chain = "11155111";
+            // Optimism Mainnet
+        } else if (chainId == 420) {
+            chain = "420";
+            // Optimism Sepolia
+        } else if (chainId == 11_155_420) {
+            chain = "11155420";
+            // Polygon Mainnet
+        } else if (chainId == 137) {
+            chain = "137";
+            // Polygon Mumbai
+        } else if (chainId == 80_001) {
+            chain = "80001";
+        } else {
+            revert("Invalid RPC / no juice contracts deployed on this network");
+        }
 
-contract DeployGoerli is Script {
-    // V3_1 goerli controller.
-    IJBController _controller = IJBController(0x1d260DE91233e650F136Bf35f8A4ea1F2b68aDB6);
-    IJBTiered721DelegateProjectDeployer _deployer =
-        IJBTiered721DelegateProjectDeployer(0xFf2FC0238d17e4B7892fca999b6865A112Ee1539);
-    IJBTiered721DelegateStore _store = IJBTiered721DelegateStore(0x8dA6B4569f88C0164d77Af5E5BF12E88d4bCd016);
-    uint256 _feeProjectId = 1016;
+        address controllerAddress = _getDeploymentAddress(
+            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBController"
+        );
 
-    function run() external {
+        address deployerAddress = _getDeploymentAddress(
+            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "JB721TiersHookProjectDeployer"
+        );
+
+        address storeAddress = _getDeploymentAddress(
+            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            "JB721TiersHookStore"
+        );
+
         vm.startBroadcast();
+        CroptopPublisher publisher = new CroptopPublisher(IJBController(controllerAddress), FEE_PROJECT_ID);
+        new CroptopDeployer(
+            IJBController(controllerAddress),
+            JB721TiersHookProjectDeployer(deployerAddress),
+            JB721TiersHookStore(storeAddress),
+            publisher
+        );
+        new CroptopProjectOwner(
+            IJBPermissioned(controllerAddress).PERMISSIONS(), IJBController(controllerAddress).PROJECTS(), publisher
+        );
+        vm.stopBroadcast();
+    }
 
-        // Deploy the deployer.
-        CroptopPublisher _publisher = new CroptopPublisher(_controller, _feeProjectId);
-        new CroptopDeployer(_controller, _deployer, _store, _publisher);
-        new CroptopProjectOwner(IJBOperatable(address(_controller)).operatorStore(), _controller.projects(), _publisher);
+    /// @notice Get the address of a contract that was deployed by the Deploy script.
+    /// @dev Reverts if the contract was not found.
+    /// @param path The path to the deployment file.
+    /// @param contractName The name of the contract to get the address of.
+    /// @return The address of the contract.
+    function _getDeploymentAddress(string memory path, string memory contractName) internal view returns (address) {
+        string memory deploymentJson = vm.readFile(path);
+        uint256 nOfTransactions = stdJson.readStringArray(deploymentJson, ".transactions").length;
+
+        for (uint256 i = 0; i < nOfTransactions; i++) {
+            string memory currentKey = string.concat(".transactions", "[", Strings.toString(i), "]");
+            string memory currentContractName =
+                stdJson.readString(deploymentJson, string.concat(currentKey, ".contractName"));
+
+            if (keccak256(abi.encodePacked(currentContractName)) == keccak256(abi.encodePacked(contractName))) {
+                return stdJson.readAddress(deploymentJson, string.concat(currentKey, ".contractAddress"));
+            }
+        }
+
+        revert(string.concat("Could not find contract with name '", contractName, "' in deployment file '", path, "'"));
     }
 }

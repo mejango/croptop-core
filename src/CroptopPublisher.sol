@@ -1,16 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { IERC165 } from "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
-import { IJBPaymentTerminal } from "lib/juice-contracts-v4/src/interfaces/IJBTerminal.sol";
-import { IJBController } from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
-import { JBConstants } from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
-import { JBMetadataResolver } from "lib/juice-contracts-v4/src/libraries/JBMetadataResolver.sol";
-import { JBRulesetMetadata } from "lib/juice-contracts-v4/src/structs/JBRulesetMetadata.sol";
-import { IJB721TiersHook } from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
-import { JB721Tier } from "lib/juice-721-hook/src/structs/JB721Tier.sol";
-import { JB721TierConfig } from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
-import { JBDelegateMetadataLib } from "@jbx-protocol/juice-delegate-metadata-lib/src/JBDelegateMetadataLib.sol";
+import {IERC165} from "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
+import {IJBTerminal} from "lib/juice-contracts-v4/src/interfaces/terminal/IJBTerminal.sol";
+import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
+import {JBConstants} from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
+import {JBMetadataResolver} from "lib/juice-contracts-v4/src/libraries/JBMetadataResolver.sol";
+import {JBRulesetMetadata} from "lib/juice-contracts-v4/src/structs/JBRulesetMetadata.sol";
+import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
+import {JB721Tier} from "lib/juice-721-hook/src/structs/JB721Tier.sol";
+import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
 
 /// @notice Criteria for allowed posts.
 /// @custom:member nft The NFT to which this allowance applies.
@@ -92,15 +91,15 @@ contract CroptopPublisher {
     uint256 public feeDivisor = 20;
 
     /// @notice The controller that directs the projects being posted to.
-    IJBController immutable public CONTROLLER;
+    IJBController public immutable CONTROLLER;
 
     /// @notice The ID of the project to which fees will be routed.
-    uint256 immutable public FEE_PROJECT_ID;
+    uint256 public immutable FEE_PROJECT_ID;
 
     /// @notice Get the tiers for the provided encoded IPFS URIs.
-    /// @param _projectId The ID of the project from which the tiers are being sought.
-    /// @param _nft The NFT from which to get tiers.
-    /// @param _encodedIPFSUris The URIs to get tiers of.
+    /// @param projectId The ID of the project from which the tiers are being sought.
+    /// @param nft The NFT from which to get tiers.
+    /// @param encodedIPFSUris The URIs to get tiers of.
     /// @return tiers The tiers that correspond to the provided encoded IPFS URIs. If there's no tier yet, an empty tier
     /// is returned.
     function tiersFor(
@@ -128,11 +127,11 @@ contract CroptopPublisher {
         // Get the tier for each provided encoded IPFS URI.
         for (uint256 i; i < numberOfEncodedIPFSUris; i++) {
             // Check if there's a tier ID stored for the encoded IPFS URI.
-            uint256 tierId = tierIdForEncodedIPFSUriOf[projectId][_encodedIPFSUris[i]];
+            uint256 tierId = tierIdForEncodedIPFSUriOf[projectId][encodedIPFSUris[i]];
 
             // If there's a tier ID stored, resolve it.
             if (tierId != 0) {
-                tiers[i] = IJBTiered721Delegate(nft).store().tierOf(nft, tierId, false);
+                tiers[i] = IJB721TiersHook(nft).STORE().tierOf(nft, tierId, false);
             }
         }
     }
@@ -195,7 +194,8 @@ contract CroptopPublisher {
     /// @param posts An array of posts that should be published as NFTs to the specified project.
     /// @param nftBeneficiary The beneficiary of the NFT mints.
     /// @param feeBeneficiary The beneficiary of the fee project's token.
-    /// @param additionalPayMetadata Metadata bytes that should be included in the pay function's metadata. This prepends the
+    /// @param additionalPayMetadata Metadata bytes that should be included in the pay function's metadata. This
+    /// prepends the
     /// payload needed for NFT creation.
     /// @param feeMetadata The metadata to send alongside the fee payment.
     function collectFrom(
@@ -217,15 +217,15 @@ contract CroptopPublisher {
 
         {
             // Get the projects current data source from its current funding cyce's metadata.
-            (, JBFundingCycleMetadata memory metadata) = controller.currentFundingCycleOf(projectId);
+            (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
 
             // Check to make sure the project's current data source is a IJBTiered721Delegate.
-            if (!IERC165(metadata.dataSource).supportsInterface(type(IJBTiered721Delegate).interfaceId)) {
-                revert INCOMPATIBLE_PROJECT(projectId, metadata.dataSource, type(IJBTiered721Delegate).interfaceId);
+            if (!IERC165(metadata.dataHook).supportsInterface(type(IJB721TiersHook).interfaceId)) {
+                revert INCOMPATIBLE_PROJECT(projectId, metadata.dataHook, type(IJB721TiersHook).interfaceId);
             }
 
             // Setup the posts.
-            (JB721TierParams[] memory tierDataToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice) =
+            (JB721TierConfig[] memory tiersToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice) =
                 _setupPosts(projectId, metadata.dataHook, posts);
 
             // Keep a reference to the fee that will be paid.
@@ -237,13 +237,13 @@ contract CroptopPublisher {
             }
 
             // Add the new tiers.
-            IJBTiered721Delegate(metadata.dataHook).adjustTiers(tierDataToAdd, new uint256[](0));
+            IJB721TiersHook(metadata.dataHook).adjustTiers(tiersToAdd, new uint256[](0));
 
             // Create the metadata for the payment to specify the tier IDs that should be minted.
-            mintMetadata = JBDelegateMetadataLib.addToMetadata({
-                idToAdd: IJBTiered721Delegate(metadata.dataHook).payMetadataDelegateId(),
-                dataToAdd: abi.encode(true, tierIdsToMint),
-                originalMetadata: abi.encodePacked(bytes32(feeProjectId), additionalPayMetadata)
+            mintMetadata = JBMetadataResolver.addToMetadata({
+                originalMetadata: abi.encodePacked(bytes32(FEE_PROJECT_ID), additionalPayMetadata),
+                idToAdd: bytes4(bytes20(metadata.dataHook)),
+                dataToAdd: abi.encode(true, tierIdsToMint)
             });
         }
 
@@ -252,7 +252,7 @@ contract CroptopPublisher {
             IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
 
             // Make the payment.
-            projectTerminal.pay{ value: msg.value - fee }({
+            projectTerminal.pay{value: msg.value - fee}({
                 projectId: projectId,
                 token: JBConstants.NATIVE_TOKEN,
                 amount: msg.value - fee,
@@ -266,16 +266,16 @@ contract CroptopPublisher {
         // Pay a fee if there are funds left.
         if (address(this).balance != 0) {
             // Get a reference to the fee project's current ETH payment terminal.
-            IJBTerminal feeTerminal = CONTROLLER.DIRECTORY.primaryTerminalOf(FEE_PROJECT_ID, JBConstants.NATIVE_TOKEN);
+            IJBTerminal feeTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(FEE_PROJECT_ID, JBConstants.NATIVE_TOKEN);
 
             // Make the fee payment.
-            feeTerminal.pay{ value: address(this).balance }({
-                projectId: feeProjectId, 
-                amount: address(this).balance, 
-                token: JBConstants.NATIVE_TOKEN, 
-                beneficiary: feeBeneficiary, 
-                minReturnedTokens: 0, 
-                memo: "", 
+            feeTerminal.pay{value: address(this).balance}({
+                projectId: FEE_PROJECT_ID,
+                amount: address(this).balance,
+                token: JBConstants.NATIVE_TOKEN,
+                beneficiary: feeBeneficiary,
+                minReturnedTokens: 0,
+                memo: "",
                 metadata: feeMetadata
             });
         }
@@ -293,7 +293,7 @@ contract CroptopPublisher {
         }
 
         // Get the projects current data source from its current ruleset's metadata.
-        (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetsOf(projectId);
+        (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
 
         // Keep a reference to the number of post criteria.
         uint256 numberOfAllowedPosts = allowedPosts.length;
@@ -302,7 +302,7 @@ contract CroptopPublisher {
         AllowedPost memory allowedPost;
 
         // For each post criteria, save the specifications.
-        for (uint256 i; i < _numberOfAllowedPosts; i++) {
+        for (uint256 i; i < numberOfAllowedPosts; i++) {
             // Set the post criteria being iterated on.
             allowedPost = allowedPosts[i];
 
@@ -318,7 +318,7 @@ contract CroptopPublisher {
 
             // Set the _nft as the current data source if not set.
             if (allowedPost.nft == address(0)) {
-                allowedPost.nft = metadata.dataSource;
+                allowedPost.nft = metadata.dataHook;
             }
 
             uint256 packed;
@@ -338,7 +338,7 @@ contract CroptopPublisher {
             // Add the number allowed addresses.
             if (numberOfAddresses != 0) {
                 // Keep a reference to the storage of the allowed addresses.
-                for (uint256 j = 0; j < _numberOfAddresses; j++) {
+                for (uint256 j = 0; j < numberOfAddresses; j++) {
                     _allowedAddresses[projectId][allowedPost.nft][allowedPost.category].push(
                         allowedPost.allowedAddresses[j]
                     );
@@ -353,7 +353,7 @@ contract CroptopPublisher {
     /// @param projectId The ID of the project having posts set up.
     /// @param nft The NFT address on which the posts will apply.
     /// @param posts An array of posts that should be published as NFTs to the specified project.
-    /// @return tierDataToAdd The tier data that will be created to represent the posts.
+    /// @return tiersToAdd The tiers that will be created to represent the posts.
     /// @return tierIdsToMint The tier IDs of the posts that should be minted once published.
     /// @return totalPrice The total price being paid.
     function _setupPosts(
@@ -362,22 +362,20 @@ contract CroptopPublisher {
         Post[] memory posts
     )
         internal
-        returns (JB721TierParams[] memory tierDataToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
+        returns (JB721TierConfig[] memory tiersToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
     {
         // Keep a reference to the number of posts being published.
         uint256 numberOfMints = posts.length;
 
         // Set the max size of the tier data that will be added.
-        tierDataToAdd = new JB721TierParams[](
-                numberOfMints
-            );
+        tiersToAdd = new JB721TierConfig[](numberOfMints);
 
         // Set the size of the tier IDs of the posts that should be minted once published.
         tierIdsToMint = new uint256[](numberOfMints);
 
         // The tier ID that will be created, and the first one that should be minted from, is one more than the current
         // max.
-        uint256 startingTierId = IJBTiered721Delegate(nft).store().maxTierIdOf(nft) + 1;
+        uint256 startingTierId = IJB721TiersHook(nft).STORE().maxTierIdOf(nft) + 1;
 
         // Keep a reference to the post being iterated on.
         Post memory post;
@@ -387,7 +385,7 @@ contract CroptopPublisher {
 
         // For each post, create tiers after validating to make sure they fulfill the allowance specified by the
         // project's owner.
-        for (uint256 i; i < _numberOfMints; i++) {
+        for (uint256 i; i < numberOfMints; i++) {
             // Get the current post being iterated on.
             post = posts[i];
 
@@ -445,16 +443,16 @@ contract CroptopPublisher {
                 }
 
                 // Set the tier.
-                tierDataToAdd[_numberOfTiersBeingAdded] = JB721TierParams({
+                tiersToAdd[numberOfTiersBeingAdded] = JB721TierConfig({
                     price: uint80(post.price),
-                    initialQuantity: post.totalSupply,
+                    initialSupply: post.totalSupply,
                     votingUnits: 0,
-                    reservedRate: 0,
-                    reservedTokenBeneficiary: address(0),
+                    reserveFrequency: 0,
+                    reserveBeneficiary: address(0),
                     encodedIPFSUri: post.encodedIPFSUri,
                     category: uint8(post.category),
-                    allowManualMint: false,
-                    shouldUseReservedTokenBeneficiaryAsDefault: false,
+                    allowOwnerMint: false,
+                    useReserveBeneficiaryAsDefault: false,
                     transfersPausable: false,
                     useVotingUnits: true
                 });
@@ -473,7 +471,7 @@ contract CroptopPublisher {
         // Resize the array if there's a mismatch in length.
         if (numberOfTiersBeingAdded != numberOfMints) {
             assembly ("memory-safe") {
-                mstore(tierDataToAdd, numberOfTiersBeingAdded)
+                mstore(tiersToAdd, numberOfTiersBeingAdded)
             }
         }
     }
