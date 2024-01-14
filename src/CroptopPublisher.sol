@@ -239,9 +239,10 @@ contract CroptopPublisher {
             // Add the new tiers.
             IJB721TiersHook(metadata.dataHook).adjustTiers(tiersToAdd, new uint256[](0));
 
-            // Create the metadata for the payment to specify the tier IDs that should be minted.
+            // Create the metadata for the payment to specify the tier IDs that should be minted. We create manually the original metadata, following
+            // the specifications from the JBMetadataResolver library.
             mintMetadata = JBMetadataResolver.addToMetadata({
-                originalMetadata: abi.encodePacked(bytes32(FEE_PROJECT_ID), additionalPayMetadata),
+                originalMetadata: abi.encodePacked(bytes32(0), bytes32(abi.encodePacked(uint32(FEE_PROJECT_ID), uint8(2))), additionalPayMetadata),
                 idToAdd: bytes4(bytes20(metadata.dataHook)),
                 dataToAdd: abi.encode(true, tierIdsToMint)
             });
