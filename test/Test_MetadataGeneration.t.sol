@@ -11,8 +11,8 @@ import {MetadataResolverHelper} from "lib/juice-contracts-v4/test/helpers/Metada
 ///         It uses a mock contract which only returns a metadata following the logic
 ///         of the CroptopPublisher contract during mint. This external contract is used to recreate the same
 contract Test_MetadataGeneration_Unit is Test {
-    
-    /// @notice Create a new metadata from the _additionalPayMetadata and the datahook metadata (containing the tiers to mint).
+    /// @notice Create a new metadata from the _additionalPayMetadata and the datahook metadata (containing the tiers to
+    /// mint).
     /// @dev    Naming follows CroptopPublisher contract.
     function test_metadataBuilding() public {
         MetadataResolverHelper _resolverHelper = new MetadataResolverHelper();
@@ -43,10 +43,10 @@ contract Test_MetadataGeneration_Unit is Test {
 
         // Test: create the new metadata:
         bytes memory mintMetadata = JBMetadataResolver.addToMetadata({
-                originalMetadata: _additionalPayMetadata,
-                idToAdd: datahookId,
-                dataToAdd: abi.encode(true, tierIdsToMint)
-            });
+            originalMetadata: _additionalPayMetadata,
+            idToAdd: datahookId,
+            dataToAdd: abi.encode(true, tierIdsToMint)
+        });
 
         // Add the referal id in the first 32 bytes
         assembly {
@@ -54,7 +54,7 @@ contract Test_MetadataGeneration_Unit is Test {
         }
 
         // Check: both data are present and correct?
-        for(uint256 i = 0; i < _ids.length; i++) {
+        for (uint256 i = 0; i < _ids.length; i++) {
             (bool found, bytes memory targetData) = JBMetadataResolver.getDataFor(_ids[i], mintMetadata);
             assertTrue(found, "metadata not found");
             assertEq(targetData, _datas[i], "metadata not equal");
@@ -66,5 +66,4 @@ contract Test_MetadataGeneration_Unit is Test {
 
         assertEq(uint256(bytes32(mintMetadata)), FEE_PROJECT_ID, "referal id not equal");
     }
-
 }

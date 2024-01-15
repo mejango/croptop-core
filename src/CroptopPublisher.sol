@@ -88,7 +88,7 @@ contract CroptopPublisher {
 
     /// @notice The divisor that describes the fee that should be taken.
     /// @dev This is equal to 100 divided by the fee percent.
-    uint256 constant public FEE_DIVISOR = 20;
+    uint256 public constant FEE_DIVISOR = 20;
 
     /// @notice The controller that directs the projects being posted to.
     IJBController public immutable CONTROLLER;
@@ -239,7 +239,8 @@ contract CroptopPublisher {
             // Add the new tiers.
             IJB721TiersHook(metadata.dataHook).adjustTiers(tiersToAdd, new uint256[](0));
 
-            // Create the metadata for the payment to specify the tier IDs that should be minted. We create manually the original metadata, following
+            // Create the metadata for the payment to specify the tier IDs that should be minted. We create manually the
+            // original metadata, following
             // the specifications from the JBMetadataResolver library.
             mintMetadata = JBMetadataResolver.addToMetadata({
                 originalMetadata: additionalPayMetadata,
