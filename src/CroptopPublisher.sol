@@ -247,6 +247,7 @@ contract CroptopPublisher {
                 dataToAdd: abi.encode(true, tierIdsToMint)
             });
 
+            // Store the referal id in the first 32 bytes of the metadata
             assembly {
                 mstore(add(mintMetadata, 32), fee)
             }
