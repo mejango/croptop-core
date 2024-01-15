@@ -53,14 +53,17 @@ contract Test_MetadataGeneration_Unit is Test {
             mstore(add(mintMetadata, 32), FEE_PROJECT_ID)
         }
 
+        bytes memory targetData;
+        bool found;
+        
         // Check: both data are present and correct?
         for (uint256 i = 0; i < _ids.length; i++) {
-            (bool found, bytes memory targetData) = JBMetadataResolver.getDataFor(_ids[i], mintMetadata);
+            (found, targetData) = JBMetadataResolver.getDataFor(_ids[i], mintMetadata);
             assertTrue(found, "metadata not found");
             assertEq(targetData, _datas[i], "metadata not equal");
         }
 
-        (bool found, bytes memory targetData) = JBMetadataResolver.getDataFor(datahookId, mintMetadata);
+        (found, targetData) = JBMetadataResolver.getDataFor(datahookId, mintMetadata);
         assertTrue(found, "datahook metadata not found");
         assertEq(targetData, abi.encode(true, tierIdsToMint), "datahook not equal");
 
