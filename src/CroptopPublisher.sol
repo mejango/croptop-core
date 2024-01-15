@@ -247,9 +247,10 @@ contract CroptopPublisher {
                 dataToAdd: abi.encode(true, tierIdsToMint)
             });
 
-            // Store the referal id in the first 32 bytes of the metadata
+            // Store the referal id in the first 32 bytes of the metadata (push to stack for immutable in assembly)
+            uint256 _feeProjectId = FEE_PROJECT_ID;
             assembly {
-                mstore(add(mintMetadata, 32), fee)
+                mstore(add(mintMetadata, 32), _feeProjectId)
             }
         }
 
