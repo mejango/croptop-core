@@ -10,7 +10,6 @@ import {IJB721TiersHookStore} from "lib/juice-721-hook/src/interfaces/IJB721Tier
 import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IJB721TiersHookProjectDeployer} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
 import {JBLaunchProjectConfig} from "lib/juice-721-hook/src/structs/JBLaunchProjectConfig.sol";
-import {JB721TiersRulesetMetadata} from "lib/juice-721-hook/src/structs/JB721TiersRulesetMetadata.sol";
 import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
 import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeploy721TiersHookConfig.sol";

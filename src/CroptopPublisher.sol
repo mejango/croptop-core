@@ -250,6 +250,7 @@ contract CroptopPublisher {
 
             // Store the referal id in the first 32 bytes of the metadata (push to stack for immutable in assembly)
             uint256 feeProjectId = FEE_PROJECT_ID;
+
             assembly {
                 mstore(add(mintMetadata, 32), feeProjectId)
             }
@@ -258,12 +259,15 @@ contract CroptopPublisher {
         {
             // Get a reference to the project's current ETH payment terminal.
             IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
+           
+            // Keep a reference to the amount being paid. 
+            uint256 _payValue = msg.value - fee;
 
             // Make the payment.
-            projectTerminal.pay{value: msg.value - fee}({
+            projectTerminal.pay{value: _payValue}({
                 projectId: projectId,
                 token: JBConstants.NATIVE_TOKEN,
-                amount: msg.value - fee,
+                amount: _payValue,
                 beneficiary: nftBeneficiary,
                 minReturnedTokens: 0,
                 memo: "Minted from Croptop",
