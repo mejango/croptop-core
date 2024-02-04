@@ -51,7 +51,7 @@ contract CroptopDeployer is IERC721Receiver {
     /// @notice Deploy a simple project meant to receive posts from Croptop templates.
     /// @param owner The address that'll own the project.
     /// @param terminalConfigurations The terminals that the network uses to accept payments through.
-    /// @param projectMetadata The metadata containing project info.
+    /// @param projectUri The metadata URI containing project info.
     /// @param allowedPosts The type of posts that the project should allow.
     /// @param contractUri A link to the collection's metadata.
     /// @param name The name of the collection where posts will go.
@@ -60,7 +60,7 @@ contract CroptopDeployer is IERC721Receiver {
     function deployProjectFor(
         address owner,
         JBTerminalConfig[] calldata terminalConfigurations,
-        string memory projectMetadata,
+        string memory projectUri,
         AllowedPost[] calldata allowedPosts,
         string memory contractUri,
         string memory name,
@@ -99,7 +99,7 @@ contract CroptopDeployer is IERC721Receiver {
                 })
             }),
             launchProjectConfig: JBLaunchProjectConfig({
-                projectMetadata: projectMetadata,
+                projectUri: projectUri,
                 rulesetConfigurations: rulesetConfigurations,
                 terminalConfigurations: terminalConfigurations,
                 memo: "Deployed from Croptop"

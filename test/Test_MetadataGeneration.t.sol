@@ -55,7 +55,7 @@ contract Test_MetadataGeneration_Unit is Test {
 
         bytes memory targetData;
         bool found;
-        
+
         // Check: both data are present and correct?
         for (uint256 i = 0; i < _ids.length; i++) {
             (found, targetData) = JBMetadataResolver.getDataFor(_ids[i], mintMetadata);

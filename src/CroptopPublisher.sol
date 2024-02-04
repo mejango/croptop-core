@@ -5,6 +5,7 @@ import {IERC165} from "lib/openzeppelin-contracts/contracts/utils/introspection/
 import {JBPermissioned} from "lib/juice-contracts-v4/src/abstract/JBPermissioned.sol";
 import {IJBTerminal} from "lib/juice-contracts-v4/src/interfaces/terminal/IJBTerminal.sol";
 import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
+import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissions.sol";
 import {JBConstants} from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
 import {JBMetadataResolver} from "lib/juice-contracts-v4/src/libraries/JBMetadataResolver.sol";
 import {JBRulesetMetadata} from "lib/juice-contracts-v4/src/structs/JBRulesetMetadata.sol";
@@ -55,7 +56,6 @@ contract CroptopPublisher is JBPermissioned {
     error PRICE_TOO_SMALL(uint256 minimumPrice);
     error TOTAL_SUPPLY_TOO_SMALL(uint256 minimumTotalSupply);
     error TOTAL_SUPPLY_TOO_BIG(uint256 maximumTotalSupply);
-    error UNAUTHORIZED();
     error UNAUTHORIZED_TO_POST_IN_CATEGORY();
 
     event Configured(uint256 indexed projectId, AllowedPost[] allowedPosts, address caller);
@@ -185,8 +185,15 @@ contract CroptopPublisher is JBPermissioned {
     }
 
     /// @param controller The controller that directs the projects being posted to.
+    /// @param permissions A contract storing permissions.
     /// @param feeProjectId The ID of the project to which fees will be routed.
-    constructor(IJBController controller, uint256 feeProjectId) {
+    constructor(
+        IJBController controller,
+        IJBPermissions permissions,
+        uint256 feeProjectId
+    )
+        JBPermissioned(permissions)
+    {
         CONTROLLER = controller;
         FEE_PROJECT_ID = feeProjectId;
     }
@@ -262,8 +269,8 @@ contract CroptopPublisher is JBPermissioned {
         {
             // Get a reference to the project's current ETH payment terminal.
             IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
-           
-            // Keep a reference to the amount being paid. 
+
+            // Keep a reference to the amount being paid.
             uint256 _payValue = msg.value - fee;
 
             // Make the payment.
@@ -316,7 +323,6 @@ contract CroptopPublisher is JBPermissioned {
             // Set the post criteria being iterated on.
             allowedPost = allowedPosts[i];
 
-
             // Set the _nft as the current data source if not set.
             if (allowedPost.nft == address(0)) {
                 allowedPost.nft = metadata.dataHook;
@@ -324,7 +330,7 @@ contract CroptopPublisher is JBPermissioned {
 
             // Enforce permissions.
             _requirePermissionFrom({
-                account: JBOwnable(allowedPost.nft).ownerOf(projectId),
+                account: JBOwnable(allowedPost.nft).owner(),
                 projectId: projectId,
                 permissionId: JB721PermissionIds.ADJUST_TIERS
             });
@@ -472,7 +478,8 @@ contract CroptopPublisher is JBPermissioned {
                     allowOwnerMint: false,
                     useReserveBeneficiaryAsDefault: false,
                     transfersPausable: false,
-                    useVotingUnits: true
+                    useVotingUnits: true,
+                    cannotBeRemoved: false
                 });
 
                 // Set the ID of the tier to mint.
