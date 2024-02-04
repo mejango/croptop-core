@@ -295,15 +295,10 @@ contract CroptopPublisher {
         emit Collected(projectId, nftBeneficiary, feeBeneficiary, posts, fee, msg.sender);
     }
 
-    /// @notice Project owners can set the allowed criteria for publishing a new NFT to their project.
+    /// @notice Collection owners can set the allowed criteria for publishing a new NFT to their project.
     /// @param projectId The ID of the project having its publishing allowances set.
     /// @param allowedPosts An array of criteria for allowed posts.
     function configurePostingCriteriaFor(uint256 projectId, AllowedPost[] memory allowedPosts) public {
-        // Make sure the caller is the owner of the project.
-        if (msg.sender != CONTROLLER.PROJECTS().ownerOf(projectId)) {
-            revert UNAUTHORIZED();
-        }
-
         // Get the projects current data source from its current ruleset's metadata.
         (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
 
@@ -318,6 +313,19 @@ contract CroptopPublisher {
             // Set the post criteria being iterated on.
             allowedPost = allowedPosts[i];
 
+
+            // Set the _nft as the current data source if not set.
+            if (allowedPost.nft == address(0)) {
+                allowedPost.nft = metadata.dataHook;
+            }
+
+            // Enforce permissions.
+            _requirePermissionFrom({
+                account: JBOwnable(allowedPost.nft).ownerOf(projectId),
+                projectId: projectId,
+                permissionId: JB721PermissionIds.ADJUST_TIERS
+            });
+
             // Make sure there is a minimum supply.
             if (allowedPost.minimumTotalSupply == 0) {
                 revert TOTAL_SUPPY_MUST_BE_POSITIVE();
@@ -326,11 +334,6 @@ contract CroptopPublisher {
             // Make sure there is a minimum supply.
             if (allowedPost.minimumTotalSupply > allowedPost.maximumTotalSupply) {
                 revert MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
-            }
-
-            // Set the _nft as the current data source if not set.
-            if (allowedPost.nft == address(0)) {
-                allowedPost.nft = metadata.dataHook;
             }
 
             uint256 packed;
