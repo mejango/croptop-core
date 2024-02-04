@@ -4,7 +4,6 @@ pragma solidity ^0.8.23;
 import {Script, stdJson} from "lib/forge-std/src/Script.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
-import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissions.sol";
 import {IJBPermissioned} from "lib/juice-contracts-v4/src/interfaces/IJBPermissioned.sol";
 import {CroptopPublisher} from "src/CroptopPublisher.sol";
 import {CroptopDeployer} from "src/CroptopDeployer.sol";
@@ -46,10 +45,6 @@ contract Deploy is Script {
             string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBController"
         );
 
-        address permissionsAddress = _getDeploymentAddress(
-            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBPermissions"
-        );
-
         address deployerAddress = _getDeploymentAddress(
             string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
             "JB721TiersHookProjectDeployer"
@@ -62,7 +57,7 @@ contract Deploy is Script {
 
         vm.startBroadcast();
         CroptopPublisher publisher =
-            new CroptopPublisher(IJBController(controllerAddress), IJBPermissions(permissionsAddress), FEE_PROJECT_ID);
+            new CroptopPublisher(IJBController(controllerAddress), IJBPermissioned(controllerAddress).PERMISSIONS(), FEE_PROJECT_ID);
         new CroptopDeployer(
             IJBController(controllerAddress),
             JB721TiersHookProjectDeployer(deployerAddress),
