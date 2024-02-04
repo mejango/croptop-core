@@ -10,3 +10,6 @@
 [submodule "lib/juice-721-hook"]
 	path = lib/juice-721-hook
 	url = https://github.com/Bananapus/juice-721-hook
+[submodule "lib/juice-ownable"]
+	path = lib/juice-ownable
+	url = https://github.com/Bananapus/juice-ownable

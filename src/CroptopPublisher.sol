@@ -2,14 +2,17 @@
 pragma solidity ^0.8.23;
 
 import {IERC165} from "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
+import {JBPermissioned} from "lib/juice-contracts-v4/src/abstract/JBPermissioned.sol";
 import {IJBTerminal} from "lib/juice-contracts-v4/src/interfaces/terminal/IJBTerminal.sol";
 import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
 import {JBConstants} from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
 import {JBMetadataResolver} from "lib/juice-contracts-v4/src/libraries/JBMetadataResolver.sol";
 import {JBRulesetMetadata} from "lib/juice-contracts-v4/src/structs/JBRulesetMetadata.sol";
 import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
+import {JB721PermissionIds} from "lib/juice-721-hook/src/libraries/JB721PermissionIds.sol";
 import {JB721Tier} from "lib/juice-721-hook/src/structs/JB721Tier.sol";
 import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
+import {JBOwnable} from "lib/juice-ownable/src/JBOwnable.sol";
 
 /// @notice Criteria for allowed posts.
 /// @custom:member nft The NFT to which this allowance applies.
@@ -42,7 +45,7 @@ struct Post {
 }
 
 /// @notice A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
-contract CroptopPublisher {
+contract CroptopPublisher is JBPermissioned {
     error TOTAL_SUPPY_MUST_BE_POSITIVE();
     error EMPTY_ENCODED_IPFS_URI(bytes32 encodedUri);
     error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource, bytes4 expectedInterfaceId);
