@@ -16,10 +16,12 @@ import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeplo
 import {JBPayDataHookRulesetConfig} from "lib/juice-721-hook/src/structs/JBPayDataHookRulesetConfig.sol";
 import {JB721InitTiersConfig} from "lib/juice-721-hook/src/structs/JB721InitTiersConfig.sol";
 import {JB721TiersHookFlags} from "lib/juice-721-hook/src/structs/JB721TiersHookFlags.sol";
-import {CroptopPublisher, AllowedPost} from "./CroptopPublisher.sol";
+
+import {CTPublisher} from "./CTPublisher.sol";
+import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
-contract CroptopDeployer is IERC721Receiver {
+contract CTDeployer is IERC721Receiver {
     /// @notice The controller that projects are made from.
     IJBController public immutable CONTROLLER;
 
@@ -30,7 +32,7 @@ contract CroptopDeployer is IERC721Receiver {
     IJB721TiersHookStore public STORE;
 
     /// @notice The Croptop publisher.
-    CroptopPublisher public PUBLISHER;
+    CTPublisher public PUBLISHER;
 
     /// @param controller The controller that projects are made from.
     /// @param deployer The deployer to launch Croptop projects from.
@@ -40,7 +42,7 @@ contract CroptopDeployer is IERC721Receiver {
         IJBController controller,
         IJB721TiersHookProjectDeployer deployer,
         IJB721TiersHookStore store,
-        CroptopPublisher publisher
+        CTPublisher publisher
     ) {
         CONTROLLER = controller;
         DEPLOYER = deployer;
@@ -61,7 +63,7 @@ contract CroptopDeployer is IERC721Receiver {
         address owner,
         JBTerminalConfig[] calldata terminalConfigurations,
         string memory projectUri,
-        AllowedPost[] calldata allowedPosts,
+        CTAllowedPost[] calldata allowedPosts,
         string memory contractUri,
         string memory name,
         string memory symbol

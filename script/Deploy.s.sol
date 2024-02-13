@@ -5,9 +5,9 @@ import {Script, stdJson} from "lib/forge-std/src/Script.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
 import {IJBPermissioned} from "lib/juice-contracts-v4/src/interfaces/IJBPermissioned.sol";
-import {CroptopPublisher} from "src/CroptopPublisher.sol";
-import {CroptopDeployer} from "src/CroptopDeployer.sol";
-import {CroptopProjectOwner} from "src/CroptopProjectOwner.sol";
+import {CTPublisher} from "src/CTPublisher.sol";
+import {CTDeployer} from "src/CTDeployer.sol";
+import {CTProjectOwner} from "src/CTProjectOwner.sol";
 import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissions.sol";
 import {JB721TiersHookProjectDeployer} from "lib/juice-721-hook/src/JB721TiersHookProjectDeployer.sol";
 import {JB721TiersHookStore} from "lib/juice-721-hook/src/JB721TiersHookStore.sol";
@@ -56,15 +56,16 @@ contract Deploy is Script {
         );
 
         vm.startBroadcast();
-        CroptopPublisher publisher =
-            new CroptopPublisher(IJBController(controllerAddress), IJBPermissioned(controllerAddress).PERMISSIONS(), FEE_PROJECT_ID);
-        new CroptopDeployer(
+        CTPublisher publisher = new CTPublisher(
+            IJBController(controllerAddress), IJBPermissioned(controllerAddress).PERMISSIONS(), FEE_PROJECT_ID
+        );
+        new CTDeployer(
             IJBController(controllerAddress),
             JB721TiersHookProjectDeployer(deployerAddress),
             JB721TiersHookStore(storeAddress),
             publisher
         );
-        new CroptopProjectOwner(
+        new CTProjectOwner(
             IJBPermissioned(controllerAddress).PERMISSIONS(), IJBController(controllerAddress).PROJECTS(), publisher
         );
         vm.stopBroadcast();

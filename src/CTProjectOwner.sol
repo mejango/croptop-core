@@ -6,10 +6,11 @@ import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissio
 import {IJBProjects} from "lib/juice-contracts-v4/src/interfaces/IJBProjects.sol";
 import {JBPermissionsData} from "lib/juice-contracts-v4/src/structs/JBPermissionsData.sol";
 import {JB721PermissionIds} from "lib/juice-721-hook/src/libraries/JB721PermissionIds.sol";
-import {CroptopPublisher} from "./CroptopPublisher.sol";
+
+import {CTPublisher} from "./CTPublisher.sol";
 
 /// @notice A contract that can be sent a project to be burned, while still allowing croptop posts.
-contract CroptopProjectOwner is IERC721Receiver {
+contract CTProjectOwner is IERC721Receiver {
     /// @notice The contract where operator permissions are stored.
     IJBPermissions public immutable PERMISSIONS;
 
@@ -17,10 +18,10 @@ contract CroptopProjectOwner is IERC721Receiver {
     IJBProjects public immutable PROJECTS;
 
     /// @notice The Croptop publisher.
-    CroptopPublisher public immutable PUBLISHER;
+    CTPublisher public immutable PUBLISHER;
 
     /// @param permissions The contract where operator permissions are stored.
-    constructor(IJBPermissions permissions, IJBProjects projects, CroptopPublisher publisher) {
+    constructor(IJBPermissions permissions, IJBProjects projects, CTPublisher publisher) {
         PERMISSIONS = permissions;
         PROJECTS = projects;
         PUBLISHER = publisher;

@@ -15,38 +15,11 @@ import {JB721Tier} from "lib/juice-721-hook/src/structs/JB721Tier.sol";
 import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
 import {JBOwnable} from "lib/juice-ownable/src/JBOwnable.sol";
 
-/// @notice Criteria for allowed posts.
-/// @custom:member nft The NFT to which this allowance applies.
-/// @custom:member category A category that should allow posts.
-/// @custom:member minimumPrice The minimum price that a post to the specified category should cost.
-/// @custom:member minimumTotalSupply The minimum total supply of NFTs that can be made available when minting.
-/// @custom:member maxTotalSupply The max total supply of NFTs that can be made available when minting. Leave as 0 for
-/// max.
-/// @custom:member allowedAddresses A list of addresses that are allowed to post on the category through Croptop.
-struct AllowedPost {
-    address nft;
-    uint256 category;
-    uint256 minimumPrice;
-    uint256 minimumTotalSupply;
-    uint256 maximumTotalSupply;
-    address[] allowedAddresses;
-}
-
-/// @notice A post to be published.
-/// @custom:member encodedIPFSUri The encoded IPFS URI of the post that is being published.
-/// @custom:member totalSupply The number of NFTs that should be made available, including the 1 that will be minted
-/// alongside this transaction.
-/// @custom:member price The price being paid for buying the post that is being published.
-/// @custom:member category The category that the post should be published in.
-struct Post {
-    bytes32 encodedIPFSUri;
-    uint32 totalSupply;
-    uint88 price;
-    uint16 category;
-}
+import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
+import {CTPost} from "./structs/CTPost.sol";
 
 /// @notice A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
-contract CroptopPublisher is JBPermissioned {
+contract CTPublisher is JBPermissioned {
     error TOTAL_SUPPY_MUST_BE_POSITIVE();
     error EMPTY_ENCODED_IPFS_URI(bytes32 encodedUri);
     error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource, bytes4 expectedInterfaceId);
@@ -58,13 +31,13 @@ contract CroptopPublisher is JBPermissioned {
     error TOTAL_SUPPLY_TOO_BIG(uint256 maximumTotalSupply);
     error UNAUTHORIZED_TO_POST_IN_CATEGORY();
 
-    event Configured(uint256 indexed projectId, AllowedPost[] allowedPosts, address caller);
+    event Configured(uint256 indexed projectId, CTAllowedPost[] allowedPosts, address caller);
 
     event Collected(
         uint256 indexed projectId,
         address indexed nftBeneficiary,
         address indexed feeBeneficiary,
-        Post[] posts,
+        CTPost[] posts,
         uint256 fee,
         address caller
     );
@@ -210,7 +183,7 @@ contract CroptopPublisher is JBPermissioned {
     /// @param feeMetadata The metadata to send alongside the fee payment.
     function mintFrom(
         uint256 projectId,
-        Post[] memory posts,
+        CTPost[] memory posts,
         address nftBeneficiary,
         address feeBeneficiary,
         bytes calldata additionalPayMetadata,
@@ -308,7 +281,7 @@ contract CroptopPublisher is JBPermissioned {
     /// @notice Collection owners can set the allowed criteria for publishing a new NFT to their project.
     /// @param projectId The ID of the project having its publishing allowances set.
     /// @param allowedPosts An array of criteria for allowed posts.
-    function configurePostingCriteriaFor(uint256 projectId, AllowedPost[] memory allowedPosts) public {
+    function configurePostingCriteriaFor(uint256 projectId, CTAllowedPost[] memory allowedPosts) public {
         // Get the projects current data source from its current ruleset's metadata.
         (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
 
@@ -316,7 +289,7 @@ contract CroptopPublisher is JBPermissioned {
         uint256 numberOfAllowedPosts = allowedPosts.length;
 
         // Keep a reference to the post criteria being iterated on.
-        AllowedPost memory allowedPost;
+        CTAllowedPost memory allowedPost;
 
         // For each post criteria, save the specifications.
         for (uint256 i; i < numberOfAllowedPosts; i++) {
@@ -383,7 +356,7 @@ contract CroptopPublisher is JBPermissioned {
     function _setupPosts(
         uint256 projectId,
         address nft,
-        Post[] memory posts
+        CTPost[] memory posts
     )
         internal
         returns (JB721TierConfig[] memory tiersToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
@@ -402,7 +375,7 @@ contract CroptopPublisher is JBPermissioned {
         uint256 startingTierId = IJB721TiersHook(nft).STORE().maxTierIdOf(nft) + 1;
 
         // Keep a reference to the post being iterated on.
-        Post memory post;
+        CTPost memory post;
 
         // Keep a reference to the total number of tiers being added.
         uint256 numberOfTiersBeingAdded;
