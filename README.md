@@ -1,68 +1,62 @@
-# juice-contract-template
-Template used to code juicy solidity stuff - includes forge, libs, etc. 
+# Croptop
 
-This template is a good starting point for building solidity extensions to the Juicebox Protocol. Forking this template may help you to avoid submodule related dependency issues down the road.
+Croptop opens up a project's NFT collection for contributions from anyone, so long as new posts meet criteria specified by the project owner.
 
-Do not push straight on main, rather create a new branch and open a PR - your reviewer will love you for this.
+## Install
 
-# Getting started
-## Prerequisites
-### Install & Update Foundry
-Install Forge with `curl -L https://foundry.paradigm.xyz | bash`. If you already have Foundry installed, run `foundryup` to update to the latest version. More detailed instructions can be found in the [Foundry Book](https://book.getfoundry.sh/getting-started/installation).
+For `npm` projects (recommended):
 
-### Install & Update Yarn
-Follow the instructions in the [Yarn Docs](https://classic.yarnpkg.com/en/docs/install). People tend to use the latest version of Yarn 1 (not Yarn 2+).
+```bash
+npm install @bananapus/721-hook
+```
 
-## Install Included Dependencies
-Install dependencies (forge tests, Juice-contracts-V3, OZ) via `yarn install` (the `preinstall` script will run `forge install` for you)
+For `forge` projects (not recommended):
 
-# Adding dependencies
-## With Yarn
-If the dependency you would like to install has an NPM package, use `yarn add [package]` where [package] is the package name. This will install the dependency to `node_modules`.
+```bash
+forge install Bananapus/nana-721-hook
+```
 
-Tell forge to look for node libraries by adding `node_modules` to the `foundry.toml` by updating `libs` like so: `libs = ['lib', 'node_modules']`.
+Add `@bananapus/721-hook/=lib/nana-721-hook/` to `remappings.txt`. You'll also need to install `nana-721-hook`'s dependencies and add similar remappings for them.
 
-Add dependencies to `remappings.txt` by running `forge remappings >> remappings.txt`. For example, the NPM package `jbx-protocol` is remapped as `@jbx-protocol/=node_modules/@jbx-protocol/`.
+## Develop
 
-## With Forge
-If the dependency you would like to install does not have an up-to-date NPM package, use `forge install [dependency]` where [dependency] is the path to the dependency repo. This will install the dependency to `/lib`. Forge manages dependencies using git submodules.
+`nana-721-hook` uses [npm](https://www.npmjs.com/) for package management and the [Foundry](https://github.com/foundry-rs/foundry) development toolchain for builds, tests, and deployments. To get set up, [install Node.js](https://nodejs.org/en/download) and install [Foundry](https://github.com/foundry-rs/foundry):
 
-Run `forge remappings > remappings.txt` to write the dependencies to `remappings.txt`. Note that this will overwrite that file. 
+```bash
+curl -L https://foundry.paradigm.xyz | sh
+```
 
-If nested dependencies are not installing, try this workaround `git submodule update --init --recursive --force`. Nested dependencies are dependencies of the dependencies you have installed. 
+You can download and install dependencies with:
 
-More information on remappings is available in the Forge Book.
+```bash
+npm install && forge install
+```
 
-# Updating dependencies
-## With Yarn
-Run `yarn upgrade [package]`.
+If you run into trouble with `forge install`, try using `git submodule update --init --recursive` to ensure that nested submodules have been properly initialized.
 
-## With Forge
-Run `foundryup` to update forge. 
+Some useful commands:
 
-Run `forge update` to update all dependencies, or run `forge update [dependency]` to update a specific dependency.
+| Command               | Description                                         |
+| --------------------- | --------------------------------------------------- |
+| `forge build`         | Compile the contracts and write artifacts to `out`. |
+| `forge fmt`           | Lint.                                               |
+| `forge test`          | Run the tests.                                      |
+| `forge build --sizes` | Get contract sizes.                                 |
+| `forge coverage`      | Generate a test coverage report.                    |
+| `foundryup`           | Update foundry. Run this periodically.              |
+| `forge clean`         | Remove the build artifacts and cache directories.   |
 
-# Usage
-use `yarn test` to run tests
+To learn more, visit the [Foundry Book](https://book.getfoundry.sh/) docs.
 
-use `yarn test:fork` to run tests in CI mode (including slower mainnet fork tests)
+## Scripts
 
-use `yarn size` to check contract size
+For convenience, several utility commands are available in `package.json`.
 
-use `yarn doc` to generate natspec docs
-
-use `yarn lint` to lint the code
-
-use `yarn tree` to generate a Solidity dependency tree
-
-use `yarn deploy:mainnet` and `yarn deploy:goerli` to deploy and verify (see .env.example for required env vars, using a ledger by default).
-
-## Code coverage
-Run `yarn coverage`to display code coverage summary and generate an LCOV report
-
-To display code coverage in VSCode:
-- You need to install the [coverage gutters extension (Ryan Luker)](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters) or any other extension handling LCOV reports
-- ctrl shift p > "Coverage Gutters: Display Coverage" (coverage are the colored markdown lines in the left gutter, after the line numbers)
-
-## PR
-Github CI flow will run both unit and forked tests, log the contracts size (with the tests) and check linting compliance.
+| Command                           | Description                            |
+| --------------------------------- | -------------------------------------- |
+| `npm test`                        | Run local tests.                       |
+| `npm run coverage:lcov`           | Generate an LCOV test coverage report. |
+| `npm run deploy:ethereum-mainnet` | Deploy to Ethereum mainnet             |
+| `npm run deploy:ethereum-sepolia` | Deploy to Ethereum Sepolia testnet     |
+| `npm run deploy:optimism-mainnet` | Deploy to Optimism mainnet             |
+| `npm run deploy:optimism-testnet` | Deploy to Optimism testnet             |

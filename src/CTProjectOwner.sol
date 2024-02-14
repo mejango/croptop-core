@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {IERC721Receiver} from "lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol";
-import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissions.sol";
-import {IJBProjects} from "lib/juice-contracts-v4/src/interfaces/IJBProjects.sol";
-import {JBPermissionsData} from "lib/juice-contracts-v4/src/structs/JBPermissionsData.sol";
-import {JB721PermissionIds} from "lib/juice-721-hook/src/libraries/JB721PermissionIds.sol";
+import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import {IJBPermissions} from "@bananapus/core/src/interfaces/IJBPermissions.sol";
+import {IJBProjects} from "@bananapus/core/src/interfaces/IJBProjects.sol";
+import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
+import {JB721PermissionIds} from "@bananapus/721-hook/src/libraries/JB721PermissionIds.sol";
 
 import {CTPublisher} from "./CTPublisher.sol";
 

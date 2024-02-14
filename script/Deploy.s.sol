@@ -2,15 +2,16 @@
 pragma solidity ^0.8.23;
 
 import {Script, stdJson} from "lib/forge-std/src/Script.sol";
-import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
-import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
-import {IJBPermissioned} from "lib/juice-contracts-v4/src/interfaces/IJBPermissioned.sol";
-import {CTPublisher} from "src/CTPublisher.sol";
-import {CTDeployer} from "src/CTDeployer.sol";
-import {CTProjectOwner} from "src/CTProjectOwner.sol";
-import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissions.sol";
-import {JB721TiersHookProjectDeployer} from "lib/juice-721-hook/src/JB721TiersHookProjectDeployer.sol";
-import {JB721TiersHookStore} from "lib/juice-721-hook/src/JB721TiersHookStore.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
+import {IJBPermissioned} from "@bananapus/core/src/interfaces/IJBPermissioned.sol";
+import {IJBPermissions} from "@bananapus/core/src/interfaces/IJBPermissions.sol";
+import {JB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/JB721TiersHookProjectDeployer.sol";
+import {JB721TiersHookStore} from "@bananapus/721-hook/src/JB721TiersHookStore.sol";
+
+import {CTPublisher} from "./../src/CTPublisher.sol";
+import {CTDeployer} from "./../src/CTDeployer.sol";
+import {CTProjectOwner} from "./../src/CTProjectOwner.sol";
 
 contract Deploy is Script {
     uint256 FEE_PROJECT_ID = 1;
@@ -42,16 +43,16 @@ contract Deploy is Script {
         }
 
         address controllerAddress = _getDeploymentAddress(
-            string.concat("lib/juice-contracts-v4/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBController"
+            string.concat("@bananapus/core/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBController"
         );
 
         address deployerAddress = _getDeploymentAddress(
-            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            string.concat("@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
             "JB721TiersHookProjectDeployer"
         );
 
         address storeAddress = _getDeploymentAddress(
-            string.concat("lib/juice-721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            string.concat("@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
             "JB721TiersHookStore"
         );
 

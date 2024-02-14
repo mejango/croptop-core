@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {IERC165} from "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
-import {JBPermissioned} from "lib/juice-contracts-v4/src/abstract/JBPermissioned.sol";
-import {IJBTerminal} from "lib/juice-contracts-v4/src/interfaces/terminal/IJBTerminal.sol";
-import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
-import {IJBPermissions} from "lib/juice-contracts-v4/src/interfaces/IJBPermissions.sol";
-import {JBConstants} from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
-import {JBMetadataResolver} from "lib/juice-contracts-v4/src/libraries/JBMetadataResolver.sol";
-import {JBRulesetMetadata} from "lib/juice-contracts-v4/src/structs/JBRulesetMetadata.sol";
-import {IJB721TiersHook} from "lib/juice-721-hook/src/interfaces/IJB721TiersHook.sol";
-import {JB721PermissionIds} from "lib/juice-721-hook/src/libraries/JB721PermissionIds.sol";
-import {JB721Tier} from "lib/juice-721-hook/src/structs/JB721Tier.sol";
-import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
+import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import {JBPermissioned} from "@bananapus/core/src/abstract/JBPermissioned.sol";
+import {IJBTerminal} from "@bananapus/core/src/interfaces/terminal/IJBTerminal.sol";
+import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
+import {IJBPermissions} from "@bananapus/core/src/interfaces/IJBPermissions.sol";
+import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBMetadataResolver} from "@bananapus/core/src/libraries/JBMetadataResolver.sol";
+import {JBRulesetMetadata} from "@bananapus/core/src/structs/JBRulesetMetadata.sol";
+import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
+import {JB721PermissionIds} from "@bananapus/721-hook/src/libraries/JB721PermissionIds.sol";
+import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
+import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
 import {JBOwnable} from "lib/juice-ownable/src/JBOwnable.sol";
 
 import {CTAllowedPost} from "./structs/CTAllowedPost.sol";

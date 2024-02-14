@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {IERC721Receiver} from "lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol";
-import {IJBController} from "lib/juice-contracts-v4/src/interfaces/IJBController.sol";
-import {JBConstants} from "lib/juice-contracts-v4/src/libraries/JBConstants.sol";
-import {JBTerminalConfig} from "lib/juice-contracts-v4/src/structs/JBTerminalConfig.sol";
-import {IJBPrices} from "lib/juice-contracts-v4/src/interfaces/IJBPrices.sol";
-import {IJB721TiersHookStore} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookStore.sol";
-import {IJB721TokenUriResolver} from "lib/juice-721-hook/src/interfaces/IJB721TokenUriResolver.sol";
-import {IJB721TiersHookProjectDeployer} from "lib/juice-721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
-import {JBLaunchProjectConfig} from "lib/juice-721-hook/src/structs/JBLaunchProjectConfig.sol";
-import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
-import {JB721TierConfig} from "lib/juice-721-hook/src/structs/JB721TierConfig.sol";
-import {JBDeploy721TiersHookConfig} from "lib/juice-721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
-import {JBPayDataHookRulesetConfig} from "lib/juice-721-hook/src/structs/JBPayDataHookRulesetConfig.sol";
-import {JB721InitTiersConfig} from "lib/juice-721-hook/src/structs/JB721InitTiersConfig.sol";
-import {JB721TiersHookFlags} from "lib/juice-721-hook/src/structs/JB721TiersHookFlags.sol";
+import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
+import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
+import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
+import {IJB721TiersHookStore} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookStore.sol";
+import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
+import {JBLaunchProjectConfig} from "@bananapus/721-hook/src/structs/JBLaunchProjectConfig.sol";
+import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
+import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
+import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
+import {JBPayDataHookRulesetConfig} from "@bananapus/721-hook/src/structs/JBPayDataHookRulesetConfig.sol";
+import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
+import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 
 import {CTPublisher} from "./CTPublisher.sol";
 import {CTAllowedPost} from "./structs/CTAllowedPost.sol";

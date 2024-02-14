@@ -2,9 +2,9 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import {JBMetadataResolver} from "lib/juice-contracts-v4/src/libraries/JBMetadataResolver.sol";
+import {JBMetadataResolver} from "@bananapus/core/src/libraries/JBMetadataResolver.sol";
 
-import {MetadataResolverHelper} from "lib/juice-contracts-v4/test/helpers/MetadataResolverHelper.sol";
+import {MetadataResolverHelper} from "@bananapus/core/test/helpers/MetadataResolverHelper.sol";
 
 /// @notice Quick test to assert the creation of metadata while minting
 /// @dev    This test is not meant to be exhaustive, but to ensure that the metadata is valid.
