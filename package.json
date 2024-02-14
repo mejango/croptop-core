@@ -4,7 +4,7 @@
     "license": "MIT",
     "repository": {
       "type": "git",
-      "url": "git+https://github.com/mejango/croptop-contracts"
+      "url": "git+https://github.com/mejango/croptop-core"
     },
     "scripts": {
       "test": "forge test",
