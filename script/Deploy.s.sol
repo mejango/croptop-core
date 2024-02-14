@@ -43,16 +43,16 @@ contract Deploy is Script {
         }
 
         address controllerAddress = _getDeploymentAddress(
-            string.concat("@bananapus/core/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBController"
+            string.concat("node_modules/@bananapus/core/broadcast/Deploy.s.sol/", chain, "/run-latest.json"), "JBController"
         );
 
         address deployerAddress = _getDeploymentAddress(
-            string.concat("@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            string.concat("node_modules/@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
             "JB721TiersHookProjectDeployer"
         );
 
         address storeAddress = _getDeploymentAddress(
-            string.concat("@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
+            string.concat("node_modules/@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
             "JB721TiersHookStore"
         );
 
