@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity 0.8.23;
 
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import {JBPermissioned} from "@bananapus/core/src/abstract/JBPermissioned.sol";
@@ -13,7 +13,7 @@ import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHoo
 import {JB721PermissionIds} from "@bananapus/721-hook/src/libraries/JB721PermissionIds.sol";
 import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
 import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
-import {JBOwnable} from "lib/juice-ownable/src/JBOwnable.sol";
+import {JBOwnable} from "@bananapus/ownable/src/JBOwnable.sol";
 
 import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 import {CTPost} from "./structs/CTPost.sol";
