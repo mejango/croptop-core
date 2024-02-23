@@ -2,10 +2,10 @@
 pragma solidity 0.8.23;
 
 import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-import {IJBPermissions} from "@bananapus/core/src/interfaces/IJBPermissions.sol";
 import {IJBProjects} from "@bananapus/core/src/interfaces/IJBProjects.sol";
+import {IJBPermissions} from "@bananapus/core/src/interfaces/IJBPermissions.sol";
 import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
-import {JB721PermissionIds} from "@bananapus/721-hook/src/libraries/JB721PermissionIds.sol";
+import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol";
 
 import {CTPublisher} from "./CTPublisher.sol";
 
@@ -47,7 +47,7 @@ contract CTProjectOwner is IERC721Receiver {
 
         // Set the correct permission.
         uint256[] memory permissionIds = new uint256[](1);
-        permissionIds[0] = JB721PermissionIds.ADJUST_TIERS;
+        permissionIds[0] = JBPermissionIds.ADJUST_721_TIERS;
 
         // Give the croptop contract permission to post on this contract's behalf.
         PERMISSIONS.setPermissionsFor({

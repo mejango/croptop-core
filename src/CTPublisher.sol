@@ -10,7 +10,7 @@ import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBMetadataResolver} from "@bananapus/core/src/libraries/JBMetadataResolver.sol";
 import {JBRulesetMetadata} from "@bananapus/core/src/structs/JBRulesetMetadata.sol";
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
-import {JB721PermissionIds} from "@bananapus/721-hook/src/libraries/JB721PermissionIds.sol";
+import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol";
 import {JB721Tier} from "@bananapus/721-hook/src/structs/JB721Tier.sol";
 import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
 import {JBOwnable} from "@bananapus/ownable/src/JBOwnable.sol";
@@ -305,7 +305,7 @@ contract CTPublisher is JBPermissioned {
             _requirePermissionFrom({
                 account: JBOwnable(allowedPost.nft).owner(),
                 projectId: projectId,
-                permissionId: JB721PermissionIds.ADJUST_TIERS
+                permissionId: JBPermissionIds.ADJUST_721_TIERS
             });
 
             // Make sure there is a minimum supply.
