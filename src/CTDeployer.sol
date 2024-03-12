@@ -6,7 +6,6 @@ import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
-import {IJB721TiersHookStore} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookStore.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
 import {JBLaunchProjectConfig} from "@bananapus/721-hook/src/structs/JBLaunchProjectConfig.sol";
@@ -28,25 +27,19 @@ contract CTDeployer is IERC721Receiver {
     /// @notice The deployer to launch Croptop recorded collections from.
     IJB721TiersHookProjectDeployer public immutable DEPLOYER;
 
-    /// @notice The contract storing NFT data for newly deployed collections.
-    IJB721TiersHookStore public STORE;
-
     /// @notice The Croptop publisher.
     CTPublisher public PUBLISHER;
 
     /// @param controller The controller that projects are made from.
     /// @param deployer The deployer to launch Croptop projects from.
-    /// @param store The contract storing NFT data for newly deployed collections.
     /// @param publisher The croptop publisher.
     constructor(
         IJBController controller,
         IJB721TiersHookProjectDeployer deployer,
-        IJB721TiersHookStore store,
         CTPublisher publisher
     ) {
         CONTROLLER = controller;
         DEPLOYER = deployer;
-        STORE = store;
         PUBLISHER = publisher;
     }
 
@@ -92,7 +85,6 @@ contract CTDeployer is IERC721Receiver {
                     prices: IJBPrices(address(0))
                 }),
                 reserveBeneficiary: address(0),
-                store: STORE,
                 flags: JB721TiersHookFlags({
                     noNewTiersWithReserves: false,
                     noNewTiersWithVotes: false,
