@@ -32,7 +32,7 @@ contract DeployScript is Script, Sphinx {
         sphinxConfig.threshold = 1;
         sphinxConfig.mainnets = ["ethereum", "optimism", "polygon"];
         sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia", "polygon_mumbai"];
-        sphinxConfig.saltNonce = 3;
+        sphinxConfig.saltNonce = 4;
     }
 
     function run() public {
