@@ -18,7 +18,7 @@
       "@bananapus/permission-ids": "^0.0.2",
       "@bananapus/core": "^0.0.6",
       "@bananapus/721-hook": "^0.0.3",
-      "@bananapus/ownable": "^0.0.3",
+      "@bananapus/ownable": "^0.0.4",
       "@openzeppelin/contracts": "^5.0.1"
     }
   }
