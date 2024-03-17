@@ -245,10 +245,10 @@ contract CTPublisher is JBPermissioned {
             IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
 
             // Keep a reference to the amount being paid.
-            uint256 _payValue = msg.value - fee;
+            uint256 payValue = msg.value - fee;
 
             // Make the payment.
-            projectTerminal.pay{value: _payValue}({
+            projectTerminal.pay{value: payValue}({
                 projectId: projectId,
                 token: JBConstants.NATIVE_TOKEN,
                 amount: _payValue,
