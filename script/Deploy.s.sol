@@ -50,18 +50,69 @@ contract DeployScript is Script, Sphinx {
     }
 
     function deploy() public sphinx {
-        CTPublisher publisher = new CTPublisher{salt: PUBLISHER_SALT}(
-            core.controller, core.permissions, FEE_PROJECT_ID
-        );
+        CTPublisher publisher;
+        {
+            // Perform the check for the publisher.
+            (address _publisher, bool _publisherIsDeployed) = _isDeployed(
+                PUBLISHER_SALT,
+                type(CTPublisher).creationCode,
+                abi.encode(core.controller, core.permissions, FEE_PROJECT_ID)
+            );
 
-        new CTDeployer{salt: DEPLOYER_SALT}(
-            core.controller,
-            hook.project_deployer,
-            publisher
-        );
+            // Deploy it if it has not been deployed yet.
+            publisher = !_publisherIsDeployed ?
+             new CTPublisher{salt: PUBLISHER_SALT}(core.controller, core.permissions, FEE_PROJECT_ID) :
+             CTPublisher(_publisher);
+        }
 
-        new CTProjectOwner{salt: PROJECT_OWNER_SALT}(
-            core.permissions, core.projects, publisher
-        );
+        CTDeployer deployer;
+        {
+            // Perform the check for the publisher.
+            (address _deployer, bool _deployerIsDeployed) = _isDeployed(
+                DEPLOYER_SALT,
+                type(CTDeployer).creationCode,
+                abi.encode(core.controller, hook.project_deployer, publisher)
+            );
+
+            // Deploy it if it has not been deployed yet.
+            deployer = !_deployerIsDeployed ?
+             new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher) :
+             CTDeployer(_deployer);
+        }
+
+        CTProjectOwner owner;
+        {
+            // Perform the check for the publisher.
+            (address _owner, bool _ownerIsDeployed) = _isDeployed(
+                PROJECT_OWNER_SALT,
+                type(CTProjectOwner).creationCode,
+                abi.encode(core.permissions, core.projects, publisher)
+            );
+
+            // Deploy it if it has not been deployed yet.
+            owner = !_ownerIsDeployed ?
+             new CTProjectOwner{salt: PROJECT_OWNER_SALT}(core.permissions, core.projects, publisher) :
+             CTProjectOwner(_owner);
+        }
+    }
+
+    function _isDeployed(
+        bytes32 salt,
+        bytes memory creationCode,
+        bytes memory arguments
+    )
+        internal
+        view
+        returns (address, bool)
+    {
+        address _deployedTo = vm.computeCreate2Address({
+            salt: salt,
+            initCodeHash: keccak256(abi.encodePacked(creationCode, arguments)),
+            // Arachnid/deterministic-deployment-proxy address.
+            deployer: address(0x4e59b44847b379578588920cA78FbF26c0B4956C)
+        });
+
+        // Return if code is already present at this address.
+        return (_deployedTo, address(_deployedTo).code.length != 0);
     }
 }
