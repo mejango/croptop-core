@@ -26,14 +26,15 @@ contract CTPublisher is JBPermissioned {
     error INSUFFICIENT_ETH_SENT(uint256 expected, uint256 sent);
     error NOT_IN_ALLOW_LIST(address[] allowedAddresses);
     error MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
+    error HOOK_NOT_PROVIDED();
     error PRICE_TOO_SMALL(uint256 minimumPrice);
     error TOTAL_SUPPLY_TOO_SMALL(uint256 minimumTotalSupply);
     error TOTAL_SUPPLY_TOO_BIG(uint256 maximumTotalSupply);
     error UNAUTHORIZED_TO_POST_IN_CATEGORY();
 
-    event Configured(uint256 indexed projectId, CTAllowedPost[] allowedPosts, address caller);
+    event ConfigurePostingCriteria(uint256 indexed projectId, CTAllowedPost[] allowedPosts, address caller);
 
-    event Collected(
+    event Mint(
         uint256 indexed projectId,
         address indexed nftBeneficiary,
         address indexed feeBeneficiary,
@@ -244,10 +245,10 @@ contract CTPublisher is JBPermissioned {
             IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
 
             // Keep a reference to the amount being paid.
-            uint256 _payValue = msg.value - fee;
+            uint256 payValue = msg.value - fee;
 
             // Make the payment.
-            projectTerminal.pay{value: _payValue}({
+            projectTerminal.pay{value: payValue}({
                 projectId: projectId,
                 token: JBConstants.NATIVE_TOKEN,
                 amount: _payValue,
@@ -275,16 +276,13 @@ contract CTPublisher is JBPermissioned {
             });
         }
 
-        emit Collected(projectId, nftBeneficiary, feeBeneficiary, posts, fee, msg.sender);
+        emit Mint(projectId, nftBeneficiary, feeBeneficiary, posts, fee, msg.sender);
     }
 
     /// @notice Collection owners can set the allowed criteria for publishing a new NFT to their project.
     /// @param projectId The ID of the project having its publishing allowances set.
     /// @param allowedPosts An array of criteria for allowed posts.
     function configurePostingCriteriaFor(uint256 projectId, CTAllowedPost[] memory allowedPosts) public {
-        // Get the projects current data source from its current ruleset's metadata.
-        (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
-
         // Keep a reference to the number of post criteria.
         uint256 numberOfAllowedPosts = allowedPosts.length;
 
@@ -295,11 +293,6 @@ contract CTPublisher is JBPermissioned {
         for (uint256 i; i < numberOfAllowedPosts; i++) {
             // Set the post criteria being iterated on.
             allowedPost = allowedPosts[i];
-
-            // Set the _nft as the current data source if not set.
-            if (allowedPost.nft == address(0)) {
-                allowedPost.nft = metadata.dataHook;
-            }
 
             // Enforce permissions.
             _requirePermissionFrom({
@@ -343,7 +336,7 @@ contract CTPublisher is JBPermissioned {
             }
         }
 
-        emit Configured(projectId, allowedPosts, msg.sender);
+        emit ConfigurePostingCriteria(projectId, allowedPosts, msg.sender);
     }
 
     /// @notice Setup the posts.
