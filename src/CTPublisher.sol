@@ -251,7 +251,7 @@ contract CTPublisher is JBPermissioned {
             projectTerminal.pay{value: payValue}({
                 projectId: projectId,
                 token: JBConstants.NATIVE_TOKEN,
-                amount: _payValue,
+                amount: payValue,
                 beneficiary: nftBeneficiary,
                 minReturnedTokens: 0,
                 memo: "Minted from Croptop",

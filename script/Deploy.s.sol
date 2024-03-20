@@ -1,97 +1,118 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity 0.8.23;
 
-import {Script, stdJson} from "lib/forge-std/src/Script.sol";
-import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
-import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
-import {IJBPermissioned} from "@bananapus/core/src/interfaces/IJBPermissioned.sol";
-import {IJBPermissions} from "@bananapus/core/src/interfaces/IJBPermissions.sol";
-import {JB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/JB721TiersHookProjectDeployer.sol";
-import {JB721TiersHookStore} from "@bananapus/721-hook/src/JB721TiersHookStore.sol";
+import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
+import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
+
+import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
+import {Script} from "forge-std/Script.sol";
 
 import {CTPublisher} from "./../src/CTPublisher.sol";
 import {CTDeployer} from "./../src/CTDeployer.sol";
 import {CTProjectOwner} from "./../src/CTProjectOwner.sol";
 
-contract Deploy is Script {
+contract DeployScript is Script, Sphinx {
+    /// @notice tracks the deployment of the core contracts for the chain we are deploying to.
+    CoreDeployment core;
+    /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
+    Hook721Deployment hook;
+
     uint256 FEE_PROJECT_ID = 1;
 
-    function run() public {
-        uint256 chainId = block.chainid;
-        string memory chain;
+    /// @notice the salts that are used to deploy the contracts.
+    bytes32 PUBLISHER_SALT = "CTPublisher";
+    bytes32 DEPLOYER_SALT = "CTDeployer";
+    bytes32 PROJECT_OWNER_SALT = "CTProjectOwner";
 
-        // Ethereum Mainnet
-        if (chainId == 1) {
-            chain = "1";
-            // Ethereum Sepolia
-        } else if (chainId == 11_155_111) {
-            chain = "11155111";
-            // Optimism Mainnet
-        } else if (chainId == 420) {
-            chain = "420";
-            // Optimism Sepolia
-        } else if (chainId == 11_155_420) {
-            chain = "11155420";
-            // Polygon Mainnet
-        } else if (chainId == 137) {
-            chain = "137";
-            // Polygon Mumbai
-        } else if (chainId == 80_001) {
-            chain = "80001";
-        } else {
-            revert("Invalid RPC / no juice contracts deployed on this network");
-        }
-
-        address controllerAddress = _getDeploymentAddress(
-            string.concat("node_modules/@bananapus/core/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "JBController"
-        );
-
-        address deployerAddress = _getDeploymentAddress(
-            string.concat("node_modules/@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "JB721TiersHookProjectDeployer"
-        );
-
-        address storeAddress = _getDeploymentAddress(
-            string.concat("node_modules/@bananapus/721-hook/broadcast/Deploy.s.sol/", chain, "/run-latest.json"),
-            "JB721TiersHookStore"
-        );
-
-        vm.startBroadcast();
-        CTPublisher publisher = new CTPublisher(
-            IJBController(controllerAddress), IJBPermissioned(controllerAddress).PERMISSIONS(), FEE_PROJECT_ID
-        );
-        new CTDeployer(
-            IJBController(controllerAddress),
-            JB721TiersHookProjectDeployer(deployerAddress),
-            JB721TiersHookStore(storeAddress),
-            publisher
-        );
-        new CTProjectOwner(
-            IJBPermissioned(controllerAddress).PERMISSIONS(), IJBController(controllerAddress).PROJECTS(), publisher
-        );
-        vm.stopBroadcast();
+    function configureSphinx() public override {
+        // TODO: Update to contain croptop devs.
+        sphinxConfig.owners = [0x26416423d530b1931A2a7a6b7D435Fac65eED27d];
+        sphinxConfig.orgId = "cltepuu9u0003j58rjtbd0hvu";
+        sphinxConfig.projectName = "croptop-core";
+        sphinxConfig.threshold = 1;
+        sphinxConfig.mainnets = ["ethereum", "optimism", "polygon"];
+        sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia", "polygon_mumbai"];
+        sphinxConfig.saltNonce = 4;
     }
 
-    /// @notice Get the address of a contract that was deployed by the Deploy script.
-    /// @dev Reverts if the contract was not found.
-    /// @param path The path to the deployment file.
-    /// @param contractName The name of the contract to get the address of.
-    /// @return The address of the contract.
-    function _getDeploymentAddress(string memory path, string memory contractName) internal view returns (address) {
-        string memory deploymentJson = vm.readFile(path);
-        uint256 nOfTransactions = stdJson.readStringArray(deploymentJson, ".transactions").length;
+    function run() public {
+        // Get the deployment addresses for the nana CORE for this chain.
+        // We want to do this outside of the `sphinx` modifier.
+        core = CoreDeploymentLib.getDeployment(
+            vm.envOr("NANA_CORE_DEPLOYMENT_PATH", string("node_modules/@bananapus/core/deployments/"))
+        );
+        // Get the deployment addresses for the 721 hook contracts for this chain.
+        hook = Hook721DeploymentLib.getDeployment(
+            vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
+        );
+        // Perform the deployment transactions.
+        deploy();
+    }
 
-        for (uint256 i = 0; i < nOfTransactions; i++) {
-            string memory currentKey = string.concat(".transactions", "[", Strings.toString(i), "]");
-            string memory currentContractName =
-                stdJson.readString(deploymentJson, string.concat(currentKey, ".contractName"));
+    function deploy() public sphinx {
+        CTPublisher publisher;
+        {
+            // Perform the check for the publisher.
+            (address _publisher, bool _publisherIsDeployed) = _isDeployed(
+                PUBLISHER_SALT,
+                type(CTPublisher).creationCode,
+                abi.encode(core.controller, core.permissions, FEE_PROJECT_ID)
+            );
 
-            if (keccak256(abi.encodePacked(currentContractName)) == keccak256(abi.encodePacked(contractName))) {
-                return stdJson.readAddress(deploymentJson, string.concat(currentKey, ".contractAddress"));
-            }
+            // Deploy it if it has not been deployed yet.
+            publisher = !_publisherIsDeployed ?
+             new CTPublisher{salt: PUBLISHER_SALT}(core.controller, core.permissions, FEE_PROJECT_ID) :
+             CTPublisher(_publisher);
         }
 
-        revert(string.concat("Could not find contract with name '", contractName, "' in deployment file '", path, "'"));
+        CTDeployer deployer;
+        {
+            // Perform the check for the publisher.
+            (address _deployer, bool _deployerIsDeployed) = _isDeployed(
+                DEPLOYER_SALT,
+                type(CTDeployer).creationCode,
+                abi.encode(core.controller, hook.project_deployer, publisher)
+            );
+
+            // Deploy it if it has not been deployed yet.
+            deployer = !_deployerIsDeployed ?
+             new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher) :
+             CTDeployer(_deployer);
+        }
+
+        CTProjectOwner owner;
+        {
+            // Perform the check for the publisher.
+            (address _owner, bool _ownerIsDeployed) = _isDeployed(
+                PROJECT_OWNER_SALT,
+                type(CTProjectOwner).creationCode,
+                abi.encode(core.permissions, core.projects, publisher)
+            );
+
+            // Deploy it if it has not been deployed yet.
+            owner = !_ownerIsDeployed ?
+             new CTProjectOwner{salt: PROJECT_OWNER_SALT}(core.permissions, core.projects, publisher) :
+             CTProjectOwner(_owner);
+        }
+    }
+
+    function _isDeployed(
+        bytes32 salt,
+        bytes memory creationCode,
+        bytes memory arguments
+    )
+        internal
+        view
+        returns (address, bool)
+    {
+        address _deployedTo = vm.computeCreate2Address({
+            salt: salt,
+            initCodeHash: keccak256(abi.encodePacked(creationCode, arguments)),
+            // Arachnid/deterministic-deployment-proxy address.
+            deployer: address(0x4e59b44847b379578588920cA78FbF26c0B4956C)
+        });
+
+        // Return if code is already present at this address.
+        return (_deployedTo, address(_deployedTo).code.length != 0);
     }
 }
