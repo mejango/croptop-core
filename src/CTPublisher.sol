@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
+import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import {JBPermissioned} from "@bananapus/core/src/abstract/JBPermissioned.sol";
 import {IJBTerminal} from "@bananapus/core/src/interfaces/terminal/IJBTerminal.sol";
@@ -19,7 +20,7 @@ import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 import {CTPost} from "./structs/CTPost.sol";
 
 /// @notice A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
-contract CTPublisher is JBPermissioned {
+contract CTPublisher is JBPermissioned, ERC2771Context {
     error TOTAL_SUPPY_MUST_BE_POSITIVE();
     error EMPTY_ENCODED_IPFS_URI(bytes32 encodedUri);
     error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource, bytes4 expectedInterfaceId);
@@ -161,12 +162,15 @@ contract CTPublisher is JBPermissioned {
     /// @param controller The controller that directs the projects being posted to.
     /// @param permissions A contract storing permissions.
     /// @param feeProjectId The ID of the project to which fees will be routed.
+    /// @param trustedForwarder The trusted forwarder for the ERC2771Context.
     constructor(
         IJBController controller,
         IJBPermissions permissions,
-        uint256 feeProjectId
+        uint256 feeProjectId,
+        address trustedForwarder
     )
         JBPermissioned(permissions)
+        ERC2771Context(trustedForwarder)
     {
         CONTROLLER = controller;
         FEE_PROJECT_ID = feeProjectId;
@@ -276,7 +280,7 @@ contract CTPublisher is JBPermissioned {
             });
         }
 
-        emit Mint(projectId, nftBeneficiary, feeBeneficiary, posts, fee, msg.sender);
+        emit Mint(projectId, nftBeneficiary, feeBeneficiary, posts, fee, _msgSender());
     }
 
     /// @notice Collection owners can set the allowed criteria for publishing a new NFT to their project.
@@ -336,7 +340,7 @@ contract CTPublisher is JBPermissioned {
             }
         }
 
-        emit ConfigurePostingCriteria(projectId, allowedPosts, msg.sender);
+        emit ConfigurePostingCriteria(projectId, allowedPosts, _msgSender());
     }
 
     /// @notice Setup the posts.
@@ -427,7 +431,7 @@ contract CTPublisher is JBPermissioned {
                     }
 
                     // Make sure the address is allowed to post.
-                    if (addresses.length != 0 && !_isAllowed(msg.sender, addresses)) {
+                    if (addresses.length != 0 && !_isAllowed(_msgSender(), addresses)) {
                         revert NOT_IN_ALLOW_LIST(addresses);
                     }
                 }
@@ -476,5 +480,22 @@ contract CTPublisher is JBPermissioned {
             if (addrs == addresses[i]) return true;
         }
         return false;
+    }
+
+    /// @notice Returns the sender, prefered to use over `msg.sender`
+    /// @return sender the sender address of this call.
+    function _msgSender() internal view override returns (address sender) {
+        return ERC2771Context._msgSender();
+    }
+
+    /// @notice Returns the calldata, prefered to use over `msg.data`
+    /// @return calldata the `msg.data` of this call
+    function _msgData() internal view override returns (bytes calldata) {
+        return ERC2771Context._msgData();
+    }
+
+    /// @dev ERC-2771 specifies the context as being a single address (20 bytes).
+    function _contextSuffixLength() internal view virtual override returns (uint256) {
+        return super._contextSuffixLength();
     }
 }
