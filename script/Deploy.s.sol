@@ -19,6 +19,10 @@ contract DeployScript is Script, Sphinx {
 
     uint256 FEE_PROJECT_ID = 1;
 
+    /// @notice The address that is allowed to forward calls to the terminal and controller on a users behalf.
+    address private constant TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
+
+
     /// @notice the salts that are used to deploy the contracts.
     bytes32 PUBLISHER_SALT = "CTPublisher";
     bytes32 DEPLOYER_SALT = "CTDeployer";
@@ -56,12 +60,12 @@ contract DeployScript is Script, Sphinx {
             (address _publisher, bool _publisherIsDeployed) = _isDeployed(
                 PUBLISHER_SALT,
                 type(CTPublisher).creationCode,
-                abi.encode(core.controller, core.permissions, FEE_PROJECT_ID)
+                abi.encode(core.controller, core.permissions, FEE_PROJECT_ID, TRUSTED_FORWARDER)
             );
 
             // Deploy it if it has not been deployed yet.
             publisher = !_publisherIsDeployed ?
-             new CTPublisher{salt: PUBLISHER_SALT}(core.controller, core.permissions, FEE_PROJECT_ID) :
+             new CTPublisher{salt: PUBLISHER_SALT}(core.controller, core.permissions, FEE_PROJECT_ID, TRUSTED_FORWARDER) :
              CTPublisher(_publisher);
         }
 
