@@ -5,7 +5,7 @@ import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol"
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import {JBPermissioned} from "@bananapus/core/src/abstract/JBPermissioned.sol";
-import {IJBTerminal} from "@bananapus/core/src/interfaces/terminal/IJBTerminal.sol";
+import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
 import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
 import {IJBPermissions} from "@bananapus/core/src/interfaces/IJBPermissions.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
