@@ -226,14 +226,14 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             hook.adjustTiers(tiersToAdd, new uint256[](0));
 
             // Keep a reference to the metadata ID target.
-            address metadataIdTarget = hook.METADATA_ID_TARGET(); 
+            address metadataIdTarget = hook.METADATA_ID_TARGET();
 
             // Create the metadata for the payment to specify the tier IDs that should be minted. We create manually the
             // original metadata, following
             // the specifications from the JBMetadataResolver library.
             mintMetadata = JBMetadataResolver.addToMetadata({
                 originalMetadata: additionalPayMetadata,
-                idToAdd: JBMetadataResolver.getId("pay", metadataIdTarget), 
+                idToAdd: JBMetadataResolver.getId("pay", metadataIdTarget),
                 dataToAdd: abi.encode(true, tierIdsToMint)
             });
 

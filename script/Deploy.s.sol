@@ -22,7 +22,6 @@ contract DeployScript is Script, Sphinx {
     /// @notice The address that is allowed to forward calls to the terminal and controller on a users behalf.
     address private constant TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
-
     /// @notice the salts that are used to deploy the contracts.
     bytes32 PUBLISHER_SALT = "CTPublisher";
     bytes32 DEPLOYER_SALT = "CTDeployer";
@@ -64,9 +63,11 @@ contract DeployScript is Script, Sphinx {
             );
 
             // Deploy it if it has not been deployed yet.
-            publisher = !_publisherIsDeployed ?
-             new CTPublisher{salt: PUBLISHER_SALT}(core.controller, core.permissions, FEE_PROJECT_ID, TRUSTED_FORWARDER) :
-             CTPublisher(_publisher);
+            publisher = !_publisherIsDeployed
+                ? new CTPublisher{salt: PUBLISHER_SALT}(
+                    core.controller, core.permissions, FEE_PROJECT_ID, TRUSTED_FORWARDER
+                )
+                : CTPublisher(_publisher);
         }
 
         CTDeployer deployer;
@@ -79,9 +80,9 @@ contract DeployScript is Script, Sphinx {
             );
 
             // Deploy it if it has not been deployed yet.
-            deployer = !_deployerIsDeployed ?
-             new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher) :
-             CTDeployer(_deployer);
+            deployer = !_deployerIsDeployed
+                ? new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher)
+                : CTDeployer(_deployer);
         }
 
         CTProjectOwner owner;
@@ -94,9 +95,9 @@ contract DeployScript is Script, Sphinx {
             );
 
             // Deploy it if it has not been deployed yet.
-            owner = !_ownerIsDeployed ?
-             new CTProjectOwner{salt: PROJECT_OWNER_SALT}(core.permissions, core.projects, publisher) :
-             CTProjectOwner(_owner);
+            owner = !_ownerIsDeployed
+                ? new CTProjectOwner{salt: PROJECT_OWNER_SALT}(core.permissions, core.projects, publisher)
+                : CTProjectOwner(_owner);
         }
     }
 

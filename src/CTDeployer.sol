@@ -33,11 +33,7 @@ contract CTDeployer is IERC721Receiver {
     /// @param controller The controller that projects are made from.
     /// @param deployer The deployer to launch Croptop projects from.
     /// @param publisher The croptop publisher.
-    constructor(
-        IJBController controller,
-        IJB721TiersHookProjectDeployer deployer,
-        CTPublisher publisher
-    ) {
+    constructor(IJBController controller, IJB721TiersHookProjectDeployer deployer, CTPublisher publisher) {
         CONTROLLER = controller;
         DEPLOYER = deployer;
         PUBLISHER = publisher;
