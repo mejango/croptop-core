@@ -38,10 +38,12 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
 
     event Mint(
         uint256 indexed projectId,
+        IJB721TiersHook indexed hook,
         address indexed nftBeneficiary,
-        address indexed feeBeneficiary,
+        address feeBeneficiary,
         CTPost[] posts,
-        uint256 fee,
+        uint256 postValue,
+        uint256 txValue,
         address caller
     );
 
@@ -179,7 +181,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
 
     /// @notice Publish an NFT to become mintable, and mint a first copy.
     /// @dev A fee is taken into the appropriate treasury.
-    /// @param projectId The ID of the project to which the NFT should be added.
+    /// @param hook The hook to mint from.
     /// @param posts An array of posts that should be published as NFTs to the specified project.
     /// @param nftBeneficiary The beneficiary of the NFT mints.
     /// @param feeBeneficiary The beneficiary of the fee project's token.
@@ -188,7 +190,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
     /// payload needed for NFT creation.
     /// @param feeMetadata The metadata to send alongside the fee payment.
     function mintFrom(
-        uint256 projectId,
+        IJB721TiersHook hook,
         CTPost[] memory posts,
         address nftBeneficiary,
         address feeBeneficiary,
@@ -198,42 +200,40 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
         external
         payable
     {
-        // Keep a reference a reference to the fee.
-        uint256 fee;
+        // Keep a reference to the amount being paid, which is msg.value minus the fee.
+        uint256 payValue = msg.value;
 
         // Keep a reference to the mint metadata.
         bytes memory mintMetadata;
 
+        // Keep a reference to the project's ID.
+        uint256 projectId = hook.PROJECT_ID();
+
         {
-            // Get the projects current data source from its current funding cyce's metadata.
-            (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
-
-            // Check to make sure the project's current data source is a IJBTiered721Delegate.
-            if (!IERC165(metadata.dataHook).supportsInterface(type(IJB721TiersHook).interfaceId)) {
-                revert INCOMPATIBLE_PROJECT(projectId, metadata.dataHook, type(IJB721TiersHook).interfaceId);
-            }
-
             // Setup the posts.
             (JB721TierConfig[] memory tiersToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice) =
-                _setupPosts(projectId, metadata.dataHook, posts);
+                _setupPosts(hook, posts);
 
             // Keep a reference to the fee that will be paid.
-            fee = projectId == FEE_PROJECT_ID ? 0 : (totalPrice / FEE_DIVISOR);
+            payValue -= projectId == FEE_PROJECT_ID ? 0 : (totalPrice / FEE_DIVISOR);
 
             // Make sure the amount sent to this function is at least the specified price of the tier plus the fee.
-            if (totalPrice + fee < msg.value) {
+            if (totalPrice > payValue) {
                 revert INSUFFICIENT_ETH_SENT(totalPrice, msg.value);
             }
 
             // Add the new tiers.
-            IJB721TiersHook(metadata.dataHook).adjustTiers(tiersToAdd, new uint256[](0));
+            hook.adjustTiers(tiersToAdd, new uint256[](0));
+
+            // Keep a reference to the metadata ID target.
+            address metadataIdTarget = hook.METADATA_ID_TARGET(); 
 
             // Create the metadata for the payment to specify the tier IDs that should be minted. We create manually the
             // original metadata, following
             // the specifications from the JBMetadataResolver library.
             mintMetadata = JBMetadataResolver.addToMetadata({
                 originalMetadata: additionalPayMetadata,
-                idToAdd: bytes4(bytes20(metadata.dataHook)),
+                idToAdd: JBMetadataResolver.getId("pay", metadataIdTarget), 
                 dataToAdd: abi.encode(true, tierIdsToMint)
             });
 
@@ -248,9 +248,6 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
         {
             // Get a reference to the project's current ETH payment terminal.
             IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
-
-            // Keep a reference to the amount being paid.
-            uint256 payValue = msg.value - fee;
 
             // Make the payment.
             projectTerminal.pay{value: payValue}({
@@ -281,7 +278,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             });
         }
 
-        emit Mint(projectId, nftBeneficiary, feeBeneficiary, posts, fee, _msgSender());
+        emit Mint(projectId, hook, nftBeneficiary, feeBeneficiary, posts, payValue, msg.value, _msgSender());
     }
 
     /// @notice Collection owners can set the allowed criteria for publishing a new NFT to their project.
@@ -345,32 +342,30 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
     }
 
     /// @notice Setup the posts.
-    /// @param projectId The ID of the project having posts set up.
-    /// @param nft The NFT address on which the posts will apply.
+    /// @param hook The NFT hook on which the posts will apply.
     /// @param posts An array of posts that should be published as NFTs to the specified project.
     /// @return tiersToAdd The tiers that will be created to represent the posts.
     /// @return tierIdsToMint The tier IDs of the posts that should be minted once published.
     /// @return totalPrice The total price being paid.
     function _setupPosts(
-        uint256 projectId,
-        address nft,
+        IJB721TiersHook hook,
         CTPost[] memory posts
     )
         internal
         returns (JB721TierConfig[] memory tiersToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
     {
-        // Keep a reference to the number of posts being published.
-        uint256 numberOfMints = posts.length;
+        // Keep a reference to the project's ID.
+        uint256 projectId = hook.PROJECT_ID();
 
         // Set the max size of the tier data that will be added.
-        tiersToAdd = new JB721TierConfig[](numberOfMints);
+        tiersToAdd = new JB721TierConfig[](posts.length);
 
         // Set the size of the tier IDs of the posts that should be minted once published.
-        tierIdsToMint = new uint256[](numberOfMints);
+        tierIdsToMint = new uint256[](posts.length);
 
         // The tier ID that will be created, and the first one that should be minted from, is one more than the current
         // max.
-        uint256 startingTierId = IJB721TiersHook(nft).STORE().maxTierIdOf(nft) + 1;
+        uint256 startingTierId = hook.STORE().maxTierIdOf(address(hook)) + 1;
 
         // Keep a reference to the post being iterated on.
         CTPost memory post;
@@ -380,7 +375,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
 
         // For each post, create tiers after validating to make sure they fulfill the allowance specified by the
         // project's owner.
-        for (uint256 i; i < numberOfMints; i++) {
+        for (uint256 i; i < posts.length; i++) {
             // Get the current post being iterated on.
             post = posts[i];
 
@@ -407,7 +402,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
                         uint256 minimumTotalSupply,
                         uint256 maximumTotalSupply,
                         address[] memory addresses
-                    ) = allowanceFor(projectId, nft, post.category);
+                    ) = allowanceFor(projectId, address(hook), post.category);
 
                     // Make sure the category being posted to allows publishing.
                     if (minimumTotalSupply == 0) {
@@ -465,7 +460,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
         }
 
         // Resize the array if there's a mismatch in length.
-        if (numberOfTiersBeingAdded != numberOfMints) {
+        if (numberOfTiersBeingAdded != posts.length) {
             assembly ("memory-safe") {
                 mstore(tiersToAdd, numberOfTiersBeingAdded)
             }
