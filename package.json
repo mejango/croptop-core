@@ -19,5 +19,8 @@
       "@bananapus/721-hook": "^0.0.9",
       "@bananapus/ownable": "^0.0.6",
       "@openzeppelin/contracts": "^5.0.2"
+    },
+    "devDependencies": {
+        "@sphinx-labs/plugins": "^0.31.10"
     }
 }
