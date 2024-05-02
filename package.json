@@ -1,6 +1,6 @@
 {
     "name": "@croptop/core",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -15,12 +15,12 @@
     },
     "dependencies": {
       "@bananapus/permission-ids": "^0.0.5",
-      "@bananapus/core": "^0.0.13",
-      "@bananapus/721-hook": "^0.0.11",
+      "@bananapus/core": "^0.0.14",
+      "@bananapus/721-hook": "^0.0.12",
       "@bananapus/ownable": "^0.0.6",
       "@openzeppelin/contracts": "^5.0.2"
     },
     "devDependencies": {
-        "@sphinx-labs/plugins": "^0.31.11"
+        "@sphinx-labs/plugins": "^0.31.12"
     }
 }
