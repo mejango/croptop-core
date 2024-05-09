@@ -98,7 +98,7 @@ contract CTDeployer is IERC721Receiver {
         });
 
         // Configure allowed posts.
-        if (allowedPosts.length > 0) PUBLISHER.configurePostingCriteriaFor(projectId, allowedPosts);
+        if (allowedPosts.length > 0) PUBLISHER.configurePostingCriteriaFor(allowedPosts);
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);

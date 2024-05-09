@@ -24,17 +24,15 @@ import {CTPost} from "./structs/CTPost.sol";
 contract CTPublisher is JBPermissioned, ERC2771Context {
     error TOTAL_SUPPY_MUST_BE_POSITIVE();
     error EMPTY_ENCODED_IPFS_URI(bytes32 encodedUri);
-    error INCOMPATIBLE_PROJECT(uint256 projectId, address dataSource, bytes4 expectedInterfaceId);
     error INSUFFICIENT_ETH_SENT(uint256 expected, uint256 sent);
     error NOT_IN_ALLOW_LIST(address[] allowedAddresses);
     error MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
-    error HOOK_NOT_PROVIDED();
     error PRICE_TOO_SMALL(uint256 minimumPrice);
     error TOTAL_SUPPLY_TOO_SMALL(uint256 minimumTotalSupply);
     error TOTAL_SUPPLY_TOO_BIG(uint256 maximumTotalSupply);
     error UNAUTHORIZED_TO_POST_IN_CATEGORY();
 
-    event ConfigurePostingCriteria(uint256 indexed projectId, CTAllowedPost[] allowedPosts, address caller);
+    event ConfigurePostingCriteria(address indexed hook, CTAllowedPost allowedPost, address caller);
 
     event Mint(
         uint256 indexed projectId,
@@ -48,24 +46,22 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
     );
 
     /// @notice Packed values that determine the allowance of posts.
-    /// @custom:param projectId The ID of the project.
-    /// @custom:param nft The NFT contract for which this allowance applies.
+    /// @custom:param hook The hook for which this allowance applies.
     /// @custom:param category The category for which the allowance applies
-    mapping(uint256 projectId => mapping(address nft => mapping(uint256 category => uint256))) internal
+    mapping(address hook => mapping(uint256 category => uint256)) internal
         _packedAllowanceFor;
 
-    /// @notice Stores addresses that are allowed to post onto an NFT category.
-    /// @custom:param projectId The ID of the project.
-    /// @custom:param nft The NFT contract for which this allowance applies.
+    /// @notice Stores addresses that are allowed to post onto a hook category.
+    /// @custom:param hook The hook for which this allowance applies.
     /// @custom:param category The category for which the allowance applies.
     /// @custom:param address The address to check an allowance for.
-    mapping(uint256 projectId => mapping(address nft => mapping(uint256 category => address[]))) internal
+    mapping(address hook => mapping(uint256 category => address[])) internal
         _allowedAddresses;
 
     /// @notice The ID of the tier that an IPFS metadata has been saved to.
-    /// @custom:param projectId The ID of the project.
+    /// @custom:param hook The hook for which the tier ID applies.
     /// @custom:param encodedIPFSUri The IPFS URI.
-    mapping(uint256 projectId => mapping(bytes32 encodedIPFSUri => uint256)) public tierIdForEncodedIPFSUriOf;
+    mapping(address hook => mapping(bytes32 encodedIPFSUri => uint256)) public tierIdForEncodedIPFSUriOf;
 
     /// @notice The divisor that describes the fee that should be taken.
     /// @dev This is equal to 100 divided by the fee percent.
@@ -78,14 +74,12 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
     uint256 public immutable FEE_PROJECT_ID;
 
     /// @notice Get the tiers for the provided encoded IPFS URIs.
-    /// @param projectId The ID of the project from which the tiers are being sought.
-    /// @param nft The NFT from which to get tiers.
+    /// @param hook The hook from which to get tiers.
     /// @param encodedIPFSUris The URIs to get tiers of.
     /// @return tiers The tiers that correspond to the provided encoded IPFS URIs. If there's no tier yet, an empty tier
     /// is returned.
     function tiersFor(
-        uint256 projectId,
-        address nft,
+        address hook,
         bytes32[] memory encodedIPFSUris
     )
         external
@@ -97,29 +91,20 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
         // Initialize the tier array being returned.
         tiers = new JB721Tier[](numberOfEncodedIPFSUris);
 
-        if (nft == address(0)) {
-            // Get the projects current data source from its current ruleset's metadata.
-            (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
-
-            // Set the NFT as the data hook.
-            nft = metadata.dataHook;
-        }
-
         // Get the tier for each provided encoded IPFS URI.
         for (uint256 i; i < numberOfEncodedIPFSUris; i++) {
             // Check if there's a tier ID stored for the encoded IPFS URI.
-            uint256 tierId = tierIdForEncodedIPFSUriOf[projectId][encodedIPFSUris[i]];
+            uint256 tierId = tierIdForEncodedIPFSUriOf[hook][encodedIPFSUris[i]];
 
             // If there's a tier ID stored, resolve it.
             if (tierId != 0) {
-                tiers[i] = IJB721TiersHook(nft).STORE().tierOf(nft, tierId, false);
+                tiers[i] = IJB721TiersHook(hook).STORE().tierOf(hook, tierId, false);
             }
         }
     }
 
-    /// @notice Post allowances for a particular category on a particular NFT.
-    /// @param projectId The ID of the project.
-    /// @param nft The NFT contract for which this allowance applies.
+    /// @notice Post allowances for a particular category on a particular hook.
+    /// @param hook The hook contract for which this allowance applies.
     /// @param category The category for which this allowance applies.
     /// @return minimumPrice The minimum price that a poster must pay to record a new NFT.
     /// @return minimumTotalSupply The minimum total number of available tokens that a minter must set to record a new
@@ -128,8 +113,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
     /// max.
     /// @return allowedAddresses The addresses allowed to post. Returns empty if all addresses are allowed.
     function allowanceFor(
-        uint256 projectId,
-        address nft,
+        address hook,
         uint256 category
     )
         public
@@ -141,16 +125,8 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             address[] memory allowedAddresses
         )
     {
-        if (nft == address(0)) {
-            // Get the projects current data source from its current funding cyce's metadata.
-            (, JBRulesetMetadata memory metadata) = CONTROLLER.currentRulesetOf(projectId);
-
-            // Set the NFT as the data hook.
-            nft = metadata.dataHook;
-        }
-
         // Get a reference to the packed values.
-        uint256 packed = _packedAllowanceFor[projectId][nft][category];
+        uint256 packed = _packedAllowanceFor[hook][category];
 
         // minimum price in bits 0-103 (104 bits).
         minimumPrice = uint256(uint104(packed));
@@ -159,7 +135,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
         // minimum supply in bits 136-67 (32 bits).
         maximumTotalSupply = uint256(uint32(packed >> 136));
 
-        allowedAddresses = _allowedAddresses[projectId][nft][category];
+        allowedAddresses = _allowedAddresses[hook][category];
     }
 
     /// @param controller The controller that directs the projects being posted to.
@@ -282,9 +258,8 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
     }
 
     /// @notice Collection owners can set the allowed criteria for publishing a new NFT to their project.
-    /// @param projectId The ID of the project having its publishing allowances set.
     /// @param allowedPosts An array of criteria for allowed posts.
-    function configurePostingCriteriaFor(uint256 projectId, CTAllowedPost[] memory allowedPosts) public {
+    function configurePostingCriteriaFor(CTAllowedPost[] memory allowedPosts) public {
         // Keep a reference to the number of post criteria.
         uint256 numberOfAllowedPosts = allowedPosts.length;
 
@@ -298,8 +273,8 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
 
             // Enforce permissions.
             _requirePermissionFrom({
-                account: JBOwnable(allowedPost.nft).owner(),
-                projectId: projectId,
+                account: JBOwnable(allowedPost.hook).owner(),
+                projectId: IJB721TiersHook(allowedPost.hook).PROJECT_ID(),
                 permissionId: JBPermissionIds.ADJUST_721_TIERS
             });
 
@@ -321,24 +296,24 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             // maximum total supply in bits 136-167 (32 bits).
             packed |= uint256(allowedPost.maximumTotalSupply) << 136;
             // Store the packed value.
-            _packedAllowanceFor[projectId][allowedPost.nft][allowedPost.category] = packed;
+            _packedAllowanceFor[allowedPost.hook][allowedPost.category] = packed;
 
             // Store the allow list.
             uint256 numberOfAddresses = allowedPost.allowedAddresses.length;
             // Reset the addresses.
-            delete _allowedAddresses[projectId][allowedPost.nft][allowedPost.category];
+            delete _allowedAddresses[allowedPost.hook][allowedPost.category];
             // Add the number allowed addresses.
             if (numberOfAddresses != 0) {
                 // Keep a reference to the storage of the allowed addresses.
                 for (uint256 j = 0; j < numberOfAddresses; j++) {
-                    _allowedAddresses[projectId][allowedPost.nft][allowedPost.category].push(
+                    _allowedAddresses[allowedPost.hook][allowedPost.category].push(
                         allowedPost.allowedAddresses[j]
                     );
                 }
             }
-        }
 
-        emit ConfigurePostingCriteria(projectId, allowedPosts, _msgSender());
+            emit ConfigurePostingCriteria(allowedPost.hook, allowedPost, _msgSender());
+        }
     }
 
     /// @notice Setup the posts.
@@ -354,9 +329,6 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
         internal
         returns (JB721TierConfig[] memory tiersToAdd, uint256[] memory tierIdsToMint, uint256 totalPrice)
     {
-        // Keep a reference to the project's ID.
-        uint256 projectId = hook.PROJECT_ID();
-
         // Set the max size of the tier data that will be added.
         tiersToAdd = new JB721TierConfig[](posts.length);
 
@@ -387,7 +359,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             // Scoped section to prevent stack too deep.
             {
                 // Check if there's an ID of a tier already minted for this encodedIPFSUri.
-                uint256 tierId = tierIdForEncodedIPFSUriOf[projectId][post.encodedIPFSUri];
+                uint256 tierId = tierIdForEncodedIPFSUriOf[address(hook)][post.encodedIPFSUri];
 
                 if (tierId != 0) tierIdsToMint[i] = tierId;
             }
@@ -402,7 +374,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
                         uint256 minimumTotalSupply,
                         uint256 maximumTotalSupply,
                         address[] memory addresses
-                    ) = allowanceFor(projectId, address(hook), post.category);
+                    ) = allowanceFor(address(hook), post.category);
 
                     // Make sure the category being posted to allows publishing.
                     if (minimumTotalSupply == 0) {
@@ -452,7 +424,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
                 tierIdsToMint[i] = startingTierId + numberOfTiersBeingAdded++;
 
                 // Save the encodedIPFSUri as minted.
-                tierIdForEncodedIPFSUriOf[projectId][post.encodedIPFSUri] = tierIdsToMint[i];
+                tierIdForEncodedIPFSUriOf[address(hook)][post.encodedIPFSUri] = tierIdsToMint[i];
             }
 
             // Increment the total price.
