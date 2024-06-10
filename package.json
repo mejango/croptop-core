@@ -1,6 +1,6 @@
 {
     "name": "@croptop/core",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -11,12 +11,12 @@
         "coverage:integration": "forge coverage --match-path \"./src/*.sol\" --report lcov --report summary",
         "deploy:mainnets": "source ./.env && npx sphinx propose ./script/Deploy.s.sol --networks mainnets",
         "deploy:testnets": "source ./.env && npx sphinx propose ./script/Deploy.s.sol --networks testnets",
-        "artifacts":  "source ./.env && npx sphinx artifacts --org-id 'cltepuu9u0003j58rjtbd0hvu' --project-name 'croptop-core'"
+        "artifacts":  "source ./.env && npx sphinx artifacts --org-id 'cltepuu9u0003j58rjtbd0hvu' --project-name 'croptop-core-testnet'"
     },
     "dependencies": {
-      "@bananapus/permission-ids": "^0.0.8",
-      "@bananapus/core": "^0.0.15",
-      "@bananapus/721-hook": "^0.0.13",
+      "@bananapus/permission-ids": "^0.0.9",
+      "@bananapus/core": "^0.0.18",
+      "@bananapus/721-hook": "^0.0.14",
       "@bananapus/ownable": "^0.0.6",
       "@openzeppelin/contracts": "^5.0.2"
     },
