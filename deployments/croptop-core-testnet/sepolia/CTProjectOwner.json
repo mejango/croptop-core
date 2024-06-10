@@ -1,0 +1,271 @@
+{
+	"_format": "sphinx-sol-ct-artifact-1",
+	"merkleRoot": "0xfe2e4f94f33f7fca7cd9d2be8f2a0f63b899cc32a11d584ea1b4ae1cff3bf162",
+	"contractName": "CTProjectOwner",
+	"address": "0xfa7Bc0b1A6642251Aa5D4Dd7e2481f401a6e79B0",
+	"abi": [
+		{
+			"type": "constructor",
+			"inputs": [
+				{
+					"name": "permissions",
+					"type": "address",
+					"internalType": "contract IJBPermissions"
+				},
+				{
+					"name": "projects",
+					"type": "address",
+					"internalType": "contract IJBProjects"
+				},
+				{
+					"name": "publisher",
+					"type": "address",
+					"internalType": "contract CTPublisher"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "PERMISSIONS",
+			"inputs": [],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "contract IJBPermissions"
+				}
+			],
+			"stateMutability": "view"
+		},
+		{
+			"type": "function",
+			"name": "PROJECTS",
+			"inputs": [],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "contract IJBProjects"
+				}
+			],
+			"stateMutability": "view"
+		},
+		{
+			"type": "function",
+			"name": "PUBLISHER",
+			"inputs": [],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "contract CTPublisher"
+				}
+			],
+			"stateMutability": "view"
+		},
+		{
+			"type": "function",
+			"name": "onERC721Received",
+			"inputs": [
+				{
+					"name": "operator",
+					"type": "address",
+					"internalType": "address"
+				},
+				{
+					"name": "from",
+					"type": "address",
+					"internalType": "address"
+				},
+				{
+					"name": "tokenId",
+					"type": "uint256",
+					"internalType": "uint256"
+				},
+				{
+					"name": "data",
+					"type": "bytes",
+					"internalType": "bytes"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "bytes4",
+					"internalType": "bytes4"
+				}
+			],
+			"stateMutability": "nonpayable"
+		}
+	],
+	"solcInputHash": "1d2f5d14d51cc1746a707f9406872550",
+	"receipt": {
+		"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+		"blockNumber": 6081411,
+		"contractAddress": null,
+		"cumulativeGasUsed": "23029634",
+		"from": "0xC034550B542b83BA1De312b21d1C94a9a52B1595",
+		"gasPrice": "795690735",
+		"gasUsed": "4712485",
+		"hash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+		"index": 149,
+		"logs": [
+			{
+				"address": "0xB5E96127D417b1B3ef8438496a38A143167209c7",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+				"index": 326,
+				"topics": [
+					"0x572f161235911da04685a68c06adf558fc7e4a36909dca394650e0adc19cc93d",
+					"0x000000000000000000000000c034550b542b83ba1de312b21d1c94a9a52b1595",
+					"0x00000000000000000000000022a64ad71227d7605e31fcb92b00816e5cc32efc",
+					"0x06007eedb3fb03cebfefbfd0f849ed8aa05ecf4ade2ea2c7a7ccaff6ee12a89f"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			},
+			{
+				"address": "0x5F477FCcb7a6E4140A94977025De5cCfb1D177F3",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x",
+				"index": 327,
+				"topics": [
+					"0x6895c13664aa4f67288b25d7a21d7aaa34916e355fb9b6fae0a139a9085becb8",
+					"0x00000000000000000000000022a64ad71227d7605e31fcb92b00816e5cc32efc"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			},
+			{
+				"address": "0x22a64AD71227D7605E31FcB92B00816e5CC32eFC",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x0000000000000000000000000000000000000000000000000000000000000001",
+				"index": 328,
+				"topics": [
+					"0xa65fb05c5808f5f389d72edeaf719ce38f4cc55c1f69ca3cbfb31c21501caa07",
+					"0xfe2e4f94f33f7fca7cd9d2be8f2a0f63b899cc32a11d584ea1b4ae1cff3bf162"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			},
+			{
+				"address": "0x5F477FCcb7a6E4140A94977025De5cCfb1D177F3",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x",
+				"index": 329,
+				"topics": [
+					"0x6895c13664aa4f67288b25d7a21d7aaa34916e355fb9b6fae0a139a9085becb8",
+					"0x00000000000000000000000022a64ad71227d7605e31fcb92b00816e5cc32efc"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			},
+			{
+				"address": "0x22a64AD71227D7605E31FcB92B00816e5CC32eFC",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x0000000000000000000000000000000000000000000000000000000000000002",
+				"index": 330,
+				"topics": [
+					"0xa65fb05c5808f5f389d72edeaf719ce38f4cc55c1f69ca3cbfb31c21501caa07",
+					"0xfe2e4f94f33f7fca7cd9d2be8f2a0f63b899cc32a11d584ea1b4ae1cff3bf162"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			},
+			{
+				"address": "0x5F477FCcb7a6E4140A94977025De5cCfb1D177F3",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x",
+				"index": 331,
+				"topics": [
+					"0x6895c13664aa4f67288b25d7a21d7aaa34916e355fb9b6fae0a139a9085becb8",
+					"0x00000000000000000000000022a64ad71227d7605e31fcb92b00816e5cc32efc"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			},
+			{
+				"address": "0x22a64AD71227D7605E31FcB92B00816e5CC32eFC",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x0000000000000000000000000000000000000000000000000000000000000003",
+				"index": 332,
+				"topics": [
+					"0xa65fb05c5808f5f389d72edeaf719ce38f4cc55c1f69ca3cbfb31c21501caa07",
+					"0xfe2e4f94f33f7fca7cd9d2be8f2a0f63b899cc32a11d584ea1b4ae1cff3bf162"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			},
+			{
+				"address": "0x22a64AD71227D7605E31FcB92B00816e5CC32eFC",
+				"blockHash": "0x31072873f71bec777f91ac4723820eefd9845809efb14179070fa936728c99f1",
+				"blockNumber": 6081411,
+				"data": "0x",
+				"index": 333,
+				"topics": [
+					"0x4383d976757d67ca920616be0b6430a681ea9d3dcce8d6d61d4603ca4a9bff63",
+					"0xfe2e4f94f33f7fca7cd9d2be8f2a0f63b899cc32a11d584ea1b4ae1cff3bf162"
+				],
+				"transactionHash": "0x4c00127050aecf49eb0553505fd8c5494a014375bb95760f4c77ae05c7627337",
+				"transactionIndex": 149
+			}
+		],
+		"logsBloom": "0x00020000080010000000000000080000408000000008000000000000004000010000008000000000000010000040000000000000000000080000000000000000000000000000200000000000000080000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100001000000000000000000000000000000000000000004000800010000000000000000000020200000000000000000000000004000000000000000000000000000008000000000000000000000000000000000000020000000000000008000000000008000200000010100000008000000008000000",
+		"status": 1,
+		"to": "0xB5E96127D417b1B3ef8438496a38A143167209c7"
+	},
+	"metadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"contract IJBPermissions\",\"name\":\"permissions\",\"type\":\"address\"},{\"internalType\":\"contract IJBProjects\",\"name\":\"projects\",\"type\":\"address\"},{\"internalType\":\"contract CTPublisher\",\"name\":\"publisher\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"PERMISSIONS\",\"outputs\":[{\"internalType\":\"contract IJBPermissions\",\"name\":\"\",\"type\":\"address\"}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"PROJECTS\",\"outputs\":[{\"internalType\":\"contract IJBProjects\",\"name\":\"\",\"type\":\"address\"}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"PUBLISHER\",\"outputs\":[{\"internalType\":\"contract CTPublisher\",\"name\":\"\",\"type\":\"address\"}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"onERC721Received\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}]}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"constructor\":{\"params\":{\"permissions\":\"The contract where operator permissions are stored.\"}},\"onERC721Received(address,address,uint256,bytes)\":{\"details\":\"Make sure to first configure certain posts before sending this contract ownership.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"PERMISSIONS()\":{\"notice\":\"The contract where operator permissions are stored.\"},\"PROJECTS()\":{\"notice\":\"The contract from which project are minted.\"},\"PUBLISHER()\":{\"notice\":\"The Croptop publisher.\"},\"onERC721Received(address,address,uint256,bytes)\":{\"notice\":\"Give the croptop publisher permission to post to the project on this contract's behalf.\"}},\"version\":1}},\"settings\":{\"remappings\":[\"@bananapus/=node_modules/@bananapus/\",\"@chainlink/=node_modules/@chainlink/\",\"@eth-optimism/=node_modules/@eth-optimism/\",\"@openzeppelin/=node_modules/@openzeppelin/\",\"@prb/=node_modules/@prb/\",\"@scroll-tech/=node_modules/@scroll-tech/\",\"@sphinx-labs/contracts/=node_modules/@sphinx-labs/contracts/contracts/foundry/\",\"@uniswap/=node_modules/@uniswap/\",\"ds-test/=lib/forge-std/lib/ds-test/src/\",\"forge-std/=lib/forge-std/src/\",\"hardhat/=node_modules/hardhat/\",\"solmate/=node_modules/solmate/\",\"sphinx/=lib/sphinx/packages/contracts/contracts/forge-std/src/\"],\"optimizer\":{\"enabled\":true,\"runs\":100000000},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"compilationTarget\":{\"src/CTProjectOwner.sol\":\"CTProjectOwner\"},\"evmVersion\":\"paris\",\"libraries\":{}},\"sources\":{\"node_modules/@bananapus/721-hook/src/interfaces/IJB721Hook.sol\":{\"keccak256\":\"0x24935445bc4c5b0fe2a10aabe549122588940842a68e79a8c39b1df9458dd7fd\",\"urls\":[\"bzz-raw://1dee273fa76d9abae116de911fdda5e3113db2a58939e62e24fba98c63fd037a\",\"dweb:/ipfs/QmT6Lih7DeRAfrLc8uC7ecaw2EAKwhaP2BZHeY5DxeeVLM\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol\":{\"keccak256\":\"0xbd9a8dae00a4b1a02c628bd172fe4ae496e49f7651426cef08774ffdb6125c23\",\"urls\":[\"bzz-raw://9ce4fd77d5af1f570dad6b70758f09f9599768e1ab32f6b473f6181197daa0c8\",\"dweb:/ipfs/QmWj6sCTvZ2CbfSyRuhaXADxYbwwPcR42pZokcgfjpsabg\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/interfaces/IJB721TiersHookStore.sol\":{\"keccak256\":\"0x8550e216c12c9cda865c1b1b0eb3f244aeaa8d465b197d4bd0dd8d4df265682e\",\"urls\":[\"bzz-raw://674a312f1eaffd7c6b21f58f8d4a628104e71220daf48a22237fa3bd035ddf21\",\"dweb:/ipfs/QmSRSW6cSwdpoGjVxDqiwJmJyCxfHWhCxZ2iaqeJcN2Ccy\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol\":{\"keccak256\":\"0xfa599167098f4459320ec4141a98a17b2dfffbce422baa27d8b4e4530f61ece1\",\"urls\":[\"bzz-raw://8b758b161f4c7b520b2c34b4d91e585e961b8f4ca278eebb91d791f7f2f45140\",\"dweb:/ipfs/QmcD9DF7NJ9QykQpT4KPzm4bs3fkjzukdAUWwdU6Atfw85\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol\":{\"keccak256\":\"0xfb78486cec94189d0ecf2050dc9cfc11245b426c73a0711a85bff1359d774307\",\"urls\":[\"bzz-raw://a8fa01f6e64dd204dbde07a60851e9a5a74e439e1411139ae16b7cf67d2a2692\",\"dweb:/ipfs/QmZAnHyfpKr3xr7NWHj5sGaCEEtG8RtmHhkRUJJvNauym5\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/structs/JB721Tier.sol\":{\"keccak256\":\"0x2e267a8af02f125465cdda9308477346ae4a94b024c3b2c2a6af0c00027944dd\",\"urls\":[\"bzz-raw://367ccea2c8fa815d498d771d4367ef1ded718a76e89644102034bfe4a3636b82\",\"dweb:/ipfs/QmYiFFa6ei9wZBSSVUHfY2Cb35zCDVXvbmLcgLj2BTiC1u\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/structs/JB721TierConfig.sol\":{\"keccak256\":\"0x2fa9c5c8cec182b854a656d3b284e9d5306be35ad3dc4da79d65dca12b804af0\",\"urls\":[\"bzz-raw://b443a5f70195a66145ea1dade04454ce9a3ff1209e1aaecf53c8a9909b294d79\",\"dweb:/ipfs/QmUDPFZ4L6XpV3zLQUNVchUvecD4XfddKz2S46BKek5XL1\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol\":{\"keccak256\":\"0x283d8429f31bd58875c056515aa42abd09c95362bd929e85cfc44a0d92585766\",\"urls\":[\"bzz-raw://9a580b89fe99d9f8e930c58a4d0d63a5ff7c01c79d210af01373d066c9e72ed6\",\"dweb:/ipfs/QmdY1eSGSoTjv4KSdsG4Tm5CzJN6iqk3qTRga5ZWNbejRz\"],\"license\":\"MIT\"},\"node_modules/@bananapus/721-hook/src/structs/JB721TiersMintReservesConfig.sol\":{\"keccak256\":\"0xab3b319dc4e736586ae595de194d93dcdfeba365bc7a54cf6c37e697f6074ad9\",\"urls\":[\"bzz-raw://a84ae2cf2e8c3e39e831dbb39a67a8eb43c78a6de6bb78b1be2e1f1e80c69efe\",\"dweb:/ipfs/QmboGXEMqsYTxc4a7oft9rggNU7ShWSa9yB4HFMVmzXCHz\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/abstract/JBPermissioned.sol\":{\"keccak256\":\"0x6486c11bff6384bfa938feb7aaacc977f457abff25b17b9aa094077d3fef71f8\",\"urls\":[\"bzz-raw://8b5190202326b6499391d5128cdb2d9ff44e91cd9ba6d8a5fe01e6f21259270d\",\"dweb:/ipfs/QmR2ufPwHtCAZYkJoyWyyag6BfdaWpaLk7VhuDc6BRLqVe\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/enums/JBApprovalStatus.sol\":{\"keccak256\":\"0x61c69b6bac7d24b566d87cda23a77e4ca9cdb87200b106aba8534cb9a0973e33\",\"urls\":[\"bzz-raw://6a9ca7249de76f77a8252eefe6bd1b63d47952f25a2acfa2c8db967cdff4470c\",\"dweb:/ipfs/QmaxSxptRQNj8bNy96EreENmrnRWdKmhyihBcxyWzBX5BN\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBController.sol\":{\"keccak256\":\"0xdb857448c5a7731b39a172b4e8df6e0def27e31443587790d1ac6d218ae040f9\",\"urls\":[\"bzz-raw://d04453f2616f370b811843e42551a7010eba770ed1e25abe3fee2e8bc73a4e9b\",\"dweb:/ipfs/QmYiDPbfF66nfSCJ2YhcdRYgyZUcK3Wky8Do4pf4zZhaa7\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBDirectory.sol\":{\"keccak256\":\"0x9cc380844aef60078ee47a61861e55a29c4a8c947efd556ebd36e6909f7b9d62\",\"urls\":[\"bzz-raw://9f5190ec8b6683d9781ee6e9eedcc91294753242748875d4a06349077e4cbaaf\",\"dweb:/ipfs/QmTQrPuXT9TCA4txwrperMeXSGvGxP8iokUK47f62F388i\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBDirectoryAccessControl.sol\":{\"keccak256\":\"0x1e67f56849320a46f834aaa9bd62b170ff8ada7b224b4a81136193740fa0be4d\",\"urls\":[\"bzz-raw://ea8fbcec44abfe49d137bcae129b67e5479d6b17879301f88534c8a7fab00be4\",\"dweb:/ipfs/QmT6wrtYX4GRpffHUzupNwYebJ1dqkkKZLEewWsoyunsqw\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBFundAccessLimits.sol\":{\"keccak256\":\"0xf5fd6bdd723b60d490ccbe22cdf1cfe43663d23e6ee48badcd1b71e3282cb16b\",\"urls\":[\"bzz-raw://fe692f0b843ea5fccdfcb68f4ec16e1c0add945bb74b303c9866342be0e31fbf\",\"dweb:/ipfs/QmSRmzpgp3DhNEhNDiLsSu7yEiTeywbzEFbwyGyDazjgKt\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBPayHook.sol\":{\"keccak256\":\"0x9438866782c652c2942f4d114e35f393cd3c8b0334abce8387eed90bca35e8b2\",\"urls\":[\"bzz-raw://cfd99daf57213f92325aad7d7d16e98476d38e870470e95ba01e3ae3cdecc95d\",\"dweb:/ipfs/QmUKKAVGf7ki8BHksr99tFcRW8APveeB5tNH63ctTbbCW8\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBPermissioned.sol\":{\"keccak256\":\"0x5b038d4dee116584e88b230920e56d48e135053e3f7e5642eaea14a775c1dad7\",\"urls\":[\"bzz-raw://19e43102f349fd4a1da1c0943ffb8f2950007fe4bb4bb7e8f74fc142575d091b\",\"dweb:/ipfs/QmXHAt4KzDTdDZgDDefEXH2WKi7NcfkJb9R7nxW5uDqsNp\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBPermissions.sol\":{\"keccak256\":\"0x957d77a71cf8bb25df4a767e3c315fbd393df52ea8ea25af14e9fa268ac820bf\",\"urls\":[\"bzz-raw://c7891e986611d3cc0472a65310d160cad5b03c7e64c63b30430401d6418f8d77\",\"dweb:/ipfs/QmNZPfbyYvG8XPSPe9vrPNfDtvDsrLaXA3AzH28KSzwxHM\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBPriceFeed.sol\":{\"keccak256\":\"0x4bd84c0f1a5d4729ed709bcddd43f4c50ec4a165ece79780af8dce482ed07d4a\",\"urls\":[\"bzz-raw://62bac4bfb6982fb002f620c77e5c445e62d50241a5aa64a07e51d929f5a42180\",\"dweb:/ipfs/QmWgJUDreVY2BuMX38a1iUUR5kNbMwGnKG3VvurB7oZtuM\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBPrices.sol\":{\"keccak256\":\"0x99525f31440b955742dce84ba57de9fc1221139b5367c1f834723bef9e13e6e1\",\"urls\":[\"bzz-raw://6fa03f0cd4ad87dd7cbae7bf7f54463450874291773c8f70f2c31ef2cae62bb0\",\"dweb:/ipfs/QmSPajPV5ismteJuB6Spzm9VmhTj2iS3eVrfpJC1Zuzg8n\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBProjectUriRegistry.sol\":{\"keccak256\":\"0x2799475228987e4f8334ac33d3935f759c9b8133db7383b4f622dde7a5dc0502\",\"urls\":[\"bzz-raw://d751731740f45df74eea48c9667e847ee2cddb2980ab4939c86bd17e6c6ed89b\",\"dweb:/ipfs/QmXW8SLTuhdUpfn7pRpdsYdcyuim8RTyagU37ULcj5UZhT\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBProjects.sol\":{\"keccak256\":\"0x735c2fb8f1fa827f054ee77f7a0ae4b312656217acb75b624d2c8fd9dc40151b\",\"urls\":[\"bzz-raw://ee7fc92299a8633a80693ae63ab494dcd125f1789487a54a39dc0e5696e5996f\",\"dweb:/ipfs/QmX7YJD4pS2XhgQb7p3JbBAXynT7YGPXcZe92BiWWRrsCL\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBRulesetApprovalHook.sol\":{\"keccak256\":\"0x592e95d159494421c6b1bcb362d0cee1df0132921697351304e9cd7af4fbd386\",\"urls\":[\"bzz-raw://5bebfd5fa67c1b6ea16fa2e76e9520e9dfe52a579f48dd94d0c2ec45f78ad178\",\"dweb:/ipfs/QmRUawEGtfYoYSHmHELGhvJoWuMsxLPKtqAXgsrb7fJboP\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBRulesets.sol\":{\"keccak256\":\"0x011d86a1ea51aed45ee83ce7b289e7abd231074ce1a12e53faa194811d5334c0\",\"urls\":[\"bzz-raw://c7d03e746e28f6d381c4a81e1b7599f01b84fa52e97106105f7a402f689b6395\",\"dweb:/ipfs/QmT7nWeCGnPaBQuCKFpmoZNiXzkCWCVLZJJAf9i4D6xNJg\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBSplitHook.sol\":{\"keccak256\":\"0xeb8dfac7a4b81897a1c3b5d0d853a406bcff33720fb187d5ca5bb3dcc0ba3a12\",\"urls\":[\"bzz-raw://36aaeef6107cfe5b0127e063ea215aac7200f8af02e28a48e61111abd3254688\",\"dweb:/ipfs/QmQ8yQANXnhQCAWBGKsKCDsJ3A8hnTKNg5tyo79GfWXTcV\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBSplits.sol\":{\"keccak256\":\"0x92deeb9e22ce2aaafc608b85e9250b8ea2deed1ebf64b7442038b157b2bfe0e6\",\"urls\":[\"bzz-raw://08bf29f0c13c2e8be46065277f67e44ecaea960cb5474f13775eece0672566c2\",\"dweb:/ipfs/QmeGu9C6tuBjfmeizmpzptxgGmch6Mbtm34NFwZxzMvqc4\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBTerminal.sol\":{\"keccak256\":\"0x19dc9bf8cbdc8f13ee5da9dc3a87047eacb94a3fc19740a286c1f0bad2cc39ca\",\"urls\":[\"bzz-raw://0b05ae6fda9a85672508232fd992b8a5f5ffd8096622eeb12c8a7b3317eb3867\",\"dweb:/ipfs/QmNh9Quj37BXYGdTdcCD1Q58PchRsE5TLbEZep56qS3MpV\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBToken.sol\":{\"keccak256\":\"0x71b1f9c3a0edd41910f77396e0be2c65596571176d53eb87e887c3c0da56c0fb\",\"urls\":[\"bzz-raw://6e956f0582f4525e83d845ee9b4a89959abc4f821414f6accbbee5b38960482d\",\"dweb:/ipfs/QmbSvjgmCgnfVmcCTGu8XwrV1Rufsf3M8hB8unFq6fTMdH\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBTokenUriResolver.sol\":{\"keccak256\":\"0xfa5cb00dcd6085d1ef912d071fe73c63f9478a2cd0f9d8bddaf659b6af2d0967\",\"urls\":[\"bzz-raw://282e4e7c342d65f77cde0e9a08fcaf20ef5cf379c7a48b639842c0ffd0b2afb8\",\"dweb:/ipfs/QmbnN3PEQeZaXdPLT75V1J79kMg7KqSMru37RHrL3z8Yf2\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/interfaces/IJBTokens.sol\":{\"keccak256\":\"0x6fd67af915dd541d9547c8297aa9ae269690e4ee23531db43f021bcacec6076f\",\"urls\":[\"bzz-raw://2e5e11954e9ab2319fffccb6563f3db400b8f7760d4ffe2165048a02c9c37fa6\",\"dweb:/ipfs/QmbDXtV83dK8EfiTjsTRf55R2XqPZzDKcjtYbW8sxQ5CFm\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/libraries/JBConstants.sol\":{\"keccak256\":\"0x9d3a9a953f859d8ec79a599577f8972de6da7199cc1bfa7fdad017d4d722bcb4\",\"urls\":[\"bzz-raw://f151fcb53a8d2684eff8b9e56ac790bcbcadd8199a4fd4d17c5b224b22936722\",\"dweb:/ipfs/QmdAz1ZtCE8nTiC4AxQNLfJhnY3ndGum2Lbef7seKdvTdR\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/libraries/JBMetadataResolver.sol\":{\"keccak256\":\"0x0117f5431b5e78de556ba2fbebb6b53db1b7e080dd4630ea4ee240a0b185fe4c\",\"urls\":[\"bzz-raw://1fbc04aaed314f3491be5f79cb6b6a277e3b7af64ef986736588b73450fe6078\",\"dweb:/ipfs/QmarLpFW8PBaXTLerZh9L5HpVCSCJLdDjoVMJJ9AWsX5mN\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBAccountingContext.sol\":{\"keccak256\":\"0x9c47e048a719f784f601df69a583505432217b9868a0244876d277f84dd1ebdf\",\"urls\":[\"bzz-raw://8565f194b87914da9a02af2e760ae2ed2a9d185c6f11229f7035140776d2fec9\",\"dweb:/ipfs/QmPs2fic8W3F5e5zNRwmGmJFjb3JWGPWJ3YUe5o82nQgEn\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBAfterPayRecordedContext.sol\":{\"keccak256\":\"0xd26c3a774ff38be79064085970454fe2603a23a638c76270d5b1b3829206c3e8\",\"urls\":[\"bzz-raw://3b55dbe3bf1ef625b7ca04efab3de35406e6041d5b3d82c7265469c500e2b702\",\"dweb:/ipfs/QmUdBDo4Lt3mcsFcsXT2mqq3czFwZjQJFPLM89YA2VtD7k\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBCurrencyAmount.sol\":{\"keccak256\":\"0xa4101629b1e85a7ffa6063f127db2f818de57c6447085c10c5d46a384f380bfe\",\"urls\":[\"bzz-raw://52c26dfc9c382d955baa8935373f6f064aad428e700e7817ce7d7327274e759d\",\"dweb:/ipfs/QmZYsdPDrBvYkUH4XZ8HTt2H59XEksggQuLjaU7ZFgP9aQ\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBFundAccessLimitGroup.sol\":{\"keccak256\":\"0x9fdaa8d017b72da25f583700a444a86849df053f7fb8eac874ec5139bcf651e5\",\"urls\":[\"bzz-raw://c8e44c49ee444a98424a0dbeb6897a76a0bf00d88a613f62ac2012afdac754ee\",\"dweb:/ipfs/QmdYkAiRi5bXM1YYNkc7BiqimHSFodMGn1cjHR5hcpm4xH\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBPermissionsData.sol\":{\"keccak256\":\"0x8f0f69a6ebf5f3704e3dfcb3712fb9d3f94ae7c1ab89bf3e37bad42a3e7a0487\",\"urls\":[\"bzz-raw://57b0c5e52843e2217082889ed47b4da3943e0da4590d5768dcebfe3edad4a6b8\",\"dweb:/ipfs/QmRz48vuWLw81kUP836rh1qzqWiJFGbksgRUA9xGEDNKTY\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBRuleset.sol\":{\"keccak256\":\"0x15b2bf3174d84846a91ccbf5a344dfb125b55ed9cf50102db8d6868844225189\",\"urls\":[\"bzz-raw://647416b025dbd941094db89cbc69f755c155bd6c87be3f322394ccc4a8e0442d\",\"dweb:/ipfs/QmTCL9xcHnxQ4t5AmCPoZvXDUPW5xhzhyyXYbkMdyg44au\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBRulesetConfig.sol\":{\"keccak256\":\"0x0be470df286939259a6b98bc71459e661e81d56a58226d6a574ae1484f8f8e6c\",\"urls\":[\"bzz-raw://64592c279ba7518ac180c835a539897163f299a439065f2cc8aa54086a2c9ad7\",\"dweb:/ipfs/QmaEepVvFJdXcDBMMr7SQYjZSDJXPtCca95kQY5rZbra6U\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBRulesetMetadata.sol\":{\"keccak256\":\"0xc495e62bf391701c6c3bce76a2524fde146128bc95ec9a5e7f70587021a61d46\",\"urls\":[\"bzz-raw://8526077e293ebc4836554fd6f643738607c23f3d33f373133598b0524e9bc36e\",\"dweb:/ipfs/QmRTLaFXjPssxQg7Aek4mAL7PvnKjsq66Pi1CojUkpQVsX\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBRulesetWithMetadata.sol\":{\"keccak256\":\"0x1bcfadf20488f6df65227f8d4d0fbf9b7539456a2389567f7fe3900d23289bc3\",\"urls\":[\"bzz-raw://0a15c399a71e5373f8c0484c6d6b83521eda31e063a2c53e4c5cec4e74550343\",\"dweb:/ipfs/QmQwi8zkjoTVXbK89NeETYimWCacTrNsesJdpLSvGdqMPX\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBSplit.sol\":{\"keccak256\":\"0x1d40fa4f1c911a53b9139f3d44d27cb58fa5c5d2cd793c7a21ccf52b9e61f848\",\"urls\":[\"bzz-raw://9897d2c29fc65fe16e4eac0b7b8b6fd8ef0b0cc501986f7f0c3a78c4ec1dbb60\",\"dweb:/ipfs/QmXcHoVjCYWWCz4hm2KZ6JxtB4YNq7jmXa2evLkga59Xwq\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBSplitGroup.sol\":{\"keccak256\":\"0x8dc98fa9e730bee8bcc0a8acf1bc4db1c9b0edf307d969c9c9caa4d6b8d856d9\",\"urls\":[\"bzz-raw://66f4306e0e69c82033927952564fd617e7c4b29aa8b165d5b53a0ebe3109ea12\",\"dweb:/ipfs/QmQqN1u7FHAdEtEZNRcKvZwYtXEQVQnLd6FMzHESP7wDtx\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBSplitHookContext.sol\":{\"keccak256\":\"0x1cef82bf434f91d518092ea7e57db4a72ce7654f48a7db9bf44882900b6b6623\",\"urls\":[\"bzz-raw://cc5012008ab7e74cf766fe1c202a23e3a73365356bcf1e0b04ec01baf21b204b\",\"dweb:/ipfs/QmSwJvd6Yrg9XZMhjquBcak5sfUswbR5nPEuJBfpjM54VT\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBTerminalConfig.sol\":{\"keccak256\":\"0xd162f3821a1ccafbc8d7d108369e39ac3048445a8c7fe7a3fa97a6343f9eefaa\",\"urls\":[\"bzz-raw://82172ea0407b6d9edc45e408c7e8edb8e129adf49a94349fe3a5862da9bc044e\",\"dweb:/ipfs/QmWheF5Tjq2hcabnSzfYqdFHUA1YxYEdAPZaRw9N166V1d\"],\"license\":\"MIT\"},\"node_modules/@bananapus/core/src/structs/JBTokenAmount.sol\":{\"keccak256\":\"0x57e93102c89120d9cad672b5281c8a02ad194961b0c3a058511ec991641c08c4\",\"urls\":[\"bzz-raw://4c8de53bb4ae25329902fcf1e26049050d7f39c980aa7f4643cb6fed4f3cafbe\",\"dweb:/ipfs/QmTr6wgxd8n7Hbvx4FE8LLYmG1WTdHqtR3x3WrFJ7VGyVf\"],\"license\":\"MIT\"},\"node_modules/@bananapus/ownable/src/JBOwnable.sol\":{\"keccak256\":\"0x5b0aec2bc7164bdb972bfb9f71660c887308cf3a72738c7469d03bf264cf0d54\",\"urls\":[\"bzz-raw://bf4f60cebc0a707004371425aa3c8751b6a84dfb4fc9bf788160ae9ac1e906f6\",\"dweb:/ipfs/QmegUfWLhKuByQTkfMkmwkEs2Tk5ZEuR56DqQw5kxFzP3d\"],\"license\":\"MIT\"},\"node_modules/@bananapus/ownable/src/JBOwnableOverrides.sol\":{\"keccak256\":\"0x70a7c55f2a0f4324b63afe61e9d0de6e54396073e431844a19936d2aaaf6d7dd\",\"urls\":[\"bzz-raw://94c55139a8e974e2a88c6f0fc7594be3044742cfc499c989051eaf6664ec7dab\",\"dweb:/ipfs/QmQPnLAootqEGzpHRdhsYGBU3cqicRYLAe6bTti2UCBHyS\"],\"license\":\"MIT\"},\"node_modules/@bananapus/ownable/src/interfaces/IJBOwnable.sol\":{\"keccak256\":\"0x2c513558439d763df03e8a68c1aef698618182fd44c285405c35597d52c65ad1\",\"urls\":[\"bzz-raw://11cc25c41fccc20cca29f93dd120e67760188fd2040ef0330a093d37fbfa2f8f\",\"dweb:/ipfs/QmWpxcv41eYmsNYT3ph1nts5pC7sp3EzwJxKDGebMqEbsH\"],\"license\":\"MIT\"},\"node_modules/@bananapus/ownable/src/struct/JBOwner.sol\":{\"keccak256\":\"0x5624ba356f01f722984c1b857a106f413b12e57bae1f762a81c16ee511e3325a\",\"urls\":[\"bzz-raw://3120b5649ac8b55158df138dcac03f6850fc988cc5a24a7cb06e6581265ca284\",\"dweb:/ipfs/QmQBSLxRT9j1MEERUt8dWbSsAjianbHpM2CFwciLK7MwaP\"],\"license\":\"MIT\"},\"node_modules/@bananapus/permission-ids/src/JBPermissionIds.sol\":{\"keccak256\":\"0x9b41caade87a3fd2ba67a76c9f586adc602a8dc8e2546730b01a90e9a676a000\",\"urls\":[\"bzz-raw://2b94d101ba6c99e3e75c1bdf37fb25b445d17be0815e84f1e7a52640be316992\",\"dweb:/ipfs/QmUDSSmq6USBttnxFP8vFj4CTccgq19ijsJCp8GY3HkoEa\"],\"license\":\"MIT\"},\"node_modules/@openzeppelin/contracts/metatx/ERC2771Context.sol\":{\"keccak256\":\"0x98256cf37b71a69b2f5a8a6fe975ea03590dff703102bd141a830f94e8adebf6\",\"urls\":[\"bzz-raw://6251fe1f6a1e45e6d619d150c123afc88b8646b38ee26a136efa9a6988a31d3f\",\"dweb:/ipfs/QmeXDT85wSZdP31wkz3ah3KhponCiksJLP5o2LR5e1JxcK\"],\"license\":\"MIT\"},\"node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol\":{\"keccak256\":\"0x5ef46daa3b58ef2702279d514780316efaa952915ee1aa3396f041ee2982b0b4\",\"urls\":[\"bzz-raw://2f8f2a76e23b02fc69e8cd24c3cb47da6c7af3a2d6c3a382f8ac25c6e094ade7\",\"dweb:/ipfs/QmPV4ZS4tPVv4mTCf9ejyZ1ai57EEibDRj7mN2ARDCLV5n\"],\"license\":\"MIT\"},\"node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol\":{\"keccak256\":\"0x7f7a26306c79a65fb8b3b6c757cd74660c532cd8a02e165488e30027dd34ca49\",\"urls\":[\"bzz-raw://d01e0b2b837ee2f628545e54d8715b49c7ef2befd08356c2e7f6c50dde8a1c22\",\"dweb:/ipfs/QmWBAn6y2D1xgftci97Z3qR9tQnkvwQpYwFwkTvDMvqU4i\"],\"license\":\"MIT\"},\"node_modules/@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"urls\":[\"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12\",\"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF\"],\"license\":\"MIT\"},\"node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x4296879f55019b23e135000eb36896057e7101fb7fb859c5ef690cf14643757b\",\"urls\":[\"bzz-raw://87b3541437c8c443ccd36795e56a338ed12855eec17f8da624511b8d1a7e14df\",\"dweb:/ipfs/QmeJQCtZrQjtJLr6u7ZHWeH3pBnjtLWzvRrKViAi7UZqxL\"],\"license\":\"MIT\"},\"src/CTProjectOwner.sol\":{\"keccak256\":\"0xb8609ba0c8ac023cb6b7049b37cbb14bc628a1d95506785c105a5a338548aac8\",\"urls\":[\"bzz-raw://99301601daf27d6c4fb54b1453244bee9fb8e678ca05e5126f4c02c3f81bd9b7\",\"dweb:/ipfs/QmVi4hgoz3JkVSUPWrzM2pwy56PFNrAJRWmBQKY3d8A9Qh\"],\"license\":\"MIT\"},\"src/CTPublisher.sol\":{\"keccak256\":\"0xc64ec137bfb5a8c8d9aa144007aabe5d6259942795d388204b5be1c6be169741\",\"urls\":[\"bzz-raw://c0ea8c46186797ff8be94776aa44ca3ed36b0ba06f937e6da8b770bc69c6f878\",\"dweb:/ipfs/QmbBt3rgkzGNTFky15AsSifn9kL5QzubG6G9VJMB5sgAHd\"],\"license\":\"MIT\"},\"src/structs/CTAllowedPost.sol\":{\"keccak256\":\"0x072d333f2d038122ec130dfa11e5b62d18bb3242410d5566d1fcd58037bfb896\",\"urls\":[\"bzz-raw://66e85b05060db5795d274cca1306037c524e6bfefd1138d1b5fec0ba662f9615\",\"dweb:/ipfs/QmQ845kW7MPHtQW7EzHTTdLerd6vN2Wn2dPJm5D6DZ77LM\"],\"license\":\"MIT\"},\"src/structs/CTPost.sol\":{\"keccak256\":\"0x7e3dd85bc455816d7cf1b260fe53c7b1ff7512fce75ce3b6d9fdc094bcda33c8\",\"urls\":[\"bzz-raw://6cc25819e7ef95cb45ea71c54af01db95f75d0ccf1a23390a6153f4ae7df1c88\",\"dweb:/ipfs/QmTJCj1Rn7uEXRcaZBNqxrBXWXM9f24dphb9TaoLe3Ts41\"],\"license\":\"MIT\"}},\"version\":1}",
+	"args": [
+		"0x4475B99b2f6F06c5048fe8c3839dFe2E5d744e65",
+		"0x0DD4C75A29147a662656535808b033abC568e33B",
+		"0x6Feee48D69171AbAf554480f2419596731CdE0C6"
+	],
+	"bytecode": "0x60e060405234801561001057600080fd5b5060405161056d38038061056d83398101604081905261002f91610064565b6001600160a01b0392831660805290821660a0521660c0526100b1565b6001600160a01b038116811461006157600080fd5b50565b60008060006060848603121561007957600080fd5b83516100848161004c565b60208501519093506100958161004c565b60408501519092506100a68161004c565b809150509250925092565b60805160a05160c05161047a6100f36000396000818160eb0152610205015260008181609f015261014e01526000818161011201526101bd015261047a6000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c8063150b7a0214610051578063293c49991461009a578063dbfbe5da146100e6578063f434c9141461010d575b600080fd5b61006461005f3660046102ed565b610134565b6040517fffffffff0000000000000000000000000000000000000000000000000000000090911681526020015b60405180910390f35b6100c17f000000000000000000000000000000000000000000000000000000000000000081565b60405173ffffffffffffffffffffffffffffffffffffffff9091168152602001610091565b6100c17f000000000000000000000000000000000000000000000000000000000000000081565b6100c17f000000000000000000000000000000000000000000000000000000000000000081565b60003373ffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000000000000000000000000000000000000000000161461017857600080fd5b604080516001808252818301909252600091602080830190803683370190505090506014816000815181106101af576101af610388565b6020026020010181815250507f000000000000000000000000000000000000000000000000000000000000000073ffffffffffffffffffffffffffffffffffffffff166305d2912e3060405180606001604052807f000000000000000000000000000000000000000000000000000000000000000073ffffffffffffffffffffffffffffffffffffffff168152602001898152602001858152506040518363ffffffff1660e01b81526004016102669291906103b7565b600060405180830381600087803b15801561028057600080fd5b505af1158015610294573d6000803e3d6000fd5b507f150b7a02000000000000000000000000000000000000000000000000000000009a9950505050505050505050565b803573ffffffffffffffffffffffffffffffffffffffff811681146102e857600080fd5b919050565b60008060008060006080868803121561030557600080fd5b61030e866102c4565b945061031c602087016102c4565b935060408601359250606086013567ffffffffffffffff8082111561034057600080fd5b818801915088601f83011261035457600080fd5b81358181111561036357600080fd5b89602082850101111561037557600080fd5b9699959850939650602001949392505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b600073ffffffffffffffffffffffffffffffffffffffff808516835260206040602085015260a0840182865116604086015260208601516060860152604086015192506060608086015280835180835260c087019150602085019450600092505b808310156104385784518252938301936001929092019190830190610418565b5097965050505050505056fea2646970667358221220f00437b06bb642c749f82a6152c56686e51f14ddd507a59cacbebaa2b6bc3e8364736f6c63430008170033",
+	"deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c8063150b7a0214610051578063293c49991461009a578063dbfbe5da146100e6578063f434c9141461010d575b600080fd5b61006461005f3660046102ed565b610134565b6040517fffffffff0000000000000000000000000000000000000000000000000000000090911681526020015b60405180910390f35b6100c17f0000000000000000000000000dd4c75a29147a662656535808b033abc568e33b81565b60405173ffffffffffffffffffffffffffffffffffffffff9091168152602001610091565b6100c17f0000000000000000000000006feee48d69171abaf554480f2419596731cde0c681565b6100c17f0000000000000000000000004475b99b2f6f06c5048fe8c3839dfe2e5d744e6581565b60003373ffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000dd4c75a29147a662656535808b033abc568e33b161461017857600080fd5b604080516001808252818301909252600091602080830190803683370190505090506014816000815181106101af576101af610388565b6020026020010181815250507f0000000000000000000000004475b99b2f6f06c5048fe8c3839dfe2e5d744e6573ffffffffffffffffffffffffffffffffffffffff166305d2912e3060405180606001604052807f0000000000000000000000006feee48d69171abaf554480f2419596731cde0c673ffffffffffffffffffffffffffffffffffffffff168152602001898152602001858152506040518363ffffffff1660e01b81526004016102669291906103b7565b600060405180830381600087803b15801561028057600080fd5b505af1158015610294573d6000803e3d6000fd5b507f150b7a02000000000000000000000000000000000000000000000000000000009a9950505050505050505050565b803573ffffffffffffffffffffffffffffffffffffffff811681146102e857600080fd5b919050565b60008060008060006080868803121561030557600080fd5b61030e866102c4565b945061031c602087016102c4565b935060408601359250606086013567ffffffffffffffff8082111561034057600080fd5b818801915088601f83011261035457600080fd5b81358181111561036357600080fd5b89602082850101111561037557600080fd5b9699959850939650602001949392505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b600073ffffffffffffffffffffffffffffffffffffffff808516835260206040602085015260a0840182865116604086015260208601516060860152604086015192506060608086015280835180835260c087019150602085019450600092505b808310156104385784518252938301936001929092019190830190610418565b5097965050505050505056fea2646970667358221220f00437b06bb642c749f82a6152c56686e51f14ddd507a59cacbebaa2b6bc3e8364736f6c63430008170033",
+	"devdoc": {
+		"kind": "dev",
+		"methods": {
+			"constructor": {
+				"params": {
+					"permissions": "The contract where operator permissions are stored."
+				}
+			},
+			"onERC721Received(address,address,uint256,bytes)": {
+				"details": "Make sure to first configure certain posts before sending this contract ownership."
+			}
+		},
+		"version": 1
+	},
+	"userdoc": {
+		"kind": "user",
+		"methods": {
+			"PERMISSIONS()": {
+				"notice": "The contract where operator permissions are stored."
+			},
+			"PROJECTS()": {
+				"notice": "The contract from which project are minted."
+			},
+			"PUBLISHER()": {
+				"notice": "The Croptop publisher."
+			},
+			"onERC721Received(address,address,uint256,bytes)": {
+				"notice": "Give the croptop publisher permission to post to the project on this contract's behalf."
+			}
+		},
+		"version": 1
+	},
+	"gitCommit": "759f87b70f382d6736e64db02c2032692ffc98ec",
+	"sourceName": "src/CTProjectOwner.sol",
+	"chainId": "11155111",
+	"linkReferences": {},
+	"deployedLinkReferences": {},
+	"history": []
+}
