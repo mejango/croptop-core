@@ -48,15 +48,13 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
     /// @notice Packed values that determine the allowance of posts.
     /// @custom:param hook The hook for which this allowance applies.
     /// @custom:param category The category for which the allowance applies
-    mapping(address hook => mapping(uint256 category => uint256)) internal
-        _packedAllowanceFor;
+    mapping(address hook => mapping(uint256 category => uint256)) internal _packedAllowanceFor;
 
     /// @notice Stores addresses that are allowed to post onto a hook category.
     /// @custom:param hook The hook for which this allowance applies.
     /// @custom:param category The category for which the allowance applies.
     /// @custom:param address The address to check an allowance for.
-    mapping(address hook => mapping(uint256 category => address[])) internal
-        _allowedAddresses;
+    mapping(address hook => mapping(uint256 category => address[])) internal _allowedAddresses;
 
     /// @notice The ID of the tier that an IPFS metadata has been saved to.
     /// @custom:param hook The hook for which the tier ID applies.
@@ -306,9 +304,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             if (numberOfAddresses != 0) {
                 // Keep a reference to the storage of the allowed addresses.
                 for (uint256 j = 0; j < numberOfAddresses; j++) {
-                    _allowedAddresses[allowedPost.hook][allowedPost.category].push(
-                        allowedPost.allowedAddresses[j]
-                    );
+                    _allowedAddresses[allowedPost.hook][allowedPost.category].push(allowedPost.allowedAddresses[j]);
                 }
             }
 
