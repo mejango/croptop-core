@@ -14,9 +14,9 @@
         "artifacts":  "source ./.env && npx sphinx artifacts --org-id 'cltepuu9u0003j58rjtbd0hvu' --project-name 'croptop-core-testnet'"
     },
     "dependencies": {
-      "@bananapus/permission-ids": "^0.0.9",
-      "@bananapus/core": "^0.0.18",
-      "@bananapus/721-hook": "^0.0.14",
+      "@bananapus/permission-ids": "^0.0.10",
+      "@bananapus/core": "^0.0.20",
+      "@bananapus/721-hook": "^0.0.15",
       "@bananapus/ownable": "^0.0.6",
       "@openzeppelin/contracts": "^5.0.2"
     },
