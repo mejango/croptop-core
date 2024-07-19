@@ -46,7 +46,7 @@ contract CTProjectOwner is IERC721Receiver {
         if (msg.sender != address(PROJECTS)) revert();
 
         // Set the correct permission.
-        uint256[] memory permissionIds = new uint256[](1);
+        uint8[] memory permissionIds = new uint8[](1);
         permissionIds[0] = JBPermissionIds.ADJUST_721_TIERS;
 
         // Give the croptop contract permission to post on this contract's behalf.
@@ -54,7 +54,7 @@ contract CTProjectOwner is IERC721Receiver {
             account: address(this),
             permissionsData: JBPermissionsData({
                 operator: address(PUBLISHER),
-                projectId: tokenId,
+                projectId: uint56(tokenId),
                 permissionIds: permissionIds
             })
         });

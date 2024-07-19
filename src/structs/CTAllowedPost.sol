@@ -11,9 +11,9 @@ pragma solidity ^0.8.0;
 /// @custom:member allowedAddresses A list of addresses that are allowed to post on the category through Croptop.
 struct CTAllowedPost {
     address hook;
-    uint256 category;
-    uint256 minimumPrice;
-    uint256 minimumTotalSupply;
-    uint256 maximumTotalSupply;
+    uint24 category;
+    uint104 minimumPrice;
+    uint32 minimumTotalSupply;
+    uint32 maximumTotalSupply;
     address[] allowedAddresses;
 }

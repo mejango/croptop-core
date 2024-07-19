@@ -281,7 +281,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
                 revert TOTAL_SUPPY_MUST_BE_POSITIVE();
             }
 
-            // Make sure there is a minimum supply.
+            // Make sure the minimum supply does not surpass the maximum supply.
             if (allowedPost.minimumTotalSupply > allowedPost.maximumTotalSupply) {
                 revert MAX_TOTAL_SUPPLY_LESS_THAN_MIN();
             }
@@ -402,13 +402,13 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
 
                 // Set the tier.
                 tiersToAdd[numberOfTiersBeingAdded] = JB721TierConfig({
-                    price: uint80(post.price),
+                    price: post.price,
                     initialSupply: post.totalSupply,
                     votingUnits: 0,
                     reserveFrequency: 0,
                     reserveBeneficiary: address(0),
                     encodedIPFSUri: post.encodedIPFSUri,
-                    category: uint8(post.category),
+                    category: post.category,
                     allowOwnerMint: false,
                     useReserveBeneficiaryAsDefault: false,
                     transfersPausable: false,

@@ -10,6 +10,6 @@ pragma solidity ^0.8.0;
 struct CTPost {
     bytes32 encodedIPFSUri;
     uint32 totalSupply;
-    uint88 price;
-    uint16 category;
+    uint104 price;
+    uint24 category;
 }
