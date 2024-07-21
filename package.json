@@ -1,6 +1,6 @@
 {
     "name": "@croptop/core",
-    "version": "0.0.14",
+    "version": "0.0.15",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -14,8 +14,8 @@
         "artifacts": "source ./.env && npx sphinx artifacts --org-id 'my-org-id' --project-name 'croptop-core-testnet'"
     },
     "dependencies": {
-        "@bananapus/core": "^0.0.23",
-        "@bananapus/721-hook": "^0.0.20",
+        "@bananapus/core": "^0.0.25",
+        "@bananapus/721-hook": "^0.0.22",
         "@bananapus/permission-ids": "^0.0.11",
         "@bananapus/ownable": "^0.0.6",
         "@openzeppelin/contracts": "^5.0.2"
