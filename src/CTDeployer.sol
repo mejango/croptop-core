@@ -28,7 +28,7 @@ contract CTDeployer is IERC721Receiver {
     IJB721TiersHookProjectDeployer public immutable DEPLOYER;
 
     /// @notice The Croptop publisher.
-    CTPublisher public PUBLISHER;
+    CTPublisher public immutable PUBLISHER;
 
     /// @param controller The controller that projects are made from.
     /// @param deployer The deployer to launch Croptop projects from.

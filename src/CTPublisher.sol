@@ -96,6 +96,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
 
             // If there's a tier ID stored, resolve it.
             if (tierId != 0) {
+                // slither-disable-next-line calls-loop
                 tiers[i] = IJB721TiersHook(hook).STORE().tierOf(hook, tierId, false);
             }
         }
@@ -197,6 +198,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             }
 
             // Add the new tiers.
+            // slither-disable-next-line reentrancy-events
             hook.adjustTiers(tiersToAdd, new uint256[](0));
 
             // Keep a reference to the metadata ID target.
@@ -219,11 +221,14 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             }
         }
 
+        emit Mint(projectId, hook, nftBeneficiary, feeBeneficiary, posts, payValue, msg.value, _msgSender());
+
         {
             // Get a reference to the project's current ETH payment terminal.
             IJBTerminal projectTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(projectId, JBConstants.NATIVE_TOKEN);
 
             // Make the payment.
+            // slither-disable-next-line unused-return
             projectTerminal.pay{value: payValue}({
                 projectId: projectId,
                 token: JBConstants.NATIVE_TOKEN,
@@ -241,6 +246,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             IJBTerminal feeTerminal = CONTROLLER.DIRECTORY().primaryTerminalOf(FEE_PROJECT_ID, JBConstants.NATIVE_TOKEN);
 
             // Make the fee payment.
+            // slither-disable-next-line unused-return
             feeTerminal.pay{value: address(this).balance}({
                 projectId: FEE_PROJECT_ID,
                 amount: address(this).balance,
@@ -251,8 +257,6 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
                 metadata: feeMetadata
             });
         }
-
-        emit Mint(projectId, hook, nftBeneficiary, feeBeneficiary, posts, payValue, msg.value, _msgSender());
     }
 
     /// @notice Collection owners can set the allowed criteria for publishing a new NFT to their project.
@@ -269,7 +273,10 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
             // Set the post criteria being iterated on.
             allowedPost = allowedPosts[i];
 
+            emit ConfigurePostingCriteria(allowedPost.hook, allowedPost, _msgSender());
+
             // Enforce permissions.
+            // slither-disable-next-line reentrancy-events,calls-loop
             _requirePermissionFrom({
                 account: JBOwnable(allowedPost.hook).owner(),
                 projectId: IJB721TiersHook(allowedPost.hook).PROJECT_ID(),
@@ -307,8 +314,6 @@ contract CTPublisher is JBPermissioned, ERC2771Context {
                     _allowedAddresses[allowedPost.hook][allowedPost.category].push(allowedPost.allowedAddresses[j]);
                 }
             }
-
-            emit ConfigurePostingCriteria(allowedPost.hook, allowedPost, _msgSender());
         }
     }
 
