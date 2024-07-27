@@ -5,6 +5,7 @@ import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
+import "@bananapus/swap-terminal/script/helpers/SwapTerminalDeploymentLib.sol";
 import "./helpers/CroptopDeploymentLib.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
@@ -38,6 +39,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     RevnetCoreDeployment revnet;
     /// @notice tracks the deployment of the buyback hook.
     BuybackDeployment buybackHook;
+    /// @notice tracks the deployment of the swap terminal.
+    SwapTerminalDeployment swapTerminal;
     /// @notice tracks the latest croptop deployment.
     CroptopDeployment croptop;
 
@@ -71,6 +74,10 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // Get the deployment addresses for the 721 hook contracts for this chain.
         revnet = RevnetCoreDeploymentLib.getDeployment(
             vm.envOr("REVNET_CORE_DEPLOYMENT_PATH", string("node_modules/@rev-net/core/deployments/"))
+        );
+        // Get the deployment addresses for the 721 hook contracts for this chain.
+        swapTerminal = SwapTerminalDeploymentLib.getDeployment(
+            vm.envOr("NANA_SWAP_TERMINAL_DEPLOYMENT_PATH", string("node_modules/@bananapus/swap-terminal/deployments/"))
         );
         // Get the deployment addresses for the croptop contracts for this chain.
         croptop = CroptopDeploymentLib.getDeployment(
@@ -124,9 +131,13 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         });
 
         // The terminals that the project will accept funds through.
-        JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](1);
+        JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](2);
         terminalConfigurations[0] =
             JBTerminalConfig({terminal: core.terminal, accountingContextsToAccept: accountingContextsToAccept});
+        terminalConfigurations[1] = JBTerminalConfig({
+            terminal: swapTerminal.swap_terminal,
+            accountingContextsToAccept: new JBAccountingContext[](0)
+        });
 
         REVMintConfig[] memory mintConfs = new REVMintConfig[](0);
 
