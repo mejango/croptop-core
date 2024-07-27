@@ -17,7 +17,9 @@ contract DeployScript is Script, Sphinx {
     /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
     Hook721Deployment hook;
 
-    uint256 FEE_PROJECT_ID = 1;
+    // @notice set this to a non-zero value to re-use an existing projectID. Having it set to 0 will deploy a new
+    // fee_project.
+    uint256 FEE_PROJECT_ID = 0;
 
     /// @notice The address that is allowed to forward calls to the terminal and controller on a users behalf.
     address private constant TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
@@ -49,6 +51,11 @@ contract DeployScript is Script, Sphinx {
     }
 
     function deploy() public sphinx {
+        // If the fee project id is 0, then we want to deploy a new fee project.
+        if (FEE_PROJECT_ID == 0) {
+            FEE_PROJECT_ID = core.projects.createFor(safeAddress());
+        }
+
         CTPublisher publisher;
         {
             // Perform the check for the publisher.
