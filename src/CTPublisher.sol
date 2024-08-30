@@ -21,7 +21,6 @@ import {CTPost} from "./structs/CTPost.sol";
 
 /// @notice A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
 contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
-
     //*********************************************************************//
     // --------------------------- custom errors ------------------------- //
     //*********************************************************************//
@@ -195,10 +194,9 @@ contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
         for (uint256 i; i < numberOfAddresses; i++) {
             if (addrs == addresses[i]) return true;
         }
-        
+
         return false;
     }
-
 
     /// @notice Returns the calldata, prefered to use over `msg.data`
     /// @return calldata the `msg.data` of this call
@@ -227,7 +225,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
             // Set the post criteria being iterated on.
             CTAllowedPost memory allowedPost = allowedPosts[i];
 
-            emit ConfigurePostingCriteria(allowedPost.hook, allowedPost, _msgSender());
+            emit ConfigurePostingCriteria({hook: allowedPost.hook, allowedPost: allowedPost, caller: _msgSender()});
 
             // Enforce permissions.
             // slither-disable-next-line reentrancy-events,calls-loop
@@ -244,7 +242,9 @@ contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
 
             // Make sure the minimum supply does not surpass the maximum supply.
             if (allowedPost.minimumTotalSupply > allowedPost.maximumTotalSupply) {
-                revert CTPublisher_MaxTotalSupplyLessThanMin(allowedPost.minimumTotalSupply, allowedPost.maximumTotalSupply);
+                revert CTPublisher_MaxTotalSupplyLessThanMin(
+                    allowedPost.minimumTotalSupply, allowedPost.maximumTotalSupply
+                );
             }
 
             uint256 packed;
@@ -290,8 +290,8 @@ contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
         bytes calldata feeMetadata
     )
         external
-        override
         payable
+        override
     {
         // Keep a reference to the amount being paid, which is msg.value minus the fee.
         uint256 payValue = msg.value;
@@ -341,7 +341,16 @@ contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
             }
         }
 
-        emit Mint(projectId, hook, nftBeneficiary, feeBeneficiary, posts, payValue, msg.value, _msgSender());
+        emit Mint({
+            projectId: projectId,
+            hook: hook,
+            nftBeneficiary: nftBeneficiary,
+            feeBeneficiary: feeBeneficiary,
+            posts: posts,
+            payValue: payValue,
+            txValue: msg.value,
+            caller: _msgSender()
+        });
 
         {
             // Get a reference to the project's current ETH payment terminal.

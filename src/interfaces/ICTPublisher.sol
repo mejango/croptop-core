@@ -20,7 +20,7 @@ interface ICTPublisher {
         uint256 txValue,
         address caller
     );
-    
+
     function FEE_DIVISOR() external view returns (uint256);
 
     function CONTROLLER() external view returns (IJBController);
@@ -33,7 +33,7 @@ interface ICTPublisher {
         address hook,
         uint256 category
     )
-        external 
+        external
         view
         returns (
             uint256 minimumPrice,
@@ -52,12 +52,14 @@ interface ICTPublisher {
 
     function configurePostingCriteriaFor(CTAllowedPost[] memory allowedPosts) external;
 
-     function mintFrom(
+    function mintFrom(
         IJB721TiersHook hook,
         CTPost[] memory posts,
         address nftBeneficiary,
         address feeBeneficiary,
         bytes calldata additionalPayMetadata,
         bytes calldata feeMetadata
-    ) external payable;
+    )
+        external
+        payable;
 }

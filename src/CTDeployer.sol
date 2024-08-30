@@ -21,7 +21,6 @@ import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
 contract CTDeployer is IERC721Receiver, ICTDeployer {
-
     //*********************************************************************//
     // ---------------- public immutable stored properties --------------- //
     //*********************************************************************//

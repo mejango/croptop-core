@@ -9,11 +9,11 @@ import {ICTPublisher} from "./ICTPublisher.sol";
 import {CTAllowedPost} from "../structs/CTAllowedPost.sol";
 
 interface ICTDeployer {
-  function CONTROLLER() external view returns (IJBController);
-  function DEPLOYER() external view returns (IJB721TiersHookProjectDeployer);
-  function PUBLISHER() external view returns (ICTPublisher);
+    function CONTROLLER() external view returns (IJBController);
+    function DEPLOYER() external view returns (IJB721TiersHookProjectDeployer);
+    function PUBLISHER() external view returns (ICTPublisher);
 
-  function deployProjectFor(
+    function deployProjectFor(
         address owner,
         JBTerminalConfig[] calldata terminalConfigurations,
         string memory projectUri,
@@ -25,4 +25,3 @@ interface ICTDeployer {
         external
         returns (uint256 projectId);
 }
-

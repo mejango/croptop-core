@@ -12,7 +12,6 @@ import {ICTPublisher} from "./interfaces/ICTPublisher.sol";
 
 /// @notice A contract that can be sent a project to be burned, while still allowing croptop posts.
 contract CTProjectOwner is IERC721Receiver, ICTProjectOwner {
-
     //*********************************************************************//
     // ---------------- public immutable stored properties --------------- //
     //*********************************************************************//
