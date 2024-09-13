@@ -10,7 +10,9 @@
         "test": "forge test",
         "coverage:integration": "forge coverage --match-path \"./src/*.sol\" --report lcov --report summary",
         "deploy:mainnets": "source ./.env && npx sphinx propose ./script/Deploy.s.sol --networks mainnets",
+        "deploy:mainnets:project": "source ./.env && export START_TIME=$(date +%s) && npx sphinx propose ./script/ConfigureFeeProject.s.sol --networks mainnets",
         "deploy:testnets": "source ./.env && npx sphinx propose ./script/Deploy.s.sol --networks testnets",
+        "deploy:testnets:project": "source ./.env && export START_TIME=$(date +%s) && npx sphinx propose ./script/ConfigureFeeProject.s.sol --networks testnets",
         "artifacts": "source ./.env && npx sphinx artifacts --org-id 'my-org-id' --project-name 'croptop-core-testnet'"
     },
     "dependencies": {
@@ -18,7 +20,11 @@
       "@bananapus/721-hook": "^0.0.22",
       "@bananapus/permission-ids": "^0.0.12",
       "@bananapus/ownable": "^0.0.6",
-      "@openzeppelin/contracts": "^5.0.2"
+      "@openzeppelin/contracts": "^5.0.2",
+      "@bananapus/buyback-hook": "^0.0.19",
+      "@bananapus/swap-terminal": "^0.0.19",
+      "@bananapus/suckers": "^0.0.21",
+      "@rev-net/core": "^0.0.33"
     },
     "devDependencies": {
         "@sphinx-labs/plugins": "^0.33.0"

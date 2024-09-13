@@ -347,7 +347,7 @@ contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
             nftBeneficiary: nftBeneficiary,
             feeBeneficiary: feeBeneficiary,
             posts: posts,
-            payValue: payValue,
+            postValue: payValue,
             txValue: msg.value,
             caller: _msgSender()
         });
