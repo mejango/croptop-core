@@ -11,7 +11,9 @@ import "./helpers/CroptopDeploymentLib.sol";
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
 
-import {REVStageConfig, REVMintConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
+import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
+import {REVAutoMint} from "@rev-net/core/src/structs/REVAutoMint.sol";
+import {REVLoanSource} from "@rev-net/core/src/structs/REVLoanSource.sol";
 import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
@@ -139,18 +141,19 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
 
-        REVMintConfig[] memory mintConfs = new REVMintConfig[](0);
+        REVAutoMint[] memory mintConfs = new REVAutoMint[](0);
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](1);
         stageConfigurations[0] = REVStageConfig({
-            mintConfigs: mintConfs,
+            autoMints: mintConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             splitPercent: uint16(JBConstants.MAX_RESERVED_PERCENT / 5), // 20%
             initialIssuance: uint112(1000 * decimalMultiplier),
             issuanceDecayFrequency: 30 days,
             issuanceDecayPercent: 25_000_000, // 2.5%
-            cashOutTaxRate: 3000 // 0.3
+            cashOutTaxRate: 3000, // 0.3
+            extraMetadata: 0
         });
 
         // The project's revnet configuration
@@ -158,7 +161,10 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             description: REVDescription(name, symbol, projectUri, ERC20_SALT),
             baseCurrency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
             splitOperator: OPERATOR,
-            stageConfigurations: stageConfigurations
+            stageConfigurations: stageConfigurations,
+            loanSources: new REVLoanSource[](0),
+            loans: address(0),
+            allowCrosschainSuckerExtension: true
         });
 
         // The project's buyback hook configuration.

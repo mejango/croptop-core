@@ -1,43 +1,80 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
-import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
+import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
+import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
+import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
+import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
+import {JBLaunchProjectConfig} from "@bananapus/721-hook/src/structs/JBLaunchProjectConfig.sol";
+import {JBPayDataHookRulesetConfig} from "@bananapus/721-hook/src/structs/JBPayDataHookRulesetConfig.sol";
 import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
+import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
-import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
-import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
-import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
-import {JBLaunchProjectConfig} from "@bananapus/721-hook/src/structs/JBLaunchProjectConfig.sol";
-import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
-import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
-import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
-import {JBPayDataHookRulesetConfig} from "@bananapus/721-hook/src/structs/JBPayDataHookRulesetConfig.sol";
-import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
-import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
+import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
-import {CTPublisher} from "./CTPublisher.sol";
+import {ICTDeployer} from "./interfaces/ICTDeployer.sol";
+import {ICTPublisher} from "./interfaces/ICTPublisher.sol";
 import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
-contract CTDeployer is IERC721Receiver {
+contract CTDeployer is IERC721Receiver, ICTDeployer {
+    //*********************************************************************//
+    // ---------------- public immutable stored properties --------------- //
+    //*********************************************************************//
+
     /// @notice The controller that projects are made from.
-    IJBController public immutable CONTROLLER;
+    IJBController public immutable override CONTROLLER;
 
     /// @notice The deployer to launch Croptop recorded collections from.
-    IJB721TiersHookProjectDeployer public immutable DEPLOYER;
+    IJB721TiersHookProjectDeployer public immutable override DEPLOYER;
 
     /// @notice The Croptop publisher.
-    CTPublisher public immutable PUBLISHER;
+    ICTPublisher public immutable override PUBLISHER;
+
+    //*********************************************************************//
+    // -------------------------- constructor ---------------------------- //
+    //*********************************************************************//
 
     /// @param controller The controller that projects are made from.
     /// @param deployer The deployer to launch Croptop projects from.
     /// @param publisher The croptop publisher.
-    constructor(IJBController controller, IJB721TiersHookProjectDeployer deployer, CTPublisher publisher) {
+    constructor(IJBController controller, IJB721TiersHookProjectDeployer deployer, ICTPublisher publisher) {
         CONTROLLER = controller;
         DEPLOYER = deployer;
         PUBLISHER = publisher;
     }
+
+    //*********************************************************************//
+    // ------------------------- external views -------------------------- //
+    //*********************************************************************//
+
+    /// @dev Make sure only mints can be received.
+    function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
+    )
+        external
+        view
+        returns (bytes4)
+    {
+        data;
+        tokenId;
+        operator;
+
+        // Make sure the 721 received is the JBProjects contract.
+        if (msg.sender != address(CONTROLLER.PROJECTS())) revert();
+        // Make sure the 721 is being received as a mint.
+        if (from != address(0)) revert();
+        return IERC721Receiver.onERC721Received.selector;
+    }
+    //*********************************************************************//
+    // ---------------------- external transactions ---------------------- //
+    //*********************************************************************//
 
     /// @notice Deploy a simple project meant to receive posts from Croptop templates.
     /// @param owner The address that'll own the project.
@@ -61,7 +98,7 @@ contract CTDeployer is IERC721Receiver {
         returns (uint256 projectId)
     {
         JBPayDataHookRulesetConfig[] memory rulesetConfigurations = new JBPayDataHookRulesetConfig[](1);
-        rulesetConfigurations[0].weight = 1_000_000 * 10 * 18;
+        rulesetConfigurations[0].weight = 1_000_000 * (10 ** 18);
         rulesetConfigurations[0].metadata.baseCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
 
         // Deploy a blank project.
@@ -102,27 +139,5 @@ contract CTDeployer is IERC721Receiver {
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);
-    }
-
-    /// @dev Make sure only mints can be received.
-    function onERC721Received(
-        address operator,
-        address from,
-        uint256 tokenId,
-        bytes calldata data
-    )
-        external
-        view
-        returns (bytes4)
-    {
-        data;
-        tokenId;
-        operator;
-
-        // Make sure the 721 received is the JBProjects contract.
-        if (msg.sender != address(CONTROLLER.PROJECTS())) revert();
-        // Make sure the 721 is being received as a mint.
-        if (from != address(0)) revert();
-        return IERC721Receiver.onERC721Received.selector;
     }
 }

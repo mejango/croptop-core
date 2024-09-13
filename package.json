@@ -16,14 +16,15 @@
         "artifacts": "source ./.env && npx sphinx artifacts --org-id 'my-org-id' --project-name 'croptop-core-testnet'"
     },
     "dependencies": {
-        "@bananapus/721-hook": "^0.0.21",
-        "@bananapus/core": "^0.0.25",
-        "@bananapus/ownable": "^0.0.6",
-        "@bananapus/permission-ids": "^0.0.11",
-        "@bananapus/swap-terminal": "^0.0.16",
-        "@bananapus/buyback-hook": "^0.0.16",
-        "@openzeppelin/contracts": "^5.0.2",
-        "@rev-net/core": "^0.0.32"
+      "@bananapus/core": "^0.0.30",
+      "@bananapus/721-hook": "^0.0.22",
+      "@bananapus/permission-ids": "^0.0.12",
+      "@bananapus/ownable": "^0.0.6",
+      "@openzeppelin/contracts": "^5.0.2",
+      "@bananapus/buyback-hook": "^0.0.19",
+      "@bananapus/swap-terminal": "^0.0.19",
+      "@bananapus/suckers": "^0.0.21",
+      "@rev-net/core": "^0.0.33"
     },
     "devDependencies": {
         "@sphinx-labs/plugins": "^0.33.0"
