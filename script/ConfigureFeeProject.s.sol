@@ -115,10 +115,9 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
 
     function getCroptopRevnetConfig() internal view returns (FeeProjectConfig memory) {
         // Define constants
-        string memory name = "$CROPTOP";
-        string memory symbol = "$CROP";
-        // TODO: Change, this is the nana ipfs.
-        string memory projectUri = "ipfs://QmareAjTrXVLNyUhipU2iYpWCHYqzeHYvZ1TaK9HtswvcW";
+        string memory name = "Croptop Publishing Network";
+        string memory symbol = "$CPN";
+        string memory projectUri = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
         uint8 decimals = 18;
         uint256 decimalMultiplier = 10 ** decimals;
 
