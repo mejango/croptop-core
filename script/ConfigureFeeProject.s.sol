@@ -120,6 +120,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         string memory projectUri = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
         uint8 decimals = 18;
         uint256 decimalMultiplier = 10 ** decimals;
+        uint256 premintChainId = 11_155_111;
 
         // The tokens that the project accepts and stores.
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
@@ -139,19 +140,47 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             terminal: swapTerminal.swap_terminal,
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
-
-        REVAutoMint[] memory mintConfs = new REVAutoMint[](0);
+        
+        REVAutoMint[] memory mintConfs = new REVAutoMint[](1);
+        mintConfs[0] = REVAutoMint({
+            chainId: premintChainId,
+            count: uint104(50_000 * decimalMultiplier),
+            beneficiary: OPERATOR
+        });
 
         // The project's revnet stage configurations.
-        REVStageConfig[] memory stageConfigurations = new REVStageConfig[](1);
+        REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
             autoMints: mintConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
-            splitPercent: uint16(JBConstants.MAX_RESERVED_PERCENT / 5), // 20%
+            splitPercent: 3800, // 38%
             initialIssuance: uint112(1000 * decimalMultiplier),
-            issuanceDecayFrequency: 30 days,
-            issuanceDecayPercent: 25_000_000, // 2.5%
+            issuanceDecayFrequency: 90 days,
+            issuanceDecayPercent: 380_000_000, // 38%
             cashOutTaxRate: 3000, // 0.3
+            extraMetadata: 0
+        });
+
+        stageConfigurations[1] = REVStageConfig({
+            autoMints: new REVAutoMint[](0),
+            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 360 days),
+            splitPercent: 3800, // 38%
+            initialIssuance: 0, // inherit from previous cycle.
+            issuanceDecayFrequency: 150 days,
+            issuanceDecayPercent: 380_000_000, // 38%
+            cashOutTaxRate: 3000, // 0.3
+            extraMetadata: 0
+        });
+
+
+        stageConfigurations[2] = REVStageConfig({
+            startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
+            autoMints: new REVAutoMint[](0),
+            splitPercent: 1000, // 10%
+            initialIssuance: 1, // this is a special number that is as close to max price as we can get.
+            issuanceDecayFrequency: 0,
+            issuanceDecayPercent: 0,
+            cashOutTaxRate: 1000, // 0.1
             extraMetadata: 0
         });
 
