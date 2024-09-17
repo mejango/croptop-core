@@ -3,6 +3,7 @@ pragma solidity 0.8.23;
 
 import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
+import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
 import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
 import "@bananapus/swap-terminal/script/helpers/SwapTerminalDeploymentLib.sol";
@@ -47,6 +48,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     CoreDeployment core;
     /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
     Hook721Deployment hook;
+    /// @notice tracks the deployment of the sucker contracts for the chain we are deploying to.
+    SuckerDeployment suckers;
     /// @notice tracks the deployment of the revnet contracts for the chain we are deploying to.
     RevnetCoreDeployment revnet;
     /// @notice tracks the deployment of the buyback hook.
@@ -86,6 +89,10 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
+        );
+        // Get the deployment addresses for the suckers contracts for this chain.
+        suckers = SuckerDeploymentLib.getDeployment(
+            vm.envOr("NANA_SUCKERS_DEPLOYMENT_PATH", string("node_modules/@bananapus/suckers/deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
         revnet = RevnetCoreDeploymentLib.getDeployment(
@@ -229,53 +236,63 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
 
         {
             JBSuckerDeployerConfig[] memory suckerDeployerConfigurations;
+            if (block.chainid == 1 || block.chainid == 11_155_111) {
+                suckerDeployerConfigurations = new JBSuckerDeployerConfig[](3);
+                // OP
+                suckerDeployerConfigurations[0] =
+                    JBSuckerDeployerConfig({deployer: suckers.optimismDeployer, mappings: tokenMappings});
 
+                suckerDeployerConfigurations[1] =
+                    JBSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
+
+                suckerDeployerConfigurations[2] =
+                    JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
+            } else {
+                suckerDeployerConfigurations = new JBSuckerDeployerConfig[](1);
+                // L2 -> Mainnet
+                suckerDeployerConfigurations[0] = JBSuckerDeployerConfig({
+                    deployer: address(suckers.optimismDeployer) != address(0)
+                        ? suckers.optimismDeployer
+                        : address(suckers.baseDeployer) != address(0) ? suckers.baseDeployer : suckers.arbitrumDeployer,
+                    mappings: tokenMappings
+                });
+
+                if (address(suckerDeployerConfigurations[0].deployer) == address(0)) {
+                    revert("L2 > L1 Sucker is not configured");
+                }
+            }
             // Specify all sucker deployments.
             suckerDeploymentConfiguration =
                 REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: SUCKER_SALT});
         }
 
         // The project's allowed croptop posts.
-        REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](6);
+        REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](4);
         allowedPosts[0] = REVCroptopAllowedPost({
-            category: 0,
-            minimumPrice: uint104(10 ** (decimals - 5)),
-            minimumTotalSupply: 100_000,
-            maximumTotalSupply: 999_999_999,
-            allowedAddresses: new address[](0)
-        });
-        allowedPosts[1] = REVCroptopAllowedPost({
-            category: 1,
-            minimumPrice: uint104(10 ** (decimals - 4)),
-            minimumTotalSupply: 100_000,
-            maximumTotalSupply: 999_999_999,
-            allowedAddresses: new address[](0)
-        });
-        allowedPosts[2] = REVCroptopAllowedPost({
-            category: 2,
+            category: 100,
             minimumPrice: uint104(10 ** (decimals - 3)),
             minimumTotalSupply: 10_000,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[3] = REVCroptopAllowedPost({
-            category: 3,
+        allowedPosts[1] = REVCroptopAllowedPost({
+            category: 101,
             minimumPrice: uint104(10 ** (decimals - 1)),
             minimumTotalSupply: 100,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[4] = REVCroptopAllowedPost({
-            category: 4,
+        allowedPosts[2] = REVCroptopAllowedPost({
+            category: 102,
             minimumPrice: uint104(10 ** decimals),
             minimumTotalSupply: 10,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[5] = REVCroptopAllowedPost({
-            category: 5,
+        allowedPosts[3] = REVCroptopAllowedPost({
+            category: 103,
             minimumPrice: uint104(10 ** (decimals + 2)),
-            minimumTotalSupply: 7,
+            minimumTotalSupply: 10,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
