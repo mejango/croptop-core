@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
-import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
+import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
 
-import {CTPublisher} from "./../src/CTPublisher.sol";
 import {CTDeployer} from "./../src/CTDeployer.sol";
 import {CTProjectOwner} from "./../src/CTProjectOwner.sol";
+import {CTPublisher} from "./../src/CTPublisher.sol";
 
 contract DeployScript is Script, Sphinx {
     /// @notice tracks the deployment of the core contracts for the chain we are deploying to.
@@ -21,13 +21,12 @@ contract DeployScript is Script, Sphinx {
     // fee_project.
     uint256 FEE_PROJECT_ID = 0;
 
-    /// @notice The address that is allowed to forward calls to the terminal and controller on a users behalf.
-    address private constant TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
     /// @notice the salts that are used to deploy the contracts.
-    bytes32 PUBLISHER_SALT = "CTPublisher";
-    bytes32 DEPLOYER_SALT = "CTDeployer";
-    bytes32 PROJECT_OWNER_SALT = "CTProjectOwner";
+    bytes32 PUBLISHER_SALT = "_PUBLISHER_SALT_";
+    bytes32 DEPLOYER_SALT = "_DEPLOYER_SALT_";
+    bytes32 PROJECT_OWNER_SALT = "_PROJECT_OWNER_SALT_";
+    address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
 
     function configureSphinx() public override {
         // TODO: Update to contain croptop devs.

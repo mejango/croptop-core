@@ -1,37 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
-import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
 import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
-import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
-import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 import "@bananapus/buyback-hook/script/helpers/BuybackDeploymentLib.sol";
+import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
+import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
 import "@bananapus/swap-terminal/script/helpers/SwapTerminalDeploymentLib.sol";
+import "@rev-net/core/script/helpers/RevnetCoreDeploymentLib.sol";
 import "./helpers/CroptopDeploymentLib.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
 
-import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
-import {REVAutoMint} from "@rev-net/core/src/structs/REVAutoMint.sol";
-import {REVLoanSource} from "@rev-net/core/src/structs/REVLoanSource.sol";
-import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
-import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
-import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
-import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
-import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
-import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
-import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
-import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
-import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
-import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
-import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
-import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowedPost.sol";
-import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
-import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
+import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
-import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
+import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
 
@@ -45,31 +29,33 @@ struct FeeProjectConfig {
 }
 
 contract ConfigureFeeProjectScript is Script, Sphinx {
-    /// @notice tracks the deployment of the core contracts for the chain we are deploying to.
-    CoreDeployment core;
-    /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
-    Hook721Deployment hook;
-    /// @notice tracks the deployment of the sucker contracts for the chain we are deploying to.
-    SuckerDeployment suckers;
-    /// @notice tracks the deployment of the revnet contracts for the chain we are deploying to.
-    RevnetCoreDeployment revnet;
     /// @notice tracks the deployment of the buyback hook.
     BuybackDeployment buybackHook;
-    /// @notice tracks the deployment of the swap terminal.
-    SwapTerminalDeployment swapTerminal;
+    /// @notice tracks the deployment of the core contracts for the chain we are deploying to.
+    CoreDeployment core;
     /// @notice tracks the latest croptop deployment.
     CroptopDeployment croptop;
+    /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
+    Hook721Deployment hook;
+    /// @notice tracks the deployment of the revnet contracts for the chain we are deploying to.
+    RevnetCoreDeployment revnet;
+    /// @notice tracks the deployment of the sucker contracts for the chain we are deploying to.
+    SuckerDeployment suckers;
+    /// @notice tracks the deployment of the swap terminal.
+    SwapTerminalDeployment swapTerminal;
 
     // @notice set this to a non-zero value to re-use an existing projectID. Having it set to 0 will deploy a new
     // fee_project.
     uint256 FEE_PROJECT_ID;
 
-    string name = "Croptop Publishing Network";
-    string symbol = "$CPN";
-    string projectUri = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
-    uint8 decimals = 18;
-    bytes32 SUCKER_SALT = "CROPTOP_SUCKER";
-    bytes32 ERC20_SALT = "CROPTOP_TOKEN";
+    uint32 PREMINT_CHAIN_ID = 11_155_111;
+    string NAME = "Croptop Publishing Network";
+    string SYMBOL = "$CPN";
+    string PROJECT_URI = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
+    uint8 DECIMALS = 18;
+    uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
+    bytes32 SUCKER_SALT = "_CPN_SUCKER_";
+    bytes32 ERC20_SALT = "_CPN_ERC20_SALT_";
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
     uint256 TIME_UNTIL_START = 1 days;
@@ -87,25 +73,25 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         core = CoreDeploymentLib.getDeployment(
             vm.envOr("NANA_CORE_DEPLOYMENT_PATH", string("node_modules/@bananapus/core/deployments/"))
         );
+        // Get the deployment addresses for the croptop contracts for this chain.
+        croptop = CroptopDeploymentLib.getDeployment(
+            vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("node_modules/@croptop/core/deployments/"))
+        );
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
+        );
+        // Get the deployment addresses for the 721 hook contracts for this chain.
+        revnet = RevnetCoreDeploymentLib.getDeployment(
+            vm.envOr("REVNET_CORE_DEPLOYMENT_PATH", string("node_modules/@rev-net/core/deployments/"))
         );
         // Get the deployment addresses for the suckers contracts for this chain.
         suckers = SuckerDeploymentLib.getDeployment(
             vm.envOr("NANA_SUCKERS_DEPLOYMENT_PATH", string("node_modules/@bananapus/suckers/deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
-        revnet = RevnetCoreDeploymentLib.getDeployment(
-            vm.envOr("REVNET_CORE_DEPLOYMENT_PATH", string("node_modules/@rev-net/core/deployments/"))
-        );
-        // Get the deployment addresses for the 721 hook contracts for this chain.
         swapTerminal = SwapTerminalDeploymentLib.getDeployment(
             vm.envOr("NANA_SWAP_TERMINAL_DEPLOYMENT_PATH", string("node_modules/@bananapus/swap-terminal/deployments/"))
-        );
-        // Get the deployment addresses for the croptop contracts for this chain.
-        croptop = CroptopDeploymentLib.getDeployment(
-            vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("node_modules/@croptop/core/deployments/"))
         );
 
         // We do a quick sanity check to make sure revnet and croptop use the same juicebox core contracts.
@@ -120,12 +106,12 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // Because of the cross-chain allowing components of nana-core, all chains require the same start_time,
         // for this reason we can't rely on the simulations block.time and we need a shared timestamp across all
         // simulations.
-        uint256 _realTimestamp = vm.envUint("START_TIME");
-        if (_realTimestamp <= block.timestamp - 1 days) {
+        uint256 realTimestamp = vm.envUint("START_TIME");
+        if (realTimestamp <= block.timestamp - TIME_UNTIL_START) {
             revert("Something went wrong while setting the 'START_TIME' environment variable.");
         }
 
-        vm.warp(_realTimestamp);
+        vm.warp(realTimestamp);
 
         // Get the fee project id from the croptop deployment.
         FEE_PROJECT_ID = croptop.publisher.FEE_PROJECT_ID();
@@ -136,17 +122,13 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     }
 
     function getCroptopRevnetConfig() internal view returns (FeeProjectConfig memory) {
-        // Define constants
-        uint256 decimalMultiplier = 10 ** decimals;
-        uint32 premintChainId = 11_155_111;
-
         // The tokens that the project accepts and stores.
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
 
         // Accept the chain's native currency through the multi terminal.
         accountingContextsToAccept[0] = JBAccountingContext({
             token: JBConstants.NATIVE_TOKEN,
-            decimals: 18,
+            decimals: DECIMALS,
             currency: uint32(uint160(JBConstants.NATIVE_TOKEN))
         });
 
@@ -161,7 +143,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
 
         REVAutoMint[] memory mintConfs = new REVAutoMint[](1);
         mintConfs[0] =
-            REVAutoMint({chainId: premintChainId, count: uint104(50_000 * decimalMultiplier), beneficiary: OPERATOR});
+            REVAutoMint({chainId: PREMINT_CHAIN_ID, count: uint104(50_000 * DECIMAL_MULTIPLIER), beneficiary: OPERATOR});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
@@ -169,7 +151,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             autoMints: mintConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             splitPercent: 3800, // 38%
-            initialIssuance: uint112(1000 * decimalMultiplier),
+            initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
             issuanceDecayFrequency: 90 days,
             issuanceDecayPercent: 380_000_000, // 38%
             cashOutTaxRate: 3000, // 0.3
@@ -198,23 +180,20 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             extraMetadata: 0
         });
 
-        REVConfig memory revnetConfiguration;
-        {
-            // The projects loan configuration.
-            REVLoanSource[] memory _loanSources = new REVLoanSource[](1);
-            _loanSources[0] = REVLoanSource({token: JBConstants.NATIVE_TOKEN, terminal: core.terminal});
+        // The projects loan configuration.
+        REVLoanSource[] memory loanSources = new REVLoanSource[](1);
+        loanSources[0] = REVLoanSource({token: JBConstants.NATIVE_TOKEN, terminal: core.terminal});
 
-            // The project's revnet configuration
-            revnetConfiguration = REVConfig({
-                description: REVDescription(name, symbol, projectUri, ERC20_SALT),
-                baseCurrency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
-                splitOperator: OPERATOR,
-                stageConfigurations: stageConfigurations,
-                loanSources: _loanSources,
-                loans: address(revnet.loans),
-                allowCrosschainSuckerExtension: true
-            });
-        }
+        // The project's revnet configuration
+        REVConfig memory revnetConfiguration = REVConfig({
+            description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
+            baseCurrency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+            splitOperator: OPERATOR,
+            stageConfigurations: stageConfigurations,
+            loanSources: loanSources,
+            loans: address(revnet.loans),
+            allowCrosschainSuckerExtension: true
+        });
 
         REVBuybackHookConfig memory buybackHookConfiguration;
         {
@@ -277,35 +256,35 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](5);
         allowedPosts[0] = REVCroptopAllowedPost({
             category: 100,
-            minimumPrice: uint104(10 ** (decimals - 5)),
+            minimumPrice: uint104(10 ** (DECIMALS - 5)),
             minimumTotalSupply: 10_000,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
         allowedPosts[1] = REVCroptopAllowedPost({
             category: 100,
-            minimumPrice: uint104(10 ** (decimals - 3)),
+            minimumPrice: uint104(10 ** (DECIMALS - 3)),
             minimumTotalSupply: 10_000,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
         allowedPosts[2] = REVCroptopAllowedPost({
             category: 101,
-            minimumPrice: uint104(10 ** (decimals - 1)),
+            minimumPrice: uint104(10 ** (DECIMALS - 1)),
             minimumTotalSupply: 100,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
         allowedPosts[3] = REVCroptopAllowedPost({
             category: 102,
-            minimumPrice: uint104(10 ** decimals),
+            minimumPrice: uint104(10 ** DECIMALS),
             minimumTotalSupply: 10,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
         allowedPosts[4] = REVCroptopAllowedPost({
             category: 103,
-            minimumPrice: uint104(10 ** (decimals + 2)),
+            minimumPrice: uint104(10 ** (DECIMALS + 2)),
             minimumTotalSupply: 10,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
@@ -318,15 +297,15 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             suckerDeploymentConfiguration: suckerDeploymentConfiguration,
             hookConfiguration: REVDeploy721TiersHookConfig({
                 baseline721HookConfiguration: JBDeploy721TiersHookConfig({
-                    name: name,
-                    symbol: symbol,
+                    name: NAME,
+                    symbol: SYMBOL,
                     baseUri: "ipfs://",
                     tokenUriResolver: IJB721TokenUriResolver(address(0)),
                     contractUri: "",
                     tiersConfig: JB721InitTiersConfig({
                         tiers: new JB721TierConfig[](0),
                         currency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
-                        decimals: decimals,
+                        decimals: DECIMALS,
                         prices: IJBPrices(address(0))
                     }),
                     reserveBeneficiary: address(0),
