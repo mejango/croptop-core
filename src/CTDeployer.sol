@@ -107,7 +107,6 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
             deployTiersHookConfig: JBDeploy721TiersHookConfig({
                 name: name,
                 symbol: symbol,
-                rulesets: CONTROLLER.RULESETS(),
                 baseUri: "ipfs://",
                 tokenUriResolver: IJB721TokenUriResolver(address(0)),
                 contractUri: contractUri,
