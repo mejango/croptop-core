@@ -267,29 +267,36 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         }
 
         // The project's allowed croptop posts.
-        REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](4);
+        REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](5);
         allowedPosts[0] = REVCroptopAllowedPost({
+            category: 100,
+            minimumPrice: uint104(10 ** (decimals - 5)),
+            minimumTotalSupply: 10_000,
+            maximumTotalSupply: 999_999_999,
+            allowedAddresses: new address[](0)
+        });
+        allowedPosts[1] = REVCroptopAllowedPost({
             category: 100,
             minimumPrice: uint104(10 ** (decimals - 3)),
             minimumTotalSupply: 10_000,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[1] = REVCroptopAllowedPost({
+        allowedPosts[2] = REVCroptopAllowedPost({
             category: 101,
             minimumPrice: uint104(10 ** (decimals - 1)),
             minimumTotalSupply: 100,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[2] = REVCroptopAllowedPost({
+        allowedPosts[3] = REVCroptopAllowedPost({
             category: 102,
             minimumPrice: uint104(10 ** decimals),
             minimumTotalSupply: 10,
             maximumTotalSupply: 999_999_999,
             allowedAddresses: new address[](0)
         });
-        allowedPosts[3] = REVCroptopAllowedPost({
+        allowedPosts[4] = REVCroptopAllowedPost({
             category: 103,
             minimumPrice: uint104(10 ** (decimals + 2)),
             minimumTotalSupply: 10,
