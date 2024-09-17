@@ -313,7 +313,6 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
                 baseline721HookConfiguration: JBDeploy721TiersHookConfig({
                     name: name,
                     symbol: symbol,
-                    rulesets: core.rulesets,
                     baseUri: "ipfs://",
                     tokenUriResolver: IJB721TokenUriResolver(address(0)),
                     contractUri: "",

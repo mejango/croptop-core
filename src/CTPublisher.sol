@@ -486,11 +486,13 @@ contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher {
                     reserveBeneficiary: address(0),
                     encodedIPFSUri: post.encodedIPFSUri,
                     category: post.category,
+                    discountPercent: 0,
                     allowOwnerMint: false,
                     useReserveBeneficiaryAsDefault: false,
                     transfersPausable: false,
                     useVotingUnits: true,
-                    cannotBeRemoved: false
+                    cannotBeRemoved: false,
+                    cannotIncreaseDiscountPercent: false
                 });
 
                 // Set the ID of the tier to mint.
