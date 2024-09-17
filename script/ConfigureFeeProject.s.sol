@@ -18,18 +18,28 @@ import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
 import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
+import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
 import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
 import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
 import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
+import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowedPost.sol";
+import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
+import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
+import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
+import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
+import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
+import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 
 struct FeeProjectConfig {
     REVConfig configuration;
     JBTerminalConfig[] terminalConfigurations;
     REVBuybackHookConfig buybackHookConfiguration;
     REVSuckerDeploymentConfig suckerDeploymentConfiguration;
+    REVDeploy721TiersHookConfig hookConfiguration;
+    REVCroptopAllowedPost[] allowedPosts;
 }
 
 contract ConfigureFeeProjectScript is Script, Sphinx {
@@ -50,6 +60,10 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     // fee_project.
     uint256 FEE_PROJECT_ID;
 
+    string name = "Croptop Publishing Network";
+    string symbol = "$CPN";
+    string projectUri = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
+    uint8 decimals = 18;
     bytes32 SUCKER_SALT = "CROPTOP_SUCKER";
     bytes32 ERC20_SALT = "CROPTOP_TOKEN";
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
@@ -115,12 +129,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
 
     function getCroptopRevnetConfig() internal view returns (FeeProjectConfig memory) {
         // Define constants
-        string memory name = "Croptop Publishing Network";
-        string memory symbol = "$CPN";
-        string memory projectUri = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
-        uint8 decimals = 18;
         uint256 decimalMultiplier = 10 ** decimals;
-        uint256 premintChainId = 11_155_111;
+        uint32 premintChainId = 11_155_111;
 
         // The tokens that the project accepts and stores.
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
@@ -140,13 +150,10 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             terminal: swapTerminal.swap_terminal,
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
-        
+
         REVAutoMint[] memory mintConfs = new REVAutoMint[](1);
-        mintConfs[0] = REVAutoMint({
-            chainId: premintChainId,
-            count: uint104(50_000 * decimalMultiplier),
-            beneficiary: OPERATOR
-        });
+        mintConfs[0] =
+            REVAutoMint({chainId: premintChainId, count: uint104(50_000 * decimalMultiplier), beneficiary: OPERATOR});
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
@@ -172,7 +179,6 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             extraMetadata: 0
         });
 
-
         stageConfigurations[2] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
             autoMints: new REVAutoMint[](0),
@@ -195,16 +201,20 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             allowCrosschainSuckerExtension: true
         });
 
-        // The project's buyback hook configuration.
-        REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
-        buybackPoolConfigurations[0] = REVBuybackPoolConfig({
-            token: JBConstants.NATIVE_TOKEN,
-            fee: 10_000,
-            twapWindow: 2 days,
-            twapSlippageTolerance: 9000
-        });
-        REVBuybackHookConfig memory buybackHookConfiguration =
-            REVBuybackHookConfig({hook: buybackHook.hook, poolConfigurations: buybackPoolConfigurations});
+        REVBuybackHookConfig memory buybackHookConfiguration;
+
+        {
+            // The project's buyback hook configuration.
+            REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
+            buybackPoolConfigurations[0] = REVBuybackPoolConfig({
+                token: JBConstants.NATIVE_TOKEN,
+                fee: 10_000,
+                twapWindow: 2 days,
+                twapSlippageTolerance: 9000
+            });
+            buybackHookConfiguration =
+                REVBuybackHookConfig({hook: buybackHook.hook, poolConfigurations: buybackPoolConfigurations});
+        }
 
         // Organize the instructions for how this project will connect to other chains.
         JBTokenMapping[] memory tokenMappings = new JBTokenMapping[](1);
@@ -215,17 +225,93 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             minBridgeAmount: 0.01 ether
         });
 
-        JBSuckerDeployerConfig[] memory suckerDeployerConfigurations;
+        REVSuckerDeploymentConfig memory suckerDeploymentConfiguration;
 
-        // Specify all sucker deployments.
-        REVSuckerDeploymentConfig memory suckerDeploymentConfiguration =
-            REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: SUCKER_SALT});
+        {
+            JBSuckerDeployerConfig[] memory suckerDeployerConfigurations;
+
+            // Specify all sucker deployments.
+            suckerDeploymentConfiguration =
+                REVSuckerDeploymentConfig({deployerConfigurations: suckerDeployerConfigurations, salt: SUCKER_SALT});
+        }
+
+        // The project's allowed croptop posts.
+        REVCroptopAllowedPost[] memory allowedPosts = new REVCroptopAllowedPost[](6);
+        allowedPosts[0] = REVCroptopAllowedPost({
+            category: 0,
+            minimumPrice: uint104(10 ** (decimals - 5)),
+            minimumTotalSupply: 100_000,
+            maximumTotalSupply: 999_999_999,
+            allowedAddresses: new address[](0)
+        });
+        allowedPosts[1] = REVCroptopAllowedPost({
+            category: 1,
+            minimumPrice: uint104(10 ** (decimals - 4)),
+            minimumTotalSupply: 100_000,
+            maximumTotalSupply: 999_999_999,
+            allowedAddresses: new address[](0)
+        });
+        allowedPosts[2] = REVCroptopAllowedPost({
+            category: 2,
+            minimumPrice: uint104(10 ** (decimals - 3)),
+            minimumTotalSupply: 10_000,
+            maximumTotalSupply: 999_999_999,
+            allowedAddresses: new address[](0)
+        });
+        allowedPosts[3] = REVCroptopAllowedPost({
+            category: 3,
+            minimumPrice: uint104(10 ** (decimals - 1)),
+            minimumTotalSupply: 100,
+            maximumTotalSupply: 999_999_999,
+            allowedAddresses: new address[](0)
+        });
+        allowedPosts[4] = REVCroptopAllowedPost({
+            category: 4,
+            minimumPrice: uint104(10 ** decimals),
+            minimumTotalSupply: 10,
+            maximumTotalSupply: 999_999_999,
+            allowedAddresses: new address[](0)
+        });
+        allowedPosts[5] = REVCroptopAllowedPost({
+            category: 5,
+            minimumPrice: uint104(10 ** (decimals + 2)),
+            minimumTotalSupply: 7,
+            maximumTotalSupply: 999_999_999,
+            allowedAddresses: new address[](0)
+        });
 
         return FeeProjectConfig({
             configuration: revnetConfiguration,
             terminalConfigurations: terminalConfigurations,
             buybackHookConfiguration: buybackHookConfiguration,
-            suckerDeploymentConfiguration: suckerDeploymentConfiguration
+            suckerDeploymentConfiguration: suckerDeploymentConfiguration,
+            hookConfiguration: REVDeploy721TiersHookConfig({
+                baseline721HookConfiguration: JBDeploy721TiersHookConfig({
+                    name: name,
+                    symbol: symbol,
+                    rulesets: core.rulesets,
+                    baseUri: "ipfs://",
+                    tokenUriResolver: IJB721TokenUriResolver(address(0)),
+                    contractUri: "",
+                    tiersConfig: JB721InitTiersConfig({
+                        tiers: new JB721TierConfig[](0),
+                        currency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+                        decimals: decimals,
+                        prices: IJBPrices(address(0))
+                    }),
+                    reserveBeneficiary: address(0),
+                    flags: JB721TiersHookFlags({
+                        noNewTiersWithReserves: false,
+                        noNewTiersWithVotes: true,
+                        noNewTiersWithOwnerMinting: true,
+                        preventOverspending: false
+                    })
+                }),
+                splitOperatorCanAdjustTiers: true,
+                splitOperatorCanUpdateMetadata: false,
+                splitOperatorCanMint: false
+            }),
+            allowedPosts: allowedPosts
         });
     }
 
@@ -236,12 +322,14 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         core.projects.approve(address(revnet.basic_deployer), FEE_PROJECT_ID);
 
         // Deploy the NANA fee project.
-        revnet.basic_deployer.deployFor({
+        revnet.basic_deployer.deployWith721sFor({
             revnetId: FEE_PROJECT_ID,
             configuration: feeProjectConfig.configuration,
             terminalConfigurations: feeProjectConfig.terminalConfigurations,
             buybackHookConfiguration: feeProjectConfig.buybackHookConfiguration,
-            suckerDeploymentConfiguration: feeProjectConfig.suckerDeploymentConfiguration
+            suckerDeploymentConfiguration: feeProjectConfig.suckerDeploymentConfiguration,
+            tiered721HookConfiguration: feeProjectConfig.hookConfiguration,
+            allowedPosts: feeProjectConfig.allowedPosts
         });
     }
 
