@@ -33,6 +33,7 @@ import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.s
 import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
+import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
 
 struct FeeProjectConfig {
     REVConfig configuration;
@@ -154,7 +155,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         terminalConfigurations[0] =
             JBTerminalConfig({terminal: core.terminal, accountingContextsToAccept: accountingContextsToAccept});
         terminalConfigurations[1] = JBTerminalConfig({
-            terminal: swapTerminal.swap_terminal,
+            terminal: IJBTerminal(address(swapTerminal.swap_terminal)),
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
 
@@ -197,19 +198,25 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             extraMetadata: 0
         });
 
-        // The project's revnet configuration
-        REVConfig memory revnetConfiguration = REVConfig({
-            description: REVDescription(name, symbol, projectUri, ERC20_SALT),
-            baseCurrency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
-            splitOperator: OPERATOR,
-            stageConfigurations: stageConfigurations,
-            loanSources: new REVLoanSource[](0),
-            loans: address(0),
-            allowCrosschainSuckerExtension: true
-        });
+        REVConfig memory revnetConfiguration;
+        {
+            // The projects loan configuration.
+            REVLoanSource[] memory _loanSources = new REVLoanSource[](1);
+            _loanSources[0] = REVLoanSource({token: JBConstants.NATIVE_TOKEN, terminal: core.terminal});
+
+            // The project's revnet configuration
+            revnetConfiguration = REVConfig({
+                description: REVDescription(name, symbol, projectUri, ERC20_SALT),
+                baseCurrency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+                splitOperator: OPERATOR,
+                stageConfigurations: stageConfigurations,
+                loanSources: _loanSources,
+                loans: address(revnet.loans),
+                allowCrosschainSuckerExtension: true
+            });
+        }
 
         REVBuybackHookConfig memory buybackHookConfiguration;
-
         {
             // The project's buyback hook configuration.
             REVBuybackPoolConfig[] memory buybackPoolConfigurations = new REVBuybackPoolConfig[](1);
@@ -245,8 +252,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
                 suckerDeployerConfigurations[1] =
                     JBSuckerDeployerConfig({deployer: suckers.baseDeployer, mappings: tokenMappings});
 
-                suckerDeployerConfigurations[2] =
-                    JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
+                // suckerDeployerConfigurations[2] =
+                //     JBSuckerDeployerConfig({deployer: suckers.arbitrumDeployer, mappings: tokenMappings});
             } else {
                 suckerDeployerConfigurations = new JBSuckerDeployerConfig[](1);
                 // L2 -> Mainnet
@@ -332,7 +339,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
                 }),
                 splitOperatorCanAdjustTiers: true,
                 splitOperatorCanUpdateMetadata: false,
-                splitOperatorCanMint: false
+                splitOperatorCanMint: false,
+                splitOperatorCanIncreaseDiscountPercent: false
             }),
             allowedPosts: allowedPosts
         });
