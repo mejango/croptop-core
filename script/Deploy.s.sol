@@ -21,7 +21,6 @@ contract DeployScript is Script, Sphinx {
     // fee_project.
     uint256 FEE_PROJECT_ID = 0;
 
-
     /// @notice the salts that are used to deploy the contracts.
     bytes32 PUBLISHER_SALT = "_PUBLISHER_SALT_";
     bytes32 DEPLOYER_SALT = "_DEPLOYER_SALT_";

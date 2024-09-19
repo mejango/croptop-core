@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
+import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
 import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
@@ -18,6 +19,7 @@ import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Recei
 import {ICTDeployer} from "./interfaces/ICTDeployer.sol";
 import {ICTPublisher} from "./interfaces/ICTPublisher.sol";
 import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
+import {CTDeployerAllowedPost} from "./structs/CTDeployerAllowedPost.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
 contract CTDeployer is IERC721Receiver, ICTDeployer {
@@ -85,24 +87,25 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
     /// @param name The name of the collection where posts will go.
     /// @param symbol The symbol of the collection where posts will go.
     /// @return projectId The ID of the newly created project.
+    /// @return hook The hook that was created.
     function deployProjectFor(
         address owner,
-        JBTerminalConfig[] calldata terminalConfigurations,
+        JBTerminalConfig[] memory terminalConfigurations,
         string memory projectUri,
-        CTAllowedPost[] calldata allowedPosts,
+        CTDeployerAllowedPost[] memory allowedPosts,
         string memory contractUri,
         string memory name,
         string memory symbol
     )
         external
-        returns (uint256 projectId)
+        returns (uint256 projectId, IJB721TiersHook hook)
     {
         JBPayDataHookRulesetConfig[] memory rulesetConfigurations = new JBPayDataHookRulesetConfig[](1);
         rulesetConfigurations[0].weight = 1_000_000 * (10 ** 18);
         rulesetConfigurations[0].metadata.baseCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
 
         // Deploy a blank project.
-        projectId = DEPLOYER.launchProjectFor({
+        (projectId, hook) = DEPLOYER.launchProjectFor({
             owner: address(this),
             deployTiersHookConfig: JBDeploy721TiersHookConfig({
                 name: name,
@@ -134,9 +137,46 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
         });
 
         // Configure allowed posts.
-        if (allowedPosts.length > 0) PUBLISHER.configurePostingCriteriaFor(allowedPosts);
+        if (allowedPosts.length > 0) _configurePostingCriteriaFor(address(hook), allowedPosts);
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);
+    }
+
+    //*********************************************************************//
+    // --------------------- internal transactions ----------------------- //
+    //*********************************************************************//
+
+    /// @notice Configure croptop posting.
+    /// @param hook The hook that will be posted to.
+    /// @param allowedPosts The type of posts that should be allowed.
+    function _configurePostingCriteriaFor(address hook, CTDeployerAllowedPost[] memory allowedPosts) internal {
+        // Keep a reference to the number of allowed posts.
+        uint256 numberOfAllowedPosts = allowedPosts.length;
+
+        // Keep a reference to the formatted allowed posts.
+        CTAllowedPost[] memory formattedAllowedPosts = new CTAllowedPost[](numberOfAllowedPosts);
+
+        // Keep a reference to the post being iterated on.
+        CTDeployerAllowedPost memory post;
+
+        // Iterate through each post to add it to the formatted list.
+        for (uint256 i; i < numberOfAllowedPosts; i++) {
+            // Set the post being iterated on.
+            post = allowedPosts[i];
+
+            // Set the formatted post.
+            formattedAllowedPosts[i] = CTAllowedPost({
+                hook: hook,
+                category: post.category,
+                minimumPrice: post.minimumPrice,
+                minimumTotalSupply: post.minimumTotalSupply,
+                maximumTotalSupply: post.maximumTotalSupply,
+                allowedAddresses: post.allowedAddresses
+            });
+        }
+
+        // Set up the allowed posts in the publisher.
+        PUBLISHER.configurePostingCriteriaFor({allowedPosts: formattedAllowedPosts});
     }
 }

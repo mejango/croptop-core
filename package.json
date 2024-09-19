@@ -17,7 +17,7 @@
     },
     "dependencies": {
         "@bananapus/core": "^0.0.32",
-        "@bananapus/721-hook": "^0.0.23",
+        "@bananapus/721-hook": "^0.0.24",
         "@bananapus/permission-ids": "^0.0.12",
         "@bananapus/ownable": "^0.0.7",
         "@openzeppelin/contracts": "^5.0.2",
