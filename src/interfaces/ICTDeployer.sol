@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
 import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
 import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 
 import {ICTPublisher} from "./ICTPublisher.sol";
-import {CTAllowedPost} from "../structs/CTAllowedPost.sol";
+import {CTDeployerAllowedPost} from "../structs/CTDeployerAllowedPost.sol";
 
 interface ICTDeployer {
     function CONTROLLER() external view returns (IJBController);
@@ -17,11 +18,11 @@ interface ICTDeployer {
         address owner,
         JBTerminalConfig[] calldata terminalConfigurations,
         string memory projectUri,
-        CTAllowedPost[] calldata allowedPosts,
+        CTDeployerAllowedPost[] calldata allowedPosts,
         string memory contractUri,
         string memory name,
         string memory symbol
     )
         external
-        returns (uint256 projectId);
+        returns (uint256 projectId, IJB721TiersHook hook);
 }
