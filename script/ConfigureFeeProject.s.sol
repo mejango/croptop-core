@@ -17,7 +17,23 @@ import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDepl
 import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
 import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
+import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
+import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
+import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
+import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
+import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
+import {REVAutoMint} from "@rev-net/core/src/structs/REVAutoMint.sol";
+import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
+import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
+import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
+import {REVCroptopAllowedPost} from "@rev-net/core/src/structs/REVCroptopAllowedPost.sol";
+import {REVDeploy721TiersHookConfig} from "@rev-net/core/src/structs/REVDeploy721TiersHookConfig.sol";
+import {REVDescription} from "@rev-net/core/src/structs/REVDescription.sol";
+import {REVLoanSource} from "@rev-net/core/src/structs/REVLoanSource.sol";
+import {REVStageConfig} from "@rev-net/core/src/structs/REVStageConfig.sol";
+import {REVSuckerDeploymentConfig} from "@rev-net/core/src/structs/REVSuckerDeploymentConfig.sol";
 
 struct FeeProjectConfig {
     REVConfig configuration;
