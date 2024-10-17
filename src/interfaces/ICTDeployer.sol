@@ -21,7 +21,8 @@ interface ICTDeployer {
         CTDeployerAllowedPost[] calldata allowedPosts,
         string memory contractUri,
         string memory name,
-        string memory symbol
+        string memory symbol,
+        bytes32 salt
     )
         external
         returns (uint256 projectId, IJB721TiersHook hook);

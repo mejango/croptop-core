@@ -86,6 +86,7 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
     /// @param contractUri A link to the collection's metadata.
     /// @param name The name of the collection where posts will go.
     /// @param symbol The symbol of the collection where posts will go.
+    /// @param salt A salt to use for the deterministic deployment.
     /// @return projectId The ID of the newly created project.
     /// @return hook The hook that was created.
     function deployProjectFor(
@@ -95,7 +96,8 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
         CTDeployerAllowedPost[] memory allowedPosts,
         string memory contractUri,
         string memory name,
-        string memory symbol
+        string memory symbol,
+        bytes32 salt
     )
         external
         returns (uint256 projectId, IJB721TiersHook hook)
@@ -133,7 +135,8 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
                 terminalConfigurations: terminalConfigurations,
                 memo: "Deployed from Croptop"
             }),
-            controller: CONTROLLER
+            controller: CONTROLLER,
+            salt: salt
         });
 
         // Configure allowed posts.
