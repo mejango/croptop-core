@@ -66,7 +66,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
 
     uint32 PREMINT_CHAIN_ID = 11_155_111;
     string NAME = "Croptop Publishing Network";
-    string SYMBOL = "$CPN";
+    string SYMBOL = "CPN";
     string PROJECT_URI = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
     uint8 DECIMALS = 18;
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
