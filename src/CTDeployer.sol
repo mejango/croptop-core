@@ -136,7 +136,7 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
                 memo: "Deployed from Croptop"
             }),
             controller: CONTROLLER,
-            salt: salt
+            salt: keccak256(abi.encode(salt, msg.sender))
         });
 
         // Configure allowed posts.
