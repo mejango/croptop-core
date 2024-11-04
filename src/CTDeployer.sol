@@ -15,6 +15,7 @@ import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 
 import {ICTDeployer} from "./interfaces/ICTDeployer.sol";
 import {ICTPublisher} from "./interfaces/ICTPublisher.sol";
@@ -22,7 +23,7 @@ import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 import {CTDeployerAllowedPost} from "./structs/CTDeployerAllowedPost.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
-contract CTDeployer is IERC721Receiver, ICTDeployer {
+contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
     //*********************************************************************//
     // ---------------- public immutable stored properties --------------- //
     //*********************************************************************//
@@ -43,7 +44,14 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
     /// @param controller The controller that projects are made from.
     /// @param deployer The deployer to launch Croptop projects from.
     /// @param publisher The croptop publisher.
-    constructor(IJBController controller, IJB721TiersHookProjectDeployer deployer, ICTPublisher publisher) {
+    constructor(
+        IJBController controller,
+        IJB721TiersHookProjectDeployer deployer,
+        ICTPublisher publisher,
+        address trusted_forwarder
+    )
+        ERC2771Context(trusted_forwarder)
+    {
         CONTROLLER = controller;
         DEPLOYER = deployer;
         PUBLISHER = publisher;
@@ -136,7 +144,7 @@ contract CTDeployer is IERC721Receiver, ICTDeployer {
                 memo: "Deployed from Croptop"
             }),
             controller: CONTROLLER,
-            salt: salt
+            salt: keccak256(abi.encode(salt, _msgSender()))
         });
 
         // Configure allowed posts.
