@@ -25,7 +25,7 @@ contract DeployScript is Script, Sphinx {
     bytes32 PUBLISHER_SALT = "_PUBLISHER_SALT_";
     bytes32 DEPLOYER_SALT = "_DEPLOYER_SALT_";
     bytes32 PROJECT_OWNER_SALT = "_PROJECT_OWNER_SALT_";
-    address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
+    address TRUSTED_FORWARDER;
 
     function configureSphinx() public override {
         // TODO: Update to contain croptop devs.
@@ -44,6 +44,10 @@ contract DeployScript is Script, Sphinx {
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
         );
+
+        // We use the same trusted forwarder as the core deployment.
+        TRUSTED_FORWARDER = core.controller.trustedForwarder();
+
         // Perform the deployment transactions.
         deploy();
     }
@@ -82,7 +86,7 @@ contract DeployScript is Script, Sphinx {
 
             // Deploy it if it has not been deployed yet.
             deployer = !_deployerIsDeployed
-                ? new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher)
+                ? new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher, TRUSTED_FORWARDER)
                 : CTDeployer(_deployer);
         }
 
