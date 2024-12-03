@@ -24,7 +24,7 @@ import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
-import {REVAutoMint} from "@rev-net/core/src/structs/REVAutoMint.sol";
+import {REVAutoIssuance} from "@rev-net/core/src/structs/REVAutoIssuance.sol";
 import {REVBuybackHookConfig} from "@rev-net/core/src/structs/REVBuybackHookConfig.sol";
 import {REVBuybackPoolConfig} from "@rev-net/core/src/structs/REVBuybackPoolConfig.sol";
 import {REVConfig} from "@rev-net/core/src/structs/REVConfig.sol";
@@ -72,6 +72,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
     bytes32 SUCKER_SALT = "_CPN_SUCKER_";
     bytes32 ERC20_SALT = "_CPN_ERC20_SALT_";
+    bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
     uint256 TIME_UNTIL_START = 1 days;
@@ -157,41 +158,44 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             accountingContextsToAccept: new JBAccountingContext[](0)
         });
 
-        REVAutoMint[] memory mintConfs = new REVAutoMint[](1);
-        mintConfs[0] =
-            REVAutoMint({chainId: PREMINT_CHAIN_ID, count: uint104(50_000 * DECIMAL_MULTIPLIER), beneficiary: OPERATOR});
+        REVAutoIssuance[] memory issuanceConfs = new REVAutoIssuance[](1);
+        issuanceConfs[0] = REVAutoIssuance({
+            chainId: PREMINT_CHAIN_ID,
+            count: uint104(50_000 * DECIMAL_MULTIPLIER),
+            beneficiary: OPERATOR
+        });
 
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
-            autoMints: mintConfs,
+            autoIssuances: issuanceConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             splitPercent: 3800, // 38%
             initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
-            issuanceDecayFrequency: 90 days,
-            issuanceDecayPercent: 380_000_000, // 38%
+            issuanceCutFrequency: 90 days,
+            issuanceCutPercent: 380_000_000, // 38%
             cashOutTaxRate: 3000, // 0.3
             extraMetadata: 0
         });
 
         stageConfigurations[1] = REVStageConfig({
-            autoMints: new REVAutoMint[](0),
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 360 days),
+            autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 3800, // 38%
             initialIssuance: 0, // inherit from previous cycle.
-            issuanceDecayFrequency: 150 days,
-            issuanceDecayPercent: 380_000_000, // 38%
+            issuanceCutFrequency: 150 days,
+            issuanceCutPercent: 380_000_000, // 38%
             cashOutTaxRate: 3000, // 0.3
             extraMetadata: 0
         });
 
         stageConfigurations[2] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
-            autoMints: new REVAutoMint[](0),
+            autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 1000, // 10%
             initialIssuance: 1, // this is a special number that is as close to max price as we can get.
-            issuanceDecayFrequency: 0,
-            issuanceDecayPercent: 0,
+            issuanceCutFrequency: 0,
+            issuanceCutPercent: 0,
             cashOutTaxRate: 1000, // 0.1
             extraMetadata: 0
         });
@@ -207,8 +211,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             splitOperator: OPERATOR,
             stageConfigurations: stageConfigurations,
             loanSources: loanSources,
-            loans: address(revnet.loans),
-            allowCrosschainSuckerExtension: true
+            loans: address(revnet.loans)
         });
 
         REVBuybackHookConfig memory buybackHookConfiguration;
@@ -332,6 +335,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
                         preventOverspending: false
                     })
                 }),
+                salt: HOOK_SALT,
                 splitOperatorCanAdjustTiers: true,
                 splitOperatorCanUpdateMetadata: false,
                 splitOperatorCanMint: false,
