@@ -148,7 +148,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         accountingContextsToAccept[0] = JBAccountingContext({
             token: JBConstants.NATIVE_TOKEN,
             decimals: DECIMALS,
-            currency: uint32(uint160(JBConstants.NATIVE_TOKEN))
+            currency: NATIVE_CURRENCY
         });
 
         // The terminals that the project will accept funds through.
@@ -209,7 +209,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // The project's revnet configuration
         REVConfig memory revnetConfiguration = REVConfig({
             description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
-            baseCurrency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+            baseCurrency: ETH_CURRENCY,
             splitOperator: OPERATOR,
             stageConfigurations: stageConfigurations,
             loanSources: loanSources,
@@ -325,7 +325,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
                     contractUri: "",
                     tiersConfig: JB721InitTiersConfig({
                         tiers: new JB721TierConfig[](0),
-                        currency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+                        currency: ETH_CURRENCY,
                         decimals: DECIMALS,
                         prices: IJBPrices(address(0))
                     }),
