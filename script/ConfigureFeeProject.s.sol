@@ -22,6 +22,7 @@ import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
 import {REVAutoIssuance} from "@rev-net/core/src/structs/REVAutoIssuance.sol";
@@ -67,7 +68,9 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     uint32 PREMINT_CHAIN_ID = 11_155_111;
     string NAME = "Croptop Publishing Network";
     string SYMBOL = "CPN";
-    string PROJECT_URI = "ipfs://QmYyTBk8fr1qg2Sqby85KgKkyMj12ADrjLLWFb11U3gepN";
+    string PROJECT_URI = "ipfs://QmNXa96G26ZHxw5AP8oYcQ9q32Aw4F46sAfzZJ2PYYYFeY";
+    uint32 NATIVE_CURRENCY = uint32(uint160(JBConstants.NATIVE_TOKEN));
+    uint32 ETH_CURRENCY = JBCurrencyIds.ETH;
     uint8 DECIMALS = 18;
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
     bytes32 SUCKER_SALT = "_CPN_SUCKER_";
@@ -143,11 +146,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
 
         // Accept the chain's native currency through the multi terminal.
-        accountingContextsToAccept[0] = JBAccountingContext({
-            token: JBConstants.NATIVE_TOKEN,
-            decimals: DECIMALS,
-            currency: uint32(uint160(JBConstants.NATIVE_TOKEN))
-        });
+        accountingContextsToAccept[0] =
+            JBAccountingContext({token: JBConstants.NATIVE_TOKEN, decimals: DECIMALS, currency: NATIVE_CURRENCY});
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](2);
@@ -174,7 +174,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
             issuanceCutFrequency: 90 days,
             issuanceCutPercent: 380_000_000, // 38%
-            cashOutTaxRate: 3000, // 0.3
+            cashOutTaxRate: 2000, // 0.2
             extraMetadata: 0
         });
 
@@ -182,10 +182,10 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 360 days),
             autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 3800, // 38%
-            initialIssuance: 0, // inherit from previous cycle.
-            issuanceCutFrequency: 150 days,
+            initialIssuance: 1, // inherit from previous cycle.
+            issuanceCutFrequency: 180 days,
             issuanceCutPercent: 380_000_000, // 38%
-            cashOutTaxRate: 3000, // 0.3
+            cashOutTaxRate: 2000, // 0.2
             extraMetadata: 0
         });
 
@@ -193,7 +193,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
             autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 1000, // 10%
-            initialIssuance: 1, // this is a special number that is as close to max price as we can get.
+            initialIssuance: 0, // no more issuance.
             issuanceCutFrequency: 0,
             issuanceCutPercent: 0,
             cashOutTaxRate: 1000, // 0.1
@@ -207,7 +207,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // The project's revnet configuration
         REVConfig memory revnetConfiguration = REVConfig({
             description: REVDescription(NAME, SYMBOL, PROJECT_URI, ERC20_SALT),
-            baseCurrency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+            baseCurrency: ETH_CURRENCY,
             splitOperator: OPERATOR,
             stageConfigurations: stageConfigurations,
             loanSources: loanSources,
@@ -323,7 +323,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
                     contractUri: "",
                     tiersConfig: JB721InitTiersConfig({
                         tiers: new JB721TierConfig[](0),
-                        currency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+                        currency: ETH_CURRENCY,
                         decimals: DECIMALS,
                         prices: IJBPrices(address(0))
                     }),
