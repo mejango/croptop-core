@@ -22,6 +22,7 @@ import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
 import {REVAutoIssuance} from "@rev-net/core/src/structs/REVAutoIssuance.sol";
@@ -69,7 +70,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     string SYMBOL = "CPN";
     string PROJECT_URI = "ipfs://QmNXa96G26ZHxw5AP8oYcQ9q32Aw4F46sAfzZJ2PYYYFeY";
     uint32 NATIVE_CURRENCY = uint32(uint160(JBConstants.NATIVE_TOKEN));
-    uint32 ETH_CURRENCY = 1; //JBCurrencyIds.ETH;
+    uint32 ETH_CURRENCY = JBCurrencyIds.ETH;
     uint8 DECIMALS = 18;
     uint256 DECIMAL_MULTIPLIER = 10 ** DECIMALS;
     bytes32 SUCKER_SALT = "_CPN_SUCKER_";
@@ -145,11 +146,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         JBAccountingContext[] memory accountingContextsToAccept = new JBAccountingContext[](1);
 
         // Accept the chain's native currency through the multi terminal.
-        accountingContextsToAccept[0] = JBAccountingContext({
-            token: JBConstants.NATIVE_TOKEN,
-            decimals: DECIMALS,
-            currency: NATIVE_CURRENCY
-        });
+        accountingContextsToAccept[0] =
+            JBAccountingContext({token: JBConstants.NATIVE_TOKEN, decimals: DECIMALS, currency: NATIVE_CURRENCY});
 
         // The terminals that the project will accept funds through.
         JBTerminalConfig[] memory terminalConfigurations = new JBTerminalConfig[](2);
