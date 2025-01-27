@@ -82,4 +82,4 @@ echo "Syncing sphinx.lock"
 npx sphinx sync --org-id ea165b21-7cdc-4d7b-be59-ecdd4c26bee4
 
 echo "Running testnet deployment through sphinx"
-npm run deploy:testnets
+npm run deploy:testnets:project

@@ -1,6 +1,6 @@
 {
     "name": "@croptop/core",
-    "version": "0.0.27",
+    "version": "0.0.28",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -21,10 +21,10 @@
         "@bananapus/permission-ids": "^0.0.17",
         "@bananapus/ownable": "^0.0.8",
         "@openzeppelin/contracts": "^5.2.0",
-        "@bananapus/buyback-hook": "^0.0.24",
-        "@bananapus/swap-terminal": "^0.0.23",
-        "@bananapus/suckers": "^0.0.29",
-        "@rev-net/core": "^0.0.42"
+        "@bananapus/buyback-hook": "^0.0.25",
+        "@bananapus/swap-terminal": "^0.0.24",
+        "@bananapus/suckers": "^0.0.30",
+        "@rev-net/core": "^0.0.43"
     },
     "devDependencies": {
         "@sphinx-labs/plugins": "^0.33.1"
