@@ -24,7 +24,7 @@
         "@bananapus/buyback-hook": "^0.0.24",
         "@bananapus/swap-terminal": "^0.0.23",
         "@bananapus/suckers": "^0.0.29",
-        "@rev-net/core": "^0.0.40"
+        "@rev-net/core": "^0.0.42"
     },
     "devDependencies": {
         "@sphinx-labs/plugins": "^0.33.0"
