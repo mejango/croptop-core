@@ -18,10 +18,12 @@ import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTie
 import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
+import {IJBSplitHook} from "@bananapus/core/src/interfaces/IJBSplitHook.sol";
 import {IJBTerminal} from "@bananapus/core/src/interfaces/IJBTerminal.sol";
 import {JBAccountingContext} from "@bananapus/core/src/structs/JBAccountingContext.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBSplit} from "@bananapus/core/src/structs/JBSplit.sol";
 import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBSuckerDeployerConfig} from "@bananapus/suckers/src/structs/JBSuckerDeployerConfig.sol";
 import {JBTokenMapping} from "@bananapus/suckers/src/structs/JBTokenMapping.sol";
@@ -165,12 +167,23 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             beneficiary: OPERATOR
         });
 
+        JBSplit[] memory splits = new JBSplit[](1);
+        splits[0] = JBSplit({
+            percent: JBConstants.SPLITS_TOTAL_PERCENT,
+            projectId: 0,
+            beneficiary: payable(OPERATOR),
+            preferAddToBalance: false,
+            lockedUntil: 0,
+            hook: IJBSplitHook(address(0))
+        });
+
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
             autoIssuances: issuanceConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
-            splitPercent: 3800, // 38%
+            splitPercent: 6200, // 62%
+            splits: splits,
             initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
             issuanceCutFrequency: 90 days,
             issuanceCutPercent: 380_000_000, // 38%
@@ -181,7 +194,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 360 days),
             autoIssuances: new REVAutoIssuance[](0),
-            splitPercent: 3800, // 38%
+            splitPercent: 6200, // 62%
+            splits: splits,
             initialIssuance: 1, // inherit from previous cycle.
             issuanceCutFrequency: 180 days,
             issuanceCutPercent: 380_000_000, // 38%
@@ -193,6 +207,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
             autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 1000, // 10%
+            splits: splits,
             initialIssuance: 0, // no more issuance.
             issuanceCutFrequency: 0,
             issuanceCutPercent: 0,
