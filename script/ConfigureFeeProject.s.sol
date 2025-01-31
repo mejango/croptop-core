@@ -340,7 +340,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
                         tiers: new JB721TierConfig[](0),
                         currency: ETH_CURRENCY,
                         decimals: DECIMALS,
-                        prices: IJBPrices(address(0))
+                        prices: core.prices
                     }),
                     reserveBeneficiary: address(0),
                     flags: JB721TiersHookFlags({
