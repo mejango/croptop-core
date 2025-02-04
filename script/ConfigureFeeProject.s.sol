@@ -182,25 +182,25 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         stageConfigurations[0] = REVStageConfig({
             autoIssuances: issuanceConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
-            splitPercent: 6200, // 62%
+            splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
             issuanceCutFrequency: 90 days,
             issuanceCutPercent: 380_000_000, // 38%
             cashOutTaxRate: 2000, // 0.2
-            extraMetadata: 0
+            extraMetadata: 4 // Allow adding suckers.
         });
 
         stageConfigurations[1] = REVStageConfig({
             startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 360 days),
             autoIssuances: new REVAutoIssuance[](0),
-            splitPercent: 6200, // 62%
+            splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: 1, // inherit from previous cycle.
             issuanceCutFrequency: 180 days,
             issuanceCutPercent: 380_000_000, // 38%
             cashOutTaxRate: 2000, // 0.2
-            extraMetadata: 0
+            extraMetadata: 4 // Allow adding suckers.
         });
 
         stageConfigurations[2] = REVStageConfig({
@@ -212,7 +212,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             issuanceCutFrequency: 0,
             issuanceCutPercent: 0,
             cashOutTaxRate: 1000, // 0.1
-            extraMetadata: 0
+            extraMetadata: 4 // Allow adding suckers.
         });
 
         // The projects loan configuration.
