@@ -163,7 +163,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         REVAutoIssuance[] memory issuanceConfs = new REVAutoIssuance[](1);
         issuanceConfs[0] = REVAutoIssuance({
             chainId: PREMINT_CHAIN_ID,
-            count: uint104(50_000 * DECIMAL_MULTIPLIER),
+            count: uint104(100_000 * DECIMAL_MULTIPLIER),
             beneficiary: OPERATOR
         });
 
