@@ -79,7 +79,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     bytes32 ERC20_SALT = "_CPN_ERC20_SALT_";
     bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
-    address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
+    address TRUSTED_FORWARDER;
     uint256 TIME_UNTIL_START = 1 days;
 
     function configureSphinx() public override {
@@ -96,9 +96,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             vm.envOr("NANA_CORE_DEPLOYMENT_PATH", string("node_modules/@bananapus/core/deployments/"))
         );
         // Get the deployment addresses for the croptop contracts for this chain.
-        croptop = CroptopDeploymentLib.getDeployment(
-            vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("node_modules/@croptop/core/deployments/"))
-        );
+        croptop = CroptopDeploymentLib.getDeployment(vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("deployments/")));
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
@@ -121,6 +119,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             revnet.basic_deployer.CONTROLLER() == croptop.publisher.CONTROLLER(),
             "The revnet package artifacts are using a different version of the core contracts than the croptop artifacts."
         );
+
+        TRUSTED_FORWARDER = core.controller.trustedForwarder();
 
         // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
         // We force simulations to make the assumption that the `START_TIME` has not occured,
