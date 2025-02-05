@@ -97,7 +97,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         );
         // Get the deployment addresses for the croptop contracts for this chain.
         croptop = CroptopDeploymentLib.getDeployment(
-            vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("node_modules/@croptop/core/deployments/"))
+            vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("deployments/"))
         );
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(

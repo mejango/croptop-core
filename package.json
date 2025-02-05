@@ -1,6 +1,6 @@
 {
     "name": "@croptop/core",
-    "version": "0.0.29",
+    "version": "0.0.30",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -24,7 +24,7 @@
         "@bananapus/buyback-hook": "^0.0.26",
         "@bananapus/swap-terminal": "^0.0.26",
         "@bananapus/suckers": "^0.0.31",
-        "@rev-net/core": "^0.0.43"
+        "@rev-net/core": "^0.0.44"
     },
     "devDependencies": {
         "@sphinx-labs/plugins": "^0.33.1"
