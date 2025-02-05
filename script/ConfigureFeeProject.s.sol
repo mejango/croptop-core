@@ -80,7 +80,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER;
-    uint256 TIME_UNTIL_START = 1 days;
+    uint256 TIME_UNTIL_START = 3 hours;
 
     function configureSphinx() public override {
         // TODO: Update to contain croptop devs.
