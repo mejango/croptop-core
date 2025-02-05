@@ -79,7 +79,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     bytes32 ERC20_SALT = "_CPN_ERC20_SALT_";
     bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
-    address TRUSTED_FORWARDER = 0xB2b5841DBeF766d4b521221732F9B618fCf34A87;
+    address TRUSTED_FORWARDER;
     uint256 TIME_UNTIL_START = 1 days;
 
     function configureSphinx() public override {
@@ -122,6 +122,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             "The revnet package artifacts are using a different version of the core contracts than the croptop artifacts."
         );
 
+        TRUSTED_FORWARDER = core.controller.trustedForwarder();
+        
         // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
         // We force simulations to make the assumption that the `START_TIME` has not occured,
         // and is not the current time.
