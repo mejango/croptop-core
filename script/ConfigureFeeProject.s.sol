@@ -96,9 +96,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             vm.envOr("NANA_CORE_DEPLOYMENT_PATH", string("node_modules/@bananapus/core/deployments/"))
         );
         // Get the deployment addresses for the croptop contracts for this chain.
-        croptop = CroptopDeploymentLib.getDeployment(
-            vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("deployments/"))
-        );
+        croptop = CroptopDeploymentLib.getDeployment(vm.envOr("CROPTOP_DEPLOYMENT_PATH", string("deployments/")));
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
@@ -123,7 +121,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         );
 
         TRUSTED_FORWARDER = core.controller.trustedForwarder();
-        
+
         // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
         // We force simulations to make the assumption that the `START_TIME` has not occured,
         // and is not the current time.
