@@ -163,7 +163,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         REVAutoIssuance[] memory issuanceConfs = new REVAutoIssuance[](1);
         issuanceConfs[0] = REVAutoIssuance({
             chainId: PREMINT_CHAIN_ID,
-            count: uint104(100_000 * DECIMAL_MULTIPLIER),
+            count: uint104(1_000_000 * DECIMAL_MULTIPLIER),
             beneficiary: OPERATOR
         });
 
@@ -184,7 +184,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             splitPercent: 3800, // 38%
             splits: splits,
-            initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
+            initialIssuance: uint112(10_000 * DECIMAL_MULTIPLIER),
             issuanceCutFrequency: 90 days,
             issuanceCutPercent: 380_000_000, // 38%
             cashOutTaxRate: 2000, // 0.2
