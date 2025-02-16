@@ -67,7 +67,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     // fee_project.
     uint256 FEE_PROJECT_ID;
 
-    uint32 PREMINT_CHAIN_ID = 11_155_111;
+    uint32 PREMINT_CHAIN_ID = 1;
     string NAME = "Croptop Publishing Network";
     string SYMBOL = "CPN";
     string PROJECT_URI = "ipfs://QmNXa96G26ZHxw5AP8oYcQ9q32Aw4F46sAfzZJ2PYYYFeY";
@@ -78,9 +78,9 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     bytes32 SUCKER_SALT = "_CPN_SUCKER_";
     bytes32 ERC20_SALT = "_CPN_ERC20_SALT_";
     bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
-    address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
+    address OPERATOR;
     address TRUSTED_FORWARDER;
-    uint256 TIME_UNTIL_START = 3 hours;
+    uint256 TIME_UNTIL_START = 1 days;
 
     function configureSphinx() public override {
         // TODO: Update to contain croptop devs.
@@ -120,6 +120,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             "The revnet package artifacts are using a different version of the core contracts than the croptop artifacts."
         );
 
+        // Set the operator address to be the multisig.
+        OPERATOR = safeAddress();
         TRUSTED_FORWARDER = core.controller.trustedForwarder();
 
         // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
@@ -163,7 +165,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         REVAutoIssuance[] memory issuanceConfs = new REVAutoIssuance[](1);
         issuanceConfs[0] = REVAutoIssuance({
             chainId: PREMINT_CHAIN_ID,
-            count: uint104(100_000 * DECIMAL_MULTIPLIER),
+            count: uint104(250_000 * DECIMAL_MULTIPLIER),
             beneficiary: OPERATOR
         });
 
@@ -180,33 +182,33 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
-            autoIssuances: issuanceConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
+            autoIssuances: issuanceConfs,
             splitPercent: 3800, // 38%
             splits: splits,
-            initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
-            issuanceCutFrequency: 90 days,
+            initialIssuance: uint112(10_000 * DECIMAL_MULTIPLIER),
+            issuanceCutFrequency: 120 days,
             issuanceCutPercent: 380_000_000, // 38%
-            cashOutTaxRate: 2000, // 0.2
+            cashOutTaxRate: 1000, // 0.1
             extraMetadata: 4 // Allow adding suckers.
         });
 
         stageConfigurations[1] = REVStageConfig({
-            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 360 days),
+            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 720 days),
             autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: 1, // inherit from previous cycle.
-            issuanceCutFrequency: 180 days,
-            issuanceCutPercent: 380_000_000, // 38%
-            cashOutTaxRate: 2000, // 0.2
+            issuanceCutFrequency: 30 days,
+            issuanceCutPercent: 70_000_000, // 7%
+            cashOutTaxRate: 1000, // 0.1
             extraMetadata: 4 // Allow adding suckers.
         });
 
         stageConfigurations[2] = REVStageConfig({
-            startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
+            startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + 3800 days),
             autoIssuances: new REVAutoIssuance[](0),
-            splitPercent: 1000, // 10%
+            splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: 0, // no more issuance.
             issuanceCutFrequency: 0,
