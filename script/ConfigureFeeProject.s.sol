@@ -80,7 +80,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
     address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
     address TRUSTED_FORWARDER;
-    uint256 TIME_UNTIL_START = 3 hours;
+    uint256 TIME_UNTIL_START = 1 days;
 
     function configureSphinx() public override {
         // TODO: Update to contain croptop devs.
@@ -163,7 +163,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         REVAutoIssuance[] memory issuanceConfs = new REVAutoIssuance[](1);
         issuanceConfs[0] = REVAutoIssuance({
             chainId: PREMINT_CHAIN_ID,
-            count: uint104(100_000 * DECIMAL_MULTIPLIER),
+            count: uint104(250_000 * DECIMAL_MULTIPLIER),
             beneficiary: OPERATOR
         });
 
@@ -184,29 +184,29 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
             splitPercent: 3800, // 38%
             splits: splits,
-            initialIssuance: uint112(1000 * DECIMAL_MULTIPLIER),
-            issuanceCutFrequency: 90 days,
+            initialIssuance: uint112(10_000 * DECIMAL_MULTIPLIER),
+            issuanceCutFrequency: 120 days,
             issuanceCutPercent: 380_000_000, // 38%
-            cashOutTaxRate: 2000, // 0.2
+            cashOutTaxRate: 1000, // 0.1
             extraMetadata: 4 // Allow adding suckers.
         });
 
         stageConfigurations[1] = REVStageConfig({
-            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 360 days),
+            startsAtOrAfter: uint40(stageConfigurations[0].startsAtOrAfter + 720 days),
             autoIssuances: new REVAutoIssuance[](0),
             splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: 1, // inherit from previous cycle.
-            issuanceCutFrequency: 180 days,
-            issuanceCutPercent: 380_000_000, // 38%
-            cashOutTaxRate: 2000, // 0.2
+            issuanceCutFrequency: 30 days,
+            issuanceCutPercent: 70_000_000, // 7%
+            cashOutTaxRate: 1000, // 0.1
             extraMetadata: 4 // Allow adding suckers.
         });
 
         stageConfigurations[2] = REVStageConfig({
-            startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + (6000 days)),
+            startsAtOrAfter: uint40(stageConfigurations[1].startsAtOrAfter + 3800 days),
             autoIssuances: new REVAutoIssuance[](0),
-            splitPercent: 1000, // 10%
+            splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: 0, // no more issuance.
             issuanceCutFrequency: 0,
