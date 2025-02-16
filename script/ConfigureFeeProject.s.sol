@@ -180,8 +180,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // The project's revnet stage configurations.
         REVStageConfig[] memory stageConfigurations = new REVStageConfig[](3);
         stageConfigurations[0] = REVStageConfig({
-            autoIssuances: issuanceConfs,
             startsAtOrAfter: uint40(block.timestamp + TIME_UNTIL_START),
+            autoIssuances: issuanceConfs,
             splitPercent: 3800, // 38%
             splits: splits,
             initialIssuance: uint112(10_000 * DECIMAL_MULTIPLIER),
