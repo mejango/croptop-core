@@ -67,7 +67,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     // fee_project.
     uint256 FEE_PROJECT_ID;
 
-    uint32 PREMINT_CHAIN_ID = 11_155_111;
+    uint32 PREMINT_CHAIN_ID = 1;
     string NAME = "Croptop Publishing Network";
     string SYMBOL = "CPN";
     string PROJECT_URI = "ipfs://QmNXa96G26ZHxw5AP8oYcQ9q32Aw4F46sAfzZJ2PYYYFeY";
@@ -78,7 +78,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     bytes32 SUCKER_SALT = "_CPN_SUCKER_";
     bytes32 ERC20_SALT = "_CPN_ERC20_SALT_";
     bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
-    address OPERATOR = 0x823b92d6a4b2AED4b15675c7917c9f922ea8ADAD;
+    address OPERATOR;
     address TRUSTED_FORWARDER;
     uint256 TIME_UNTIL_START = 1 days;
 
@@ -120,6 +120,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
             "The revnet package artifacts are using a different version of the core contracts than the croptop artifacts."
         );
 
+        // Set the operator address to be the multisig.
+        OPERATOR = safeAddress();
         TRUSTED_FORWARDER = core.controller.trustedForwarder();
 
         // Since Juicebox has logic dependent on the timestamp we warp time to create a scenario closer to production.
