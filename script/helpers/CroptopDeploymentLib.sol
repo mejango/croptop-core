@@ -47,11 +47,9 @@ library CroptopDeploymentLib {
         view
         returns (CroptopDeployment memory deployment)
     {
-        deployment.publisher =
-            CTPublisher(_getDeploymentAddress(path, "croptop-core", network_name, "CTPublisher"));
+        deployment.publisher = CTPublisher(_getDeploymentAddress(path, "croptop-core", network_name, "CTPublisher"));
 
-        deployment.deployer =
-            CTDeployer(_getDeploymentAddress(path, "croptop-core", network_name, "CTDeployer"));
+        deployment.deployer = CTDeployer(_getDeploymentAddress(path, "croptop-core", network_name, "CTDeployer"));
 
         deployment.project_owner =
             CTProjectOwner(_getDeploymentAddress(path, "croptop-core", network_name, "CTProjectOwner"));
