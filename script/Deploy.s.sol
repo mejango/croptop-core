@@ -29,7 +29,7 @@ contract DeployScript is Script, Sphinx {
 
     function configureSphinx() public override {
         // TODO: Update to contain croptop devs.
-        sphinxConfig.projectName = "croptop-core-testnet";
+        sphinxConfig.projectName = "croptop-core";
         sphinxConfig.mainnets = ["ethereum", "optimism", "base", "arbitrum"];
         sphinxConfig.testnets = ["ethereum_sepolia", "optimism_sepolia", "base_sepolia", "arbitrum_sepolia"];
     }

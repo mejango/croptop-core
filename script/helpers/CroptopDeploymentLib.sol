@@ -48,13 +48,13 @@ library CroptopDeploymentLib {
         returns (CroptopDeployment memory deployment)
     {
         deployment.publisher =
-            CTPublisher(_getDeploymentAddress(path, "croptop-core-testnet", network_name, "CTPublisher"));
+            CTPublisher(_getDeploymentAddress(path, "croptop-core", network_name, "CTPublisher"));
 
         deployment.deployer =
-            CTDeployer(_getDeploymentAddress(path, "croptop-core-testnet", network_name, "CTDeployer"));
+            CTDeployer(_getDeploymentAddress(path, "croptop-core", network_name, "CTDeployer"));
 
         deployment.project_owner =
-            CTProjectOwner(_getDeploymentAddress(path, "croptop-core-testnet", network_name, "CTProjectOwner"));
+            CTProjectOwner(_getDeploymentAddress(path, "croptop-core", network_name, "CTProjectOwner"));
     }
 
     /// @notice Get the address of a contract that was deployed by the Deploy script.
