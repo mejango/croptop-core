@@ -80,7 +80,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
     bytes32 HOOK_SALT = "_CPN_HOOK_SALT_";
     address OPERATOR;
     address TRUSTED_FORWARDER;
-    uint256 TIME_UNTIL_START = 1 days;
+    uint256 TIME_UNTIL_START = 3 days;
 
     function configureSphinx() public override {
         // TODO: Update to contain croptop devs.
@@ -130,7 +130,8 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // Because of the cross-chain allowing components of nana-core, all chains require the same start_time,
         // for this reason we can't rely on the simulations block.time and we need a shared timestamp across all
         // simulations.
-        uint256 realTimestamp = vm.envUint("START_TIME");
+        // uint256 realTimestamp = vm.envUint("START_TIME");
+        uint256 realTimestamp = 1739830244;  // timestamp hardcoded at time of deploy. 
         if (realTimestamp <= block.timestamp - TIME_UNTIL_START) {
             revert("Something went wrong while setting the 'START_TIME' environment variable.");
         }
