@@ -1,6 +1,6 @@
 {
     "name": "@croptop/core",
-    "version": "0.0.31",
+    "version": "1.0.0",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -13,17 +13,17 @@
         "deploy:mainnets:project": "source ./.env && export START_TIME=$(date +%s) && npx sphinx propose ./script/ConfigureFeeProject.s.sol --networks mainnets",
         "deploy:testnets": "source ./.env && npx sphinx propose ./script/Deploy.s.sol --networks testnets",
         "deploy:testnets:project": "source ./.env && export START_TIME=$(date +%s) && npx sphinx propose ./script/ConfigureFeeProject.s.sol --networks testnets",
-        "artifacts": "source ./.env && npx sphinx artifacts --org-id 'ea165b21-7cdc-4d7b-be59-ecdd4c26bee4' --project-name 'croptop-core-testnet'"
+        "artifacts": "source ./.env && npx sphinx artifacts --org-id 'ea165b21-7cdc-4d7b-be59-ecdd4c26bee4' --project-name 'croptop-core'"
     },
     "dependencies": {
-        "@bananapus/core": "^0.0.45",
-        "@bananapus/721-hook": "^0.0.32",
+        "@bananapus/core": "^1.0.0",
+        "@bananapus/721-hook": "^1.0.0",
         "@bananapus/permission-ids": "^0.0.17",
-        "@bananapus/ownable": "^0.0.8",
+        "@bananapus/ownable": "^0.0.9",
         "@openzeppelin/contracts": "^5.2.0",
-        "@bananapus/buyback-hook": "^0.0.27",
-        "@bananapus/swap-terminal": "^0.0.27",
-        "@bananapus/suckers": "^0.0.32",
+        "@bananapus/buyback-hook": "^1.0.0",
+        "@bananapus/swap-terminal": "^1.0.0",
+        "@bananapus/suckers": "^1.0.0",
         "@rev-net/core": "^0.0.45"
     },
     "devDependencies": {
