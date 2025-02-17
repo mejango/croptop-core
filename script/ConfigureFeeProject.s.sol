@@ -131,7 +131,7 @@ contract ConfigureFeeProjectScript is Script, Sphinx {
         // for this reason we can't rely on the simulations block.time and we need a shared timestamp across all
         // simulations.
         // uint256 realTimestamp = vm.envUint("START_TIME");
-        uint256 realTimestamp = 1739830244;  // timestamp hardcoded at time of deploy. 
+        uint256 realTimestamp = 1_739_830_244; // timestamp hardcoded at time of deploy.
         if (realTimestamp <= block.timestamp - TIME_UNTIL_START) {
             revert("Something went wrong while setting the 'START_TIME' environment variable.");
         }
