@@ -125,9 +125,9 @@ contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
                 contractUri: contractUri,
                 tiersConfig: JB721InitTiersConfig({
                     tiers: new JB721TierConfig[](0),
-                    currency: uint32(uint160(JBConstants.NATIVE_TOKEN)),
+                    currency: JBCurrencyIds.ETH,
                     decimals: 18,
-                    prices: IJBPrices(address(0))
+                    prices: CONTROLLER.PRICES()
                 }),
                 reserveBeneficiary: address(0),
                 flags: JB721TiersHookFlags({
