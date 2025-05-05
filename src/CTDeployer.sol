@@ -71,6 +71,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         IJBController controller,
         IJB721TiersHookProjectDeployer deployer,
         ICTPublisher publisher,
+        IJBSuckerRegistry suckerRegistry,
         address trusted_forwarder
     )
         ERC2771Context(trusted_forwarder)
@@ -79,6 +80,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         CONTROLLER = controller;
         DEPLOYER = deployer;
         PUBLISHER = publisher;
+        SUCKER_REGISTRY = suckerRegistry;
     }
 
      //*********************************************************************//
@@ -246,6 +248,8 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
 
         // Configure allowed posts.
         if (allowedPosts.length > 0) _configurePostingCriteriaFor(address(hook), allowedPosts);
+
+        // TODO: Deploy the suckers.
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);
