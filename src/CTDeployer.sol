@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.23;
 
+import {JBPermissioned} from "@bananapus/core/src/abstract/JBPermissioned.sol";
+import {IJBPermissioned} from "@bananapus/core/src/interfaces/IJBPermissioned.sol";
+import {IJBRulesetDataHook} from "@bananapus/core/src/interfaces/IJBRulesetDataHook.sol";
+import {IJBSuckerRegistry} from "@bananapus/suckers/src/interfaces/IJBSuckerRegistry.sol";
+import {JBBeforePayRecordedContext} from "@bananapus/core/src/structs/JBBeforePayRecordedContext.sol";
+import {JBCashOutHookSpecification} from "@bananapus/core/src/structs/JBCashOutHookSpecification.sol";
+import {JBPayHookSpecification} from "@bananapus/core/src/structs/JBPayHookSpecification.sol";
+import {JBBeforeCashOutRecordedContext} from "@bananapus/core/src/structs/JBBeforeCashOutRecordedContext.sol";
+import {Context} from "@openzeppelin/contracts/utils/Context.sol";
+
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
 import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
@@ -13,6 +23,7 @@ import {JBPayDataHookRulesetConfig} from "@bananapus/721-hook/src/structs/JBPayD
 import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
+import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
@@ -23,7 +34,7 @@ import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 import {CTDeployerAllowedPost} from "./structs/CTDeployerAllowedPost.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
-contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
+contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC721Receiver, ICTDeployer {
     //*********************************************************************//
     // ---------------- public immutable stored properties --------------- //
     //*********************************************************************//
@@ -36,6 +47,18 @@ contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
 
     /// @notice The Croptop publisher.
     ICTPublisher public immutable override PUBLISHER;
+
+     /// @notice Deploys and tracks suckers for projects.
+    IJBSuckerRegistry public immutable SUCKER_REGISTRY;
+
+    //*********************************************************************//
+    // --------------------- public stored properties -------------------- //
+    //*********************************************************************//
+
+    /// @notice Each project's data hook provided on deployment.
+    /// @custom:param projectId The ID of the project to get the data hook for.
+    /// @custom:param rulesetId The ID of the ruleset to get the data hook for.
+    mapping(uint256 projectId => IJBRulesetDataHook) public dataHookOf;
 
     //*********************************************************************//
     // -------------------------- constructor ---------------------------- //
@@ -51,15 +74,72 @@ contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
         address trusted_forwarder
     )
         ERC2771Context(trusted_forwarder)
+        JBPermissioned(IJBPermissioned(address(controller)).PERMISSIONS())
     {
         CONTROLLER = controller;
         DEPLOYER = deployer;
         PUBLISHER = publisher;
     }
 
-    //*********************************************************************//
+     //*********************************************************************//
     // ------------------------- external views -------------------------- //
     //*********************************************************************//
+
+    /// @notice Forward the call to the original data hook.
+    /// @dev This function is part of `IJBRulesetDataHook`, and gets called before the revnet processes a payment.
+    /// @param context Standard Juicebox payment context. See `JBBeforePayRecordedContext`.
+    /// @return weight The weight which project tokens are minted relative to. This can be used to customize how many
+    /// tokens get minted by a payment.
+    /// @return hookSpecifications Amounts (out of what's being paid in) to be sent to pay hooks instead of being paid
+    /// into the project. Useful for automatically routing funds from a treasury as payments come in.
+    function beforePayRecordedWith(JBBeforePayRecordedContext calldata context)
+        external
+        view
+        override
+        returns (uint256 weight, JBPayHookSpecification[] memory hookSpecifications)
+    {
+        // Otherwise, forward the call to the datahook.
+        return dataHookOf[context.projectId].beforePayRecordedWith(context);
+    }
+
+    /// @notice Allow cash outs from suckers without a tax.
+    /// @dev This function is part of `IJBRulesetDataHook`, and gets called before the revnet processes a cash out.
+    /// @param context Standard Juicebox cash out context. See `JBBeforeCashOutRecordedContext`.
+    /// @return cashOutTaxRate The cash out tax rate, which influences the amount of terminal tokens which get cashed
+    /// out.
+    /// @return cashOutCount The number of project tokens that are cashed out.
+    /// @return totalSupply The total project token supply.
+    /// @return hookSpecifications The amount of funds and the data to send to cash out hooks (this contract).
+    function beforeCashOutRecordedWith(JBBeforeCashOutRecordedContext calldata context)
+        external
+        view
+        override
+        returns (
+            uint256 cashOutTaxRate,
+            uint256 cashOutCount,
+            uint256 totalSupply,
+            JBCashOutHookSpecification[] memory hookSpecifications
+        )
+    {
+        // If the cash out is from a sucker, return the full cash out amount without taxes or fees.
+        if (SUCKER_REGISTRY.isSuckerOf(context.projectId, context.holder)) {
+            return (0, context.cashOutCount, context.totalSupply, hookSpecifications);
+        }
+
+        // If the ruleset has a data hook, forward the call to the datahook.
+        return dataHookOf[context.projectId].beforeCashOutRecordedWith(context);
+    }
+
+    /// @notice A flag indicating whether an address has permission to mint a project's tokens on-demand.
+    /// @dev A project's data hook can allow any address to mint its tokens.
+    /// @param projectId The ID of the project whose token can be minted.
+    /// @param addr The address to check the token minting permission of.
+    /// @return flag A flag indicating whether the address has permission to mint the project's tokens on-demand.
+    function hasMintPermissionFor(uint256 projectId, address addr) external view returns (bool flag) {
+        // If the address is a sucker for this project.
+        return SUCKER_REGISTRY.isSuckerOf(projectId, addr);
+    }
+
 
     /// @dev Make sure only mints can be received.
     function onERC721Received(
@@ -82,6 +162,20 @@ contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
         if (from != address(0)) revert();
         return IERC721Receiver.onERC721Received.selector;
     }
+
+    //*********************************************************************//
+    // -------------------------- public views --------------------------- //
+    //*********************************************************************//
+
+    /// @notice Indicates if this contract adheres to the specified interface.
+    /// @dev See `IERC165.supportsInterface`.
+    /// @return A flag indicating if the provided interface ID is supported.
+    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+        return interfaceId == type(ICTDeployer).interfaceId
+            || interfaceId == type(IJBRulesetDataHook).interfaceId || interfaceId == type(IERC721Receiver).interfaceId;
+    }
+
+
     //*********************************************************************//
     // ---------------------- external transactions ---------------------- //
     //*********************************************************************//
@@ -147,6 +241,9 @@ contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
             salt: keccak256(abi.encode(salt, _msgSender()))
         });
 
+        // Set the data hook for the project.
+        dataHookOf[projectId] = IJBRulesetDataHook(hook);
+
         // Configure allowed posts.
         if (allowedPosts.length > 0) _configurePostingCriteriaFor(address(hook), allowedPosts);
 
@@ -189,5 +286,26 @@ contract CTDeployer is ERC2771Context, IERC721Receiver, ICTDeployer {
 
         // Set up the allowed posts in the publisher.
         PUBLISHER.configurePostingCriteriaFor({allowedPosts: formattedAllowedPosts});
+    }
+
+    //*********************************************************************//
+    // ------------------------ internal functions ----------------------- //
+    //*********************************************************************//
+
+    /// @notice The calldata. Preferred to use over `msg.data`.
+    /// @return calldata The `msg.data` of this call.
+    function _msgData() internal view override(ERC2771Context, Context) returns (bytes calldata) {
+        return ERC2771Context._msgData();
+    }
+
+    /// @notice The message's sender. Preferred to use over `msg.sender`.
+    /// @return sender The address which sent this call.
+    function _msgSender() internal view override(ERC2771Context, Context) returns (address sender) {
+        return ERC2771Context._msgSender();
+    }
+
+    /// @dev ERC-2771 specifies the context as being a single address (20 bytes).
+    function _contextSuffixLength() internal view virtual override(ERC2771Context, Context) returns (uint256) {
+        return ERC2771Context._contextSuffixLength();
     }
 }
