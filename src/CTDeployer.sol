@@ -11,6 +11,7 @@ import {JBPayHookSpecification} from "@bananapus/core/src/structs/JBPayHookSpeci
 import {JBBeforeCashOutRecordedContext} from "@bananapus/core/src/structs/JBBeforeCashOutRecordedContext.sol";
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
 
+import {CTSuckerDeploymentConfig} from "./structs/CTSuckerDeploymentConfig.sol";
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
 import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
@@ -21,17 +22,20 @@ import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDepl
 import {JBLaunchProjectConfig} from "@bananapus/721-hook/src/structs/JBLaunchProjectConfig.sol";
 import {JBPayDataHookRulesetConfig} from "@bananapus/721-hook/src/structs/JBPayDataHookRulesetConfig.sol";
 import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
+import {IJBProjects} from "@bananapus/core/src/interfaces/IJBProjects.sol";
 import {IJBPrices} from "@bananapus/core/src/interfaces/IJBPrices.sol";
 import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
+import {JBPermissionIds} from "@bananapus/permission-ids/src/JBPermissionIds.sol";
 
 import {ICTDeployer} from "./interfaces/ICTDeployer.sol";
 import {ICTPublisher} from "./interfaces/ICTPublisher.sol";
 import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 import {CTDeployerAllowedPost} from "./structs/CTDeployerAllowedPost.sol";
+import {CTProjectConfig} from "./structs/CTProjectConfig.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
 contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC721Receiver, ICTDeployer {
@@ -41,6 +45,9 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
 
     /// @notice The controller that projects are made from.
     IJBController public immutable override CONTROLLER;
+
+    /// @notice Mints ERC-721s that represent Juicebox project ownership and transfers.
+    IJBProjects public immutable PROJECTS;
 
     /// @notice The deployer to launch Croptop recorded collections from.
     IJB721TiersHookProjectDeployer public immutable override DEPLOYER;
@@ -78,6 +85,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         JBPermissioned(IJBPermissioned(address(controller)).PERMISSIONS())
     {
         CONTROLLER = controller;
+        PROJECTS = controller.PROJECTS();
         DEPLOYER = deployer;
         PUBLISHER = publisher;
         SUCKER_REGISTRY = suckerRegistry;
@@ -184,24 +192,14 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
 
     /// @notice Deploy a simple project meant to receive posts from Croptop templates.
     /// @param owner The address that'll own the project.
-    /// @param terminalConfigurations The terminals that the network uses to accept payments through.
-    /// @param projectUri The metadata URI containing project info.
-    /// @param allowedPosts The type of posts that the project should allow.
-    /// @param contractUri A link to the collection's metadata.
-    /// @param name The name of the collection where posts will go.
-    /// @param symbol The symbol of the collection where posts will go.
-    /// @param salt A salt to use for the deterministic deployment.
+    /// @param projectConfig The configuration for the project.
+    /// @param suckerDeploymentConfiguration The configuration for the suckers to deploy.
     /// @return projectId The ID of the newly created project.
     /// @return hook The hook that was created.
     function deployProjectFor(
         address owner,
-        JBTerminalConfig[] memory terminalConfigurations,
-        string memory projectUri,
-        CTDeployerAllowedPost[] memory allowedPosts,
-        string memory contractUri,
-        string memory name,
-        string memory symbol,
-        bytes32 salt
+        CTProjectConfig calldata projectConfig,
+        CTSuckerDeploymentConfig calldata suckerDeploymentConfiguration
     )
         external
         returns (uint256 projectId, IJB721TiersHook hook)
@@ -214,11 +212,11 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         (projectId, hook) = DEPLOYER.launchProjectFor({
             owner: address(this),
             deployTiersHookConfig: JBDeploy721TiersHookConfig({
-                name: name,
-                symbol: symbol,
+                name: projectConfig.name,
+                symbol: projectConfig.symbol,
                 baseUri: "ipfs://",
                 tokenUriResolver: IJB721TokenUriResolver(address(0)),
-                contractUri: contractUri,
+                contractUri: projectConfig.contractUri,
                 tiersConfig: JB721InitTiersConfig({
                     tiers: new JB721TierConfig[](0),
                     currency: JBCurrencyIds.ETH,
@@ -234,25 +232,58 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
                 })
             }),
             launchProjectConfig: JBLaunchProjectConfig({
-                projectUri: projectUri,
+                projectUri: projectConfig.projectUri,
                 rulesetConfigurations: rulesetConfigurations,
-                terminalConfigurations: terminalConfigurations,
+                terminalConfigurations: projectConfig.terminalConfigurations,
                 memo: "Deployed from Croptop"
             }),
             controller: CONTROLLER,
-            salt: keccak256(abi.encode(salt, _msgSender()))
+            salt: keccak256(abi.encode(projectConfig.salt, _msgSender()))
         });
 
         // Set the data hook for the project.
         dataHookOf[projectId] = IJBRulesetDataHook(hook);
 
         // Configure allowed posts.
-        if (allowedPosts.length > 0) _configurePostingCriteriaFor(address(hook), allowedPosts);
+        if (projectConfig.allowedPosts.length > 0) _configurePostingCriteriaFor(address(hook), projectConfig.allowedPosts);
 
-        // TODO: Deploy the suckers.
+        // Deploy the suckers.
+        // slither-disable-next-line unused-return
+        SUCKER_REGISTRY.deploySuckersFor({
+            projectId: projectId,
+            salt: keccak256(abi.encode(suckerDeploymentConfiguration.salt, _msgSender())),
+            configurations: suckerDeploymentConfiguration.deployerConfigurations
+        });
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);
+    }
+
+    /// @notice Deploy new suckers for an existing project.
+    /// @dev Only the juicebox's owner can deploy new suckers.
+    /// @param projectId The ID of the project to deploy suckers for.
+    /// @param suckerDeploymentConfiguration The suckers to set up for the project.
+    function deploySuckersFor(
+        uint256 projectId,
+        CTSuckerDeploymentConfig calldata suckerDeploymentConfiguration
+    )
+        external
+        returns (address[] memory suckers)
+    {
+        // Enforce permissions.
+        _requirePermissionFrom({
+            account: PROJECTS.ownerOf(projectId),
+            projectId: projectId,
+            permissionId: JBPermissionIds.DEPLOY_SUCKERS
+        });
+
+        // Deploy the suckers.
+        // slither-disable-next-line unused-return
+        suckers = SUCKER_REGISTRY.deploySuckersFor({
+            projectId: projectId,
+            salt: keccak256(abi.encode(suckerDeploymentConfiguration.salt, _msgSender())),
+            configurations: suckerDeploymentConfiguration.deployerConfigurations
+        });
     }
 
     //*********************************************************************//
