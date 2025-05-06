@@ -93,7 +93,9 @@ contract DeployScript is Script, Sphinx {
 
             // Deploy it if it has not been deployed yet.
             deployer = !_deployerIsDeployed
-                ? new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher, suckers.registry, TRUSTED_FORWARDER)
+                ? new CTDeployer{salt: DEPLOYER_SALT}(
+                    core.controller, hook.project_deployer, publisher, suckers.registry, TRUSTED_FORWARDER
+                )
                 : CTDeployer(_deployer);
         }
 

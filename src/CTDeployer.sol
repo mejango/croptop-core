@@ -55,7 +55,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
     /// @notice The Croptop publisher.
     ICTPublisher public immutable override PUBLISHER;
 
-     /// @notice Deploys and tracks suckers for projects.
+    /// @notice Deploys and tracks suckers for projects.
     IJBSuckerRegistry public immutable SUCKER_REGISTRY;
 
     //*********************************************************************//
@@ -91,7 +91,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         SUCKER_REGISTRY = suckerRegistry;
     }
 
-     //*********************************************************************//
+    //*********************************************************************//
     // ------------------------- external views -------------------------- //
     //*********************************************************************//
 
@@ -150,7 +150,6 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         return SUCKER_REGISTRY.isSuckerOf(projectId, addr);
     }
 
-
     /// @dev Make sure only mints can be received.
     function onERC721Received(
         address operator,
@@ -181,10 +180,9 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
     /// @dev See `IERC165.supportsInterface`.
     /// @return A flag indicating if the provided interface ID is supported.
     function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
-        return interfaceId == type(ICTDeployer).interfaceId
-            || interfaceId == type(IJBRulesetDataHook).interfaceId || interfaceId == type(IERC721Receiver).interfaceId;
+        return interfaceId == type(ICTDeployer).interfaceId || interfaceId == type(IJBRulesetDataHook).interfaceId
+            || interfaceId == type(IERC721Receiver).interfaceId;
     }
-
 
     //*********************************************************************//
     // ---------------------- external transactions ---------------------- //
@@ -245,7 +243,9 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         dataHookOf[projectId] = IJBRulesetDataHook(hook);
 
         // Configure allowed posts.
-        if (projectConfig.allowedPosts.length > 0) _configurePostingCriteriaFor(address(hook), projectConfig.allowedPosts);
+        if (projectConfig.allowedPosts.length > 0) {
+            _configurePostingCriteriaFor(address(hook), projectConfig.allowedPosts);
+        }
 
         // Deploy the suckers (if applicable).
         if (suckerDeploymentConfiguration.salt != bytes32(0)) {
@@ -256,7 +256,6 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
                 configurations: suckerDeploymentConfiguration.deployerConfigurations
             });
         }
-
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);
