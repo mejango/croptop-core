@@ -247,13 +247,16 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         // Configure allowed posts.
         if (projectConfig.allowedPosts.length > 0) _configurePostingCriteriaFor(address(hook), projectConfig.allowedPosts);
 
-        // Deploy the suckers.
-        // slither-disable-next-line unused-return
-        SUCKER_REGISTRY.deploySuckersFor({
-            projectId: projectId,
-            salt: keccak256(abi.encode(suckerDeploymentConfiguration.salt, _msgSender())),
-            configurations: suckerDeploymentConfiguration.deployerConfigurations
-        });
+        // Deploy the suckers (if applicable).
+        if (suckerDeploymentConfiguration.salt != bytes32(0)) {
+            // slither-disable-next-line unused-return
+            SUCKER_REGISTRY.deploySuckersFor({
+                projectId: projectId,
+                salt: keccak256(abi.encode(suckerDeploymentConfiguration.salt, _msgSender())),
+                configurations: suckerDeploymentConfiguration.deployerConfigurations
+            });
+        }
+
 
         //transfer to _owner.
         CONTROLLER.PROJECTS().transferFrom(address(this), owner, projectId);
