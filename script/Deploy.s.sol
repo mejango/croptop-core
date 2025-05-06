@@ -3,6 +3,7 @@ pragma solidity 0.8.23;
 
 import "@bananapus/721-hook/script/helpers/Hook721DeploymentLib.sol";
 import "@bananapus/core/script/helpers/CoreDeploymentLib.sol";
+import "@bananapus/suckers/script/helpers/SuckerDeploymentLib.sol";
 
 import {Sphinx} from "@sphinx-labs/contracts/SphinxPlugin.sol";
 import {Script} from "forge-std/Script.sol";
@@ -16,6 +17,8 @@ contract DeployScript is Script, Sphinx {
     CoreDeployment core;
     /// @notice tracks the deployment of the 721 hook contracts for the chain we are deploying to.
     Hook721Deployment hook;
+    /// @notice tracks the deployment of the sucker contracts for the chain we are deploying to.
+    SuckerDeployment suckers;
 
     // @notice set this to a non-zero value to re-use an existing projectID. Having it set to 0 will deploy a new
     // fee_project.
@@ -43,6 +46,10 @@ contract DeployScript is Script, Sphinx {
         // Get the deployment addresses for the 721 hook contracts for this chain.
         hook = Hook721DeploymentLib.getDeployment(
             vm.envOr("NANA_721_DEPLOYMENT_PATH", string("node_modules/@bananapus/721-hook/deployments/"))
+        );
+        // Get the deployment addresses for the suckers contracts for this chain.
+        suckers = SuckerDeploymentLib.getDeployment(
+            vm.envOr("NANA_SUCKERS_DEPLOYMENT_PATH", string("node_modules/@bananapus/suckers/deployments/"))
         );
 
         // We use the same trusted forwarder as the core deployment.
@@ -81,12 +88,12 @@ contract DeployScript is Script, Sphinx {
             (address _deployer, bool _deployerIsDeployed) = _isDeployed(
                 DEPLOYER_SALT,
                 type(CTDeployer).creationCode,
-                abi.encode(core.controller, hook.project_deployer, publisher)
+                abi.encode(core.controller, hook.project_deployer, publisher, suckers.registry, TRUSTED_FORWARDER)
             );
 
             // Deploy it if it has not been deployed yet.
             deployer = !_deployerIsDeployed
-                ? new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher, TRUSTED_FORWARDER)
+                ? new CTDeployer{salt: DEPLOYER_SALT}(core.controller, hook.project_deployer, publisher, suckers.registry, TRUSTED_FORWARDER)
                 : CTDeployer(_deployer);
         }
 
