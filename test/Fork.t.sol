@@ -55,6 +55,8 @@ contract ForkTest is Test {
     }
 
     function testDeployProject(address owner) public {
+        vm.assume(owner != address(0) && owner.code.length == 0);
+
         // Create the project config.
         CTProjectConfig memory config = CTProjectConfig({
             terminalConfigurations: new JBTerminalConfig[](0),
@@ -73,6 +75,9 @@ contract ForkTest is Test {
     }
 
     function testDeployProjectWithSuckers(address owner, bytes32 salt, bytes32 suckerSalt) public {
+        vm.assume(owner != address(0) && owner.code.length == 0);
+        vm.assume(suckerSalt != bytes32(0));
+
         // Create the project config.
         CTProjectConfig memory config = CTProjectConfig({
             terminalConfigurations: new JBTerminalConfig[](0),
