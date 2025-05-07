@@ -122,6 +122,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         returns (uint256 weight, JBPayHookSpecification[] memory hookSpecifications)
     {
         // Otherwise, forward the call to the datahook.
+        // slither-disable-next-line unused-return
         return dataHookOf[context.projectId].beforePayRecordedWith(context);
     }
 
@@ -150,6 +151,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         }
 
         // If the ruleset has a data hook, forward the call to the datahook.
+        // slither-disable-next-line unused-return
         return dataHookOf[context.projectId].beforeCashOutRecordedWith(context);
     }
 
@@ -220,6 +222,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         rulesetConfigurations[0].metadata.baseCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
 
         // Deploy a blank project.
+        // slither-disable-next-line reentrancy-benign
         (projectId, hook) = DEPLOYER.launchProjectFor({
             owner: address(this),
             deployTiersHookConfig: JBDeploy721TiersHookConfig({
