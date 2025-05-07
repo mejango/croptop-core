@@ -9,6 +9,7 @@ import {JBBeforePayRecordedContext} from "@bananapus/core/src/structs/JBBeforePa
 import {JBCashOutHookSpecification} from "@bananapus/core/src/structs/JBCashOutHookSpecification.sol";
 import {JBPayHookSpecification} from "@bananapus/core/src/structs/JBPayHookSpecification.sol";
 import {JBBeforeCashOutRecordedContext} from "@bananapus/core/src/structs/JBBeforeCashOutRecordedContext.sol";
+import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
 
 import {CTSuckerDeploymentConfig} from "./structs/CTSuckerDeploymentConfig.sol";
@@ -89,6 +90,18 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
         DEPLOYER = deployer;
         PUBLISHER = publisher;
         SUCKER_REGISTRY = suckerRegistry;
+
+        // Give the sucker registry permission to map tokens for all revnets.
+        uint8[] memory permissionIds = new uint8[](1);
+        permissionIds[0] = JBPermissionIds.MAP_SUCKER_TOKEN;
+
+        // Give the operator the permission.
+        // Set up the permission data.
+        JBPermissionsData memory permissionData =
+            JBPermissionsData({operator: address(SUCKER_REGISTRY), projectId: 0, permissionIds: permissionIds});
+
+        // Set the permissions.
+        PERMISSIONS.setPermissionsFor({account: address(this), permissionsData: permissionData});
     }
 
     //*********************************************************************//
