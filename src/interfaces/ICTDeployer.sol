@@ -8,6 +8,8 @@ import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol
 
 import {ICTPublisher} from "./ICTPublisher.sol";
 import {CTDeployerAllowedPost} from "../structs/CTDeployerAllowedPost.sol";
+import {CTSuckerDeploymentConfig} from "../structs/CTSuckerDeploymentConfig.sol";
+import {CTProjectConfig} from "../structs/CTProjectConfig.sol";
 
 interface ICTDeployer {
     function CONTROLLER() external view returns (IJBController);
@@ -16,14 +18,16 @@ interface ICTDeployer {
 
     function deployProjectFor(
         address owner,
-        JBTerminalConfig[] calldata terminalConfigurations,
-        string memory projectUri,
-        CTDeployerAllowedPost[] calldata allowedPosts,
-        string memory contractUri,
-        string memory name,
-        string memory symbol,
-        bytes32 salt
+        CTProjectConfig calldata projectConfigurations,
+        CTSuckerDeploymentConfig calldata deployerConfigurations
     )
         external
         returns (uint256 projectId, IJB721TiersHook hook);
+
+    function deploySuckersFor(
+        uint256 projectId,
+        CTSuckerDeploymentConfig calldata suckerDeploymentConfiguration
+    )
+        external
+        returns (address[] memory suckers);
 }
