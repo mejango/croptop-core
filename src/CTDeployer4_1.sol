@@ -38,7 +38,7 @@ import {CTDeployerAllowedPost} from "./structs/CTDeployerAllowedPost.sol";
 import {CTProjectConfig} from "./structs/CTProjectConfig.sol";
 
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
-contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC721Receiver, ICTDeployer4_1 {
+contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC721Receiver, ICTDeployer4_1 {
     //*********************************************************************//
     // ---------------- public immutable stored properties --------------- //
     //*********************************************************************//
@@ -67,7 +67,7 @@ contract CTDeployer is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC7
     //*********************************************************************//
     // -------------------------- constructor ---------------------------- //
     //*********************************************************************//
-    
+
     /// @param permissions The permissions contract.
     /// @param projects The projects contract.
     /// @param deployer The deployer to launch Croptop projects from.

@@ -20,7 +20,7 @@ import {CTAllowedPost} from "./structs/CTAllowedPost.sol";
 import {CTPost} from "./structs/CTPost.sol";
 
 /// @notice A contract that facilitates the permissioned publishing of NFT posts to a Juicebox project.
-contract CTPublisher is JBPermissioned, ERC2771Context, ICTPublisher4_1 {
+contract CTPublisher4_1 is JBPermissioned, ERC2771Context, ICTPublisher4_1 {
     //*********************************************************************//
     // --------------------------- custom errors ------------------------- //
     //*********************************************************************//
