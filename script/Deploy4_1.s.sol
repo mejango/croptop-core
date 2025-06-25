@@ -24,7 +24,7 @@ contract Deploy41Script is Script, Sphinx {
 
     // @notice set this to a non-zero value to re-use an existing projectID. Having it set to 0 will deploy a new
     // fee_project.
-    uint256 FEE_PROJECT_ID = 0;
+    uint256 FEE_PROJECT_ID = 2;
 
     /// @notice the salts that are used to deploy the contracts.
     bytes32 PUBLISHER_SALT = "_PUBLISHER_SALT_";
@@ -68,7 +68,7 @@ contract Deploy41Script is Script, Sphinx {
         );
 
         new CTDeployer4_1{salt: DEPLOYER_SALT}(
-            core.permissions, core.projects, hook.project_deployer, publisher, suckers.registry, TRUSTED_FORWARDER
+            core.permissions, core.projects, hook.hook_deployer, publisher, suckers.registry, TRUSTED_FORWARDER
         );
     }
 }
