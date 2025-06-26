@@ -10,20 +10,20 @@ import {JBCashOutHookSpecification} from "@bananapus/core/src/structs/JBCashOutH
 import {JBPayHookSpecification} from "@bananapus/core/src/structs/JBPayHookSpecification.sol";
 import {JBBeforeCashOutRecordedContext} from "@bananapus/core/src/structs/JBBeforeCashOutRecordedContext.sol";
 import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
+import {JBRulesetConfig} from "@bananapus/core/src/structs/JBRulesetConfig.sol";
+import {JBOwnable} from "@bananapus/ownable/src/JBOwnable.sol";
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
 
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
-import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
+import {IJB721TiersHookDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookDeployer.sol";
 import {IJB721TokenUriResolver} from "@bananapus/721-hook/src/interfaces/IJB721TokenUriResolver.sol";
 import {JB721InitTiersConfig} from "@bananapus/721-hook/src/structs/JB721InitTiersConfig.sol";
 import {JB721TierConfig} from "@bananapus/721-hook/src/structs/JB721TierConfig.sol";
 import {JB721TiersHookFlags} from "@bananapus/721-hook/src/structs/JB721TiersHookFlags.sol";
 import {JBDeploy721TiersHookConfig} from "@bananapus/721-hook/src/structs/JBDeploy721TiersHookConfig.sol";
 import {JBLaunchProjectConfig} from "@bananapus/721-hook/src/structs/JBLaunchProjectConfig.sol";
-import {JBPayDataHookRulesetConfig} from "@bananapus/721-hook/src/structs/JBPayDataHookRulesetConfig.sol";
 import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
 import {IJBProjects} from "@bananapus/core/src/interfaces/IJBProjects.sol";
-import {JBConstants} from "@bananapus/core/src/libraries/JBConstants.sol";
 import {JBCurrencyIds} from "@bananapus/core/src/libraries/JBCurrencyIds.sol";
 import {JBTerminalConfig} from "@bananapus/core/src/structs/JBTerminalConfig.sol";
 import {IERC721Receiver} from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
@@ -47,7 +47,7 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
     IJBProjects public immutable override PROJECTS;
 
     /// @notice The deployer to launch Croptop recorded collections from.
-    IJB721TiersHookProjectDeployer public immutable override DEPLOYER;
+    IJB721TiersHookDeployer public immutable override DEPLOYER;
 
     /// @notice The Croptop publisher.
     ICTPublisher4_1 public immutable override PUBLISHER;
@@ -77,7 +77,7 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
     constructor(
         IJBPermissions permissions,
         IJBProjects projects,
-        IJB721TiersHookProjectDeployer deployer,
+        IJB721TiersHookDeployer deployer,
         ICTPublisher4_1 publisher,
         IJBSuckerRegistry suckerRegistry,
         address trusted_forwarder
@@ -220,14 +220,17 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
     {
         if (controller.PROJECTS() != PROJECTS) revert();
 
-        JBPayDataHookRulesetConfig[] memory rulesetConfigurations = new JBPayDataHookRulesetConfig[](1);
+        JBRulesetConfig[] memory rulesetConfigurations = new JBRulesetConfig[](1);
         rulesetConfigurations[0].weight = 1_000_000 * (10 ** 18);
-        rulesetConfigurations[0].metadata.baseCurrency = uint32(uint160(JBConstants.NATIVE_TOKEN));
+        rulesetConfigurations[0].metadata.baseCurrency = JBCurrencyIds.ETH;
+
+        // Get the next project ID.
+        projectId = PROJECTS.count() + 1;
 
         // Deploy a blank project.
         // slither-disable-next-line reentrancy-benign
-        (projectId, hook) = DEPLOYER.launchProjectFor({
-            owner: address(this),
+        hook = DEPLOYER.deployHookFor({
+            projectId: projectId,
             deployTiersHookConfig: JBDeploy721TiersHookConfig({
                 name: projectConfig.name,
                 symbol: projectConfig.symbol,
@@ -248,15 +251,23 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
                     preventOverspending: false
                 })
             }),
-            launchProjectConfig: JBLaunchProjectConfig({
-                projectUri: projectConfig.projectUri,
-                rulesetConfigurations: rulesetConfigurations,
-                terminalConfigurations: projectConfig.terminalConfigurations,
-                memo: "Deployed from Croptop"
-            }),
-            controller: controller,
             salt: keccak256(abi.encode(projectConfig.salt, _msgSender()))
         });
+
+        rulesetConfigurations[0].metadata.dataHook = address(hook);
+        rulesetConfigurations[0].metadata.useDataHookForPay = true;
+        
+        // Launch the project, and sanity check the project ID.
+        assert(
+            projectId
+                == controller.launchProjectFor({
+                    owner: address(this),
+                    projectUri: projectConfig.projectUri,
+                    rulesetConfigurations: rulesetConfigurations,
+                    terminalConfigurations: projectConfig.terminalConfigurations,
+                    memo: "Deployed from Croptop"
+                })
+        );
 
         // Set the data hook for the project.
         dataHookOf[projectId] = IJBRulesetDataHook(hook);
@@ -278,6 +289,9 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
 
         //transfer to _owner.
         PROJECTS.transferFrom(address(this), owner, projectId);
+
+        // Transfer the hook's ownership to the project.
+        JBOwnable(address(hook)).transferOwnershipToProject(projectId);
     }
 
     /// @notice Deploy new suckers for an existing project.

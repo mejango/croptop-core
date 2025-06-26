@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
-import {IJB721TiersHookProjectDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookProjectDeployer.sol";
+import {IJB721TiersHookDeployer} from "@bananapus/721-hook/src/interfaces/IJB721TiersHookDeployer.sol";
 import {IJBController} from "@bananapus/core/src/interfaces/IJBController.sol";
 import {IJBProjects} from "@bananapus/core/src/interfaces/IJBProjects.sol";
 
@@ -12,7 +12,7 @@ import {CTProjectConfig} from "../structs/CTProjectConfig.sol";
 
 interface ICTDeployer4_1 {
     function PROJECTS() external view returns (IJBProjects);
-    function DEPLOYER() external view returns (IJB721TiersHookProjectDeployer);
+    function DEPLOYER() external view returns (IJB721TiersHookDeployer);
     function PUBLISHER() external view returns (ICTPublisher4_1);
 
     function deployProjectFor(
