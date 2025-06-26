@@ -11,6 +11,7 @@ import {JBPayHookSpecification} from "@bananapus/core/src/structs/JBPayHookSpeci
 import {JBBeforeCashOutRecordedContext} from "@bananapus/core/src/structs/JBBeforeCashOutRecordedContext.sol";
 import {JBPermissionsData} from "@bananapus/core/src/structs/JBPermissionsData.sol";
 import {JBRulesetConfig} from "@bananapus/core/src/structs/JBRulesetConfig.sol";
+import {JBOwnable} from "@bananapus/ownable/src/JBOwnable.sol";
 import {Context} from "@openzeppelin/contracts/utils/Context.sol";
 
 import {IJB721TiersHook} from "@bananapus/721-hook/src/interfaces/IJB721TiersHook.sol";
@@ -288,6 +289,9 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
 
         //transfer to _owner.
         PROJECTS.transferFrom(address(this), owner, projectId);
+
+        // Transfer the hook's ownership to the project.
+        JBOwnable(address(hook)).transferOwnershipToProject(projectId);
     }
 
     /// @notice Deploy new suckers for an existing project.
