@@ -27,9 +27,8 @@ contract Deploy41Script is Script, Sphinx {
     uint256 FEE_PROJECT_ID = 2;
 
     /// @notice the salts that are used to deploy the contracts.
-    bytes32 PUBLISHER_SALT = "_PUBLISHER_SALT_";
-    bytes32 DEPLOYER_SALT = "_DEPLOYER_SALT_";
-    bytes32 PROJECT_OWNER_SALT = "_PROJECT_OWNER_SALT_";
+    bytes32 PUBLISHER_SALT = "_PUBLISHER_SALT__";
+    bytes32 DEPLOYER_SALT = "_DEPLOYER_SALT__";
     address TRUSTED_FORWARDER;
 
     function configureSphinx() public override {

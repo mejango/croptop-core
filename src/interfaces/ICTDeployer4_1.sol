@@ -24,6 +24,8 @@ interface ICTDeployer4_1 {
         external
         returns (uint256 projectId, IJB721TiersHook hook);
 
+    function claimCollectionOwnershipOf(IJB721TiersHook hook) external;
+
     function deploySuckersFor(
         uint256 projectId,
         CTSuckerDeploymentConfig calldata suckerDeploymentConfiguration

@@ -40,6 +40,12 @@ import {CTProjectConfig} from "./structs/CTProjectConfig.sol";
 /// @notice A contract that facilitates deploying a simple Juicebox project to receive posts from Croptop templates.
 contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IERC721Receiver, ICTDeployer4_1 {
     //*********************************************************************//
+    // --------------------------- custom errors ------------------------- //
+    //*********************************************************************//
+
+    error CTDeployer_NotOwnerOfProject(uint256 projectId, address hook, address caller);
+
+    //*********************************************************************//
     // ---------------- public immutable stored properties --------------- //
     //*********************************************************************//
 
@@ -100,6 +106,15 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
             JBPermissionsData({operator: address(SUCKER_REGISTRY), projectId: 0, permissionIds: permissionIds});
 
         // Set the permissions.
+        PERMISSIONS.setPermissionsFor({account: address(this), permissionsData: permissionData});
+
+        // Set permission for the CTPublisher to adjust the tier.
+        permissionIds[0] = JBPermissionIds.MINT_721;
+
+        // Set permission for the CTPublisher to mint the NFT.
+        permissionData = JBPermissionsData({operator: address(PUBLISHER), projectId: 0, permissionIds: permissionIds});
+
+        // Set permission for the CTPublisher to adjust the tier.
         PERMISSIONS.setPermissionsFor({account: address(this), permissionsData: permissionData});
     }
 
@@ -216,6 +231,7 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
         IJBController controller
     )
         external
+        override
         returns (uint256 projectId, IJB721TiersHook hook)
     {
         if (controller.PROJECTS() != PROJECTS) revert();
@@ -256,7 +272,7 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
 
         rulesetConfigurations[0].metadata.dataHook = address(hook);
         rulesetConfigurations[0].metadata.useDataHookForPay = true;
-        
+
         // Launch the project, and sanity check the project ID.
         assert(
             projectId
@@ -289,6 +305,34 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
 
         //transfer to _owner.
         PROJECTS.transferFrom(address(this), owner, projectId);
+
+        // Set permission for the project's owner to do all the NFT things.
+        uint8[] memory permissionIds = new uint8[](4);
+        permissionIds[0] = JBPermissionIds.ADJUST_721_TIERS;
+        permissionIds[1] = JBPermissionIds.SET_721_METADATA;
+        permissionIds[2] = JBPermissionIds.MINT_721;
+        permissionIds[3] = JBPermissionIds.SET_721_DISCOUNT_PERCENT;
+
+        PERMISSIONS.setPermissionsFor({
+            account: address(this),
+            permissionsData: JBPermissionsData({
+                operator: address(owner),
+                projectId: uint64(projectId),
+                permissionIds: permissionIds
+            })
+        });
+    }
+
+    /// @notice Claim ownership of the collection.
+    /// @param hook The hook to claim ownership of.
+    function claimCollectionOwnershipOf(IJB721TiersHook hook) external override {
+        // Get the project ID of the hook.
+        uint256 projectId = hook.PROJECT_ID();
+
+        // Make sure the caller is the owner of the project.
+        if (PROJECTS.ownerOf(projectId) != _msgSender()) {
+            revert CTDeployer_NotOwnerOfProject(projectId, address(hook), _msgSender());
+        }
 
         // Transfer the hook's ownership to the project.
         JBOwnable(address(hook)).transferOwnershipToProject(projectId);
