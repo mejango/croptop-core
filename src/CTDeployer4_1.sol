@@ -109,7 +109,7 @@ contract CTDeployer4_1 is ERC2771Context, JBPermissioned, IJBRulesetDataHook, IE
         PERMISSIONS.setPermissionsFor({account: address(this), permissionsData: permissionData});
 
         // Set permission for the CTPublisher to adjust the tier.
-        permissionIds[0] = JBPermissionIds.MINT_721;
+        permissionIds[0] = JBPermissionIds.ADJUST_721_TIERS;
 
         // Set permission for the CTPublisher to mint the NFT.
         permissionData = JBPermissionsData({operator: address(PUBLISHER), projectId: 0, permissionIds: permissionIds});
